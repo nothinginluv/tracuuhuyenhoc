@@ -1,0 +1,45 @@
+{
+  "name": "tracuuhuyenhoc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Tra cứu Tử Vi và Bát Tự — công cụ tính toán minh bạch, có dẫn nguồn.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "corpus:fetch": "node scripts/fetch-corpus.mjs",
+    "quotes:verify": "node scripts/verify-quotes.mjs",
+    "quotes:selftest": "node scripts/verify-quotes.mjs --quotes=tests/fixtures/fake-quotes.jsonl --expect-fail",
+    "content:verify": "node scripts/verify-content.mjs",
+    "content:selftest": "node scripts/verify-content.mjs --stars=tests/fixtures/fake-stars.json --expect-fail",
+    "test": "node --test packages/calendar-core/test/ packages/tuvi-engine/test/ packages/bazi-engine/test/ apps/web/test/",
+    "data:terms": "node scripts/gen-solar-terms.mjs",
+    "data:lunar": "node scripts/gen-lunar-months.mjs",
+    "data:provinces": "node scripts/gen-provinces.mjs",
+    "demo": "node packages/calendar-core/examples/demo.ts",
+    "demo:tuvi": "node packages/tuvi-engine/examples/demo.ts",
+    "demo:bazi": "node packages/bazi-engine/examples/demo.ts",
+    "check": "npm run typecheck && npm run quotes:verify && npm run content:verify && npm run content:selftest && npm test"
+  },
+  "dependencies": {
+    "lunar-javascript": "^1.7.7",
+    "opencc-js": "^1.0.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "iztro": "^2.6.4",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}

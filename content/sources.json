@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "$comment": "Sổ nguồn công khai. Mọi trích dẫn trong content/quotes.jsonl phải trỏ tới một id ở đây. Tầng A = văn bản cổ, public domain.",
+  "sources": {
+    "ziwei-quanshu": {
+      "id": "ziwei-quanshu",
+      "title_zh": "紫微斗數全書",
+      "title_vi": "Tử Vi Đẩu Số Toàn Thư",
+      "domain": "tuvi",
+      "tier": "A",
+      "license": "public-domain",
+      "author": "truyền là 陳摶 (Trần Đoàn); 羅洪先 (La Hồng Tiên) viết tựa",
+      "era": "Minh – Thanh",
+      "provider": "zh.wikisource",
+      "url": "https://zh.wikisource.org/wiki/紫微斗數全書",
+      "corpus": "corpus/ziwei-quanshu.txt",
+      "note": "Bản 3 quyển. Dùng cho an sao và định nghĩa tinh diệu."
+    },
+    "sanming-tonghui": {
+      "id": "sanming-tonghui",
+      "title_zh": "三命通會",
+      "title_vi": "Tam Mệnh Thông Hội",
+      "domain": "bazi",
+      "tier": "A",
+      "license": "public-domain",
+      "author": "萬民英 (Vạn Dân Anh)",
+      "era": "Minh",
+      "provider": "zh.wikisource",
+      "url": "https://zh.wikisource.org/wiki/三命通會_(四庫全書本)",
+      "corpus": "corpus/sanming-tonghui.txt",
+      "note": "Bản 四庫全書 12 quyển. Văn bản không có dấu câu — bình thường hoá sẽ bỏ dấu khi so khớp."
+    },
+    "yuanhai-ziping": {
+      "id": "yuanhai-ziping",
+      "title_zh": "淵海子平",
+      "title_vi": "Uyên Hải Tử Bình",
+      "domain": "bazi",
+      "tier": "A",
+      "license": "public-domain",
+      "author": "truyền là 徐大升 (Từ Đại Thăng)",
+      "era": "Tống – Minh",
+      "provider": "zh.wikisource",
+      "url": "https://zh.wikisource.org/wiki/淵海子平",
+      "corpus": "corpus/yuanhai-ziping.txt",
+      "note": "Nền tảng phái Tử Bình. Bản trên Wikisource dùng giản thể."
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "$comment": "Tứ Hoá — bốn biến thái của sao theo can năm sinh. Nội dung cắt từ 諸星問答論 (卷一); ngũ hành lấy từ bảng 分屬五行 (卷二). Mọi từ khoá đều được scripts/verify-content.mjs đối chiếu nguyên văn.",
+  "entries": [
+    {
+      "id": "loc",
+      "elements": [
+        {
+          "zh": "土",
+          "vi": "Thổ"
+        }
+      ],
+      "roles": [
+        {
+          "zh": "福德之神",
+          "vi": "Thần phúc đức"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0067",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0068",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "quyen",
+      "elements": [
+        {
+          "zh": "木",
+          "vi": "Mộc"
+        }
+      ],
+      "roles": [
+        {
+          "zh": "生杀之神",
+          "vi": "Thần sinh sát"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0069",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0070",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "khoa",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "roles": [
+        {
+          "zh": "文墨之星",
+          "vi": "Sao văn mặc"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0071",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0072",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "ky",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "roles": [
+        {
+          "zh": "多管之神",
+          "vi": "Thần nhiều quản"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0073",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0074",
+          "role": "reading"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cách tính — tracuuhuyenhoc (mock)</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --card: #ffffff;
+    --ink: #1c1b19;
+    --muted: #6b675f;
+    --line: #e4e0d8;
+    --accent: #8a5a2b;
+    --ok: #2f6b4f;
+    --warn: #9a6a12;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 20px 64px;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; }
+  .eyebrow {
+    font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: 26px; margin: 0 0 6px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden;
+  }
+  .head {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    padding: 14px 18px; border-bottom: 1px solid var(--line);
+    background: #fdfcfa;
+  }
+  .chip {
+    font: 500 13px/1 var(--mono);
+    padding: 5px 9px; border-radius: 6px;
+    background: #f1ede5; color: #4a3f33; border: 1px solid #e6e0d5;
+  }
+  .chip.key { background: #efe7dc; border-color: #dfd2bf; color: var(--accent); }
+  .spacer { flex: 1; }
+
+  .toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .toggle button {
+    appearance: none; border: 0; background: transparent; cursor: pointer;
+    font: 500 12.5px/1 system-ui, sans-serif; padding: 8px 11px; color: var(--muted);
+  }
+  .toggle button[aria-pressed="true"] { background: #2a2620; color: #fff; }
+
+  ol { list-style: none; margin: 0; padding: 6px 0; }
+  .step {
+    display: grid; grid-template-columns: 1fr auto; gap: 4px 16px;
+    padding: 11px 18px 11px 46px; position: relative;
+    border-bottom: 1px dashed #eeebe4;
+  }
+  .step:last-child { border-bottom: 0; }
+  .step::before {
+    content: ""; position: absolute; left: 22px; top: 20px;
+    width: 7px; height: 7px; border-radius: 50%; background: #cdc6b9;
+  }
+  .step.done::before { background: var(--ok); }
+  .step.alt::before { background: var(--warn); }
+  .label { font-size: 14.5px; }
+  .label small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+  .val { font: 500 14px/1.5 var(--mono); color: #2a2620; text-align: right; white-space: nowrap; }
+
+  .result {
+    padding: 16px 18px; background: #f7f4ee; border-top: 1px solid var(--line);
+    font: 500 15px/1.7 var(--mono);
+  }
+  .result b { color: var(--accent); font-weight: 600; }
+  .note {
+    margin-top: 14px; padding: 12px 14px; border-left: 3px solid var(--warn);
+    background: #fdf8ec; border-radius: 0 8px 8px 0; font-size: 13.5px; color: #5b4a2a;
+  }
+  .note b { font-weight: 600; }
+  .foot { margin-top: 22px; font-size: 12.5px; color: var(--muted); }
+  .foot code { font-family: var(--mono); font-size: 12px; background: #f1ede5; padding: 1px 5px; border-radius: 4px; }
+  @media (max-width: 520px) {
+    .step { grid-template-columns: 1fr; }
+    .val { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">tracuuhuyenhoc · mock giao diện</div>
+  <h1>Cách tính</h1>
+  <p class="sub">Bảng này mở ra được từ mọi lá số. Mục đích: người dùng thấy <em>vì sao</em> kết quả khác app khác.</p>
+
+  <div class="card">
+    <div class="head">
+      <span class="chip">23:30</span>
+      <span class="chip">04/02/1972</span>
+      <span class="chip key">Sài Gòn · 106.70°E</span>
+      <span class="spacer"></span>
+      <div class="toggle" role="group" aria-label="Chế độ giờ">
+        <button id="btn-std" aria-pressed="true">Giờ chuẩn</button>
+        <button id="btn-solar" aria-pressed="false">Giờ mặt trời thật</button>
+      </div>
+    </div>
+
+    <ol id="steps"></ol>
+    <div class="result" id="result"></div>
+  </div>
+
+  <div class="note" id="note"></div>
+
+  <p class="foot">
+    Số minh hoạ cho thiết kế. Engine thật sẽ tính bằng ephemeris và có test vector.
+    Quy ước mặc định: <code>chuan-tq</code> — lịch âm TQ, tiết khí theo instant UTC, Tý muộn (00:00), phái Tam Hợp.
+  </p>
+</div>
+
+<script>
+  const CFG = { lon: 106.70, tzOffset: 8 };
+  const CIVIL_MIN = 23 * 60 + 30;
+
+  // Chênh lệch kinh độ so với kinh tuyến gốc của múi giờ (UTC+8 → 120°E): 4 phút / độ.
+  const lonCorr = Math.round((CFG.lon - 15 * CFG.tzOffset) * 4);
+  // Equation of time đầu tháng 2: mặt trời chậm ~14 phút.
+  const eot = -14;
+  const solarMin = ((CIVIL_MIN + lonCorr + eot) % 1440 + 1440) % 1440;
+
+  const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+  const sign = (n) => (n >= 0 ? '+' : '−') + Math.abs(n);
+
+  // 12 canh giờ, mỗi canh 2 tiếng, bắt đầu 23:00.
+  const CANH = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+  const canhOf = (min) => CANH[Math.floor(((min + 60) % 1440) / 120)];
+
+  const render = (mode) => {
+    const solar = mode === 'solar';
+    const t = solar ? solarMin : CIVIL_MIN;
+    const canh = canhOf(t);
+    const lateTý = !solar && t >= 23 * 60;
+
+    const steps = [
+      ['Múi giờ lịch sử',
+       'UTC+8 — miền Nam Việt Nam, 1960 – 12/06/1975',
+       '15:30 UTC', 'done', true],
+      ['Kinh độ nơi sinh',
+       `${CFG.lon.toFixed(2)}°E · lệch kinh tuyến ${sign(lonCorr)} phút`,
+       sign(lonCorr) + ' phút', solar ? 'done' : 'skip', solar],
+      ['Equation of time',
+       'Đầu tháng 2, mặt trời chậm ~14 phút',
+       sign(eot) + ' phút', solar ? 'done' : 'skip', solar],
+      ['Giờ dùng để an sao',
+       solar ? 'Giờ mặt trời thật tại nơi sinh' : 'Giờ đồng hồ dân sự (quy ước chuan-tq)',
+       hhmm(t) + ' → ' + canh, 'done', true],
+      ['Ranh giới giờ Tý',
+       solar
+         ? `Không áp dụng — ${hhmm(t)} thuộc canh ${canh}, không phải Tý`
+         : lateTý ? 'Tý muộn (23:00–23:59) → ngày KHÔNG đổi' : 'Tý sớm (00:00–00:59) → ngày đã đổi',
+       solar ? '—' : 'giữ ngày', lateTý || solar ? 'alt' : 'done', true],
+    ];
+
+    document.getElementById('steps').innerHTML = steps
+      .filter((s) => s[4])
+      .map(([label, sub, val, cls]) =>
+        `<li class="step ${cls}"><div class="label">${label}<small>${sub}</small></div>
+         <div class="val">${val}</div></li>`).join('');
+
+    document.getElementById('result').innerHTML =
+      `⇒ Trụ năm <b>Nhâm Tý</b> · tháng <b>…</b> · ngày <b>…</b> · giờ <b>${canh}</b>`;
+
+    document.getElementById('note').innerHTML = solar
+      ? 'Ở chế độ <b>giờ mặt trời thật</b>, 23:30 đồng hồ là 22:23 theo mặt trời → rơi vào canh <b>Hợi</b>, không phải Tý. Trụ giờ khác hoàn toàn.'
+      : 'Nếu chọn <b>giờ mặt trời thật</b>: 22:23 → canh <b>Hợi</b>, trụ giờ khác. Đây là khác biệt do quy ước, không phải do tính sai.';
+  };
+
+  const bStd = document.getElementById('btn-std');
+  const bSolar = document.getElementById('btn-solar');
+  const set = (mode) => {
+    bStd.setAttribute('aria-pressed', String(mode === 'std'));
+    bSolar.setAttribute('aria-pressed', String(mode === 'solar'));
+    render(mode);
+  };
+  bStd.onclick = () => set('std');
+  bSolar.onclick = () => set('solar');
+  set('std');
+</script>
+</body>
+</html>

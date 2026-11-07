@@ -1,0 +1,738 @@
+{
+  "$comment": "Đơn vị hành chính cấp tỉnh trước sáp nhập 01/07/2025. Toạ độ = tỉnh lỵ, dùng cho giờ mặt trời thật (sai số ~±2 phút so với điểm sinh thực tế trong tỉnh).",
+  "scheme": {
+    "lat": "vĩ độ tỉnh lỵ",
+    "lon": "kinh độ tỉnh lỵ",
+    "mien_1960_1975": "bac | nam | chia — phân vùng múi giờ lịch sử 01/01/1960 – 12/06/1975. \"chia\" = tỉnh vắt qua vĩ tuyến 17, phải hỏi cấp huyện.",
+    "crossCheck": "đối chiếu chéo tuỳ chọn với Wikidata P625 (điểm đại diện tỉnh)"
+  },
+  "count": 63,
+  "provinces": [
+    {
+      "code": "01",
+      "name": "Hà Nội",
+      "capital": "Hà Nội",
+      "lat": 21.0285,
+      "lon": 105.8542,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 21.0245,
+        "lon": 105.8412,
+        "deltaDeg": 0.01
+      }
+    },
+    {
+      "code": "02",
+      "name": "Hải Phòng",
+      "capital": "Hải Phòng",
+      "lat": 20.8449,
+      "lon": 106.6881,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 20.8,
+        "lon": 106.6667,
+        "deltaDeg": 0.04
+      }
+    },
+    {
+      "code": "03",
+      "name": "Hải Dương",
+      "capital": "Hải Dương",
+      "lat": 20.9373,
+      "lon": 106.3145,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "04",
+      "name": "Hưng Yên",
+      "capital": "Hưng Yên",
+      "lat": 20.6464,
+      "lon": 106.0511,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 20.8167,
+        "lon": 106.05,
+        "deltaDeg": 0.17
+      }
+    },
+    {
+      "code": "05",
+      "name": "Vĩnh Phúc",
+      "capital": "Vĩnh Yên",
+      "lat": 21.3089,
+      "lon": 105.6043,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "06",
+      "name": "Bắc Ninh",
+      "capital": "Bắc Ninh",
+      "lat": 21.1861,
+      "lon": 106.0763,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 21.1,
+        "lon": 106.1,
+        "deltaDeg": 0.09
+      }
+    },
+    {
+      "code": "07",
+      "name": "Bắc Giang",
+      "capital": "Bắc Giang",
+      "lat": 21.2731,
+      "lon": 106.1946,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "08",
+      "name": "Bắc Kạn",
+      "capital": "Bắc Kạn",
+      "lat": 22.147,
+      "lon": 105.8348,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "09",
+      "name": "Thái Nguyên",
+      "capital": "Thái Nguyên",
+      "lat": 21.5942,
+      "lon": 105.8482,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 21.6667,
+        "lon": 105.8333,
+        "deltaDeg": 0.07
+      }
+    },
+    {
+      "code": "10",
+      "name": "Lạng Sơn",
+      "capital": "Lạng Sơn",
+      "lat": 21.8537,
+      "lon": 106.7615,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 21.75,
+        "lon": 106.5,
+        "deltaDeg": 0.26
+      }
+    },
+    {
+      "code": "11",
+      "name": "Cao Bằng",
+      "capital": "Cao Bằng",
+      "lat": 22.6657,
+      "lon": 106.2522,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 22.75,
+        "lon": 106.0833,
+        "deltaDeg": 0.17
+      }
+    },
+    {
+      "code": "12",
+      "name": "Hà Giang",
+      "capital": "Hà Giang",
+      "lat": 22.8233,
+      "lon": 104.9836,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 22.75,
+        "lon": 105,
+        "deltaDeg": 0.07
+      }
+    },
+    {
+      "code": "13",
+      "name": "Tuyên Quang",
+      "capital": "Tuyên Quang",
+      "lat": 21.8236,
+      "lon": 105.214,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 22.1167,
+        "lon": 105.25,
+        "deltaDeg": 0.29
+      }
+    },
+    {
+      "code": "14",
+      "name": "Yên Bái",
+      "capital": "Yên Bái",
+      "lat": 21.7229,
+      "lon": 104.9113,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "15",
+      "name": "Lào Cai",
+      "capital": "Lào Cai",
+      "lat": 22.4856,
+      "lon": 103.9707,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 22.3,
+        "lon": 104.1667,
+        "deltaDeg": 0.2
+      }
+    },
+    {
+      "code": "16",
+      "name": "Lai Châu",
+      "capital": "Lai Châu",
+      "lat": 22.3964,
+      "lon": 103.4587,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 22.2833,
+        "lon": 103.25,
+        "deltaDeg": 0.21
+      }
+    },
+    {
+      "code": "17",
+      "name": "Điện Biên",
+      "capital": "Điện Biên Phủ",
+      "lat": 21.386,
+      "lon": 103.023,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 21.3833,
+        "lon": 103.0167,
+        "deltaDeg": 0.01
+      }
+    },
+    {
+      "code": "18",
+      "name": "Sơn La",
+      "capital": "Sơn La",
+      "lat": 21.3256,
+      "lon": 103.9188,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 21.1667,
+        "lon": 104,
+        "deltaDeg": 0.16
+      }
+    },
+    {
+      "code": "19",
+      "name": "Hoà Bình",
+      "capital": "Hoà Bình",
+      "lat": 20.8137,
+      "lon": 105.3382,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "20",
+      "name": "Phú Thọ",
+      "capital": "Việt Trì",
+      "lat": 21.3227,
+      "lon": 105.4019,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 21.3333,
+        "lon": 105.1667,
+        "deltaDeg": 0.24
+      }
+    },
+    {
+      "code": "21",
+      "name": "Quảng Ninh",
+      "capital": "Hạ Long",
+      "lat": 20.95,
+      "lon": 107.0833,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 21.25,
+        "lon": 107.3333,
+        "deltaDeg": 0.3
+      }
+    },
+    {
+      "code": "22",
+      "name": "Thái Bình",
+      "capital": "Thái Bình",
+      "lat": 20.446,
+      "lon": 106.3365,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "23",
+      "name": "Nam Định",
+      "capital": "Nam Định",
+      "lat": 20.434,
+      "lon": 106.168,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "24",
+      "name": "Hà Nam",
+      "capital": "Phủ Lý",
+      "lat": 20.5411,
+      "lon": 105.9139,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "25",
+      "name": "Ninh Bình",
+      "capital": "Ninh Bình",
+      "lat": 20.2539,
+      "lon": 105.975,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 20.25,
+        "lon": 105.8333,
+        "deltaDeg": 0.14
+      }
+    },
+    {
+      "code": "26",
+      "name": "Thanh Hoá",
+      "capital": "Thanh Hoá",
+      "lat": 19.8067,
+      "lon": 105.7852,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "27",
+      "name": "Nghệ An",
+      "capital": "Vinh",
+      "lat": 18.6796,
+      "lon": 105.6813,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 19.3333,
+        "lon": 104.8333,
+        "deltaDeg": 0.85
+      }
+    },
+    {
+      "code": "28",
+      "name": "Hà Tĩnh",
+      "capital": "Hà Tĩnh",
+      "lat": 18.3428,
+      "lon": 105.9057,
+      "mien_1960_1975": "bac",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 18.3333,
+        "lon": 105.9,
+        "deltaDeg": 0.01
+      }
+    },
+    {
+      "code": "29",
+      "name": "Quảng Bình",
+      "capital": "Đồng Hới",
+      "lat": 17.4689,
+      "lon": 106.5997,
+      "mien_1960_1975": "bac"
+    },
+    {
+      "code": "30",
+      "name": "Quảng Trị",
+      "capital": "Đông Hà",
+      "lat": 16.8163,
+      "lon": 107.1,
+      "mien_1960_1975": "chia",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 16.75,
+        "lon": 107,
+        "deltaDeg": 0.1
+      }
+    },
+    {
+      "code": "31",
+      "name": "Thừa Thiên Huế",
+      "capital": "Huế",
+      "lat": 16.4637,
+      "lon": 107.5909,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "32",
+      "name": "Đà Nẵng",
+      "capital": "Đà Nẵng",
+      "lat": 16.0544,
+      "lon": 108.2022,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 16.0694,
+        "lon": 108.2097,
+        "deltaDeg": 0.02
+      }
+    },
+    {
+      "code": "33",
+      "name": "Quảng Nam",
+      "capital": "Tam Kỳ",
+      "lat": 15.5736,
+      "lon": 108.474,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 15.55,
+        "lon": 108.05,
+        "deltaDeg": 0.42
+      }
+    },
+    {
+      "code": "34",
+      "name": "Quảng Ngãi",
+      "capital": "Quảng Ngãi",
+      "lat": 15.1214,
+      "lon": 108.8044,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 15,
+        "lon": 108.6667,
+        "deltaDeg": 0.14
+      }
+    },
+    {
+      "code": "35",
+      "name": "Bình Định",
+      "capital": "Quy Nhơn",
+      "lat": 13.783,
+      "lon": 109.2196,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "36",
+      "name": "Phú Yên",
+      "capital": "Tuy Hoà",
+      "lat": 13.0882,
+      "lon": 109.305,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "37",
+      "name": "Khánh Hoà",
+      "capital": "Nha Trang",
+      "lat": 12.2388,
+      "lon": 109.1967,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "38",
+      "name": "Ninh Thuận",
+      "capital": "Phan Rang–Tháp Chàm",
+      "lat": 11.5643,
+      "lon": 108.9886,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 11.75,
+        "lon": 108.8333,
+        "deltaDeg": 0.19
+      }
+    },
+    {
+      "code": "39",
+      "name": "Bình Thuận",
+      "capital": "Phan Thiết",
+      "lat": 10.9333,
+      "lon": 108.1,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "40",
+      "name": "Kon Tum",
+      "capital": "Kon Tum",
+      "lat": 14.3497,
+      "lon": 108.0005,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "41",
+      "name": "Gia Lai",
+      "capital": "Pleiku",
+      "lat": 13.9833,
+      "lon": 108,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 13.75,
+        "lon": 108.25,
+        "deltaDeg": 0.25
+      }
+    },
+    {
+      "code": "42",
+      "name": "Đắk Lắk",
+      "capital": "Buôn Ma Thuột",
+      "lat": 12.6667,
+      "lon": 108.05,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 12.6667,
+        "lon": 108.05,
+        "deltaDeg": 0
+      }
+    },
+    {
+      "code": "43",
+      "name": "Đắk Nông",
+      "capital": "Gia Nghĩa",
+      "lat": 12.004,
+      "lon": 107.6907,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "44",
+      "name": "Lâm Đồng",
+      "capital": "Đà Lạt",
+      "lat": 11.9404,
+      "lon": 108.4583,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 11.95,
+        "lon": 108.4333,
+        "deltaDeg": 0.02
+      }
+    },
+    {
+      "code": "45",
+      "name": "Bình Phước",
+      "capital": "Đồng Xoài",
+      "lat": 11.534,
+      "lon": 106.883,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "46",
+      "name": "Tây Ninh",
+      "capital": "Tây Ninh",
+      "lat": 11.31,
+      "lon": 106.098,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 11.3333,
+        "lon": 106.1667,
+        "deltaDeg": 0.07
+      }
+    },
+    {
+      "code": "47",
+      "name": "Bình Dương",
+      "capital": "Thủ Dầu Một",
+      "lat": 10.9804,
+      "lon": 106.6519,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "48",
+      "name": "Đồng Nai",
+      "capital": "Biên Hoà",
+      "lat": 10.9574,
+      "lon": 106.8427,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 11.1103,
+        "lon": 107.1811,
+        "deltaDeg": 0.34
+      }
+    },
+    {
+      "code": "49",
+      "name": "Bà Rịa - Vũng Tàu",
+      "capital": "Bà Rịa",
+      "lat": 10.496,
+      "lon": 107.168,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "50",
+      "name": "Thành phố Hồ Chí Minh",
+      "capital": "TP. Hồ Chí Minh",
+      "lat": 10.7769,
+      "lon": 106.7009,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 10.7756,
+        "lon": 106.7019,
+        "deltaDeg": 0
+      }
+    },
+    {
+      "code": "51",
+      "name": "Long An",
+      "capital": "Tân An",
+      "lat": 10.532,
+      "lon": 106.413,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "52",
+      "name": "Tiền Giang",
+      "capital": "Mỹ Tho",
+      "lat": 10.36,
+      "lon": 106.36,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 10.4167,
+        "lon": 106.1667,
+        "deltaDeg": 0.19
+      }
+    },
+    {
+      "code": "53",
+      "name": "Bến Tre",
+      "capital": "Bến Tre",
+      "lat": 10.241,
+      "lon": 106.376,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "54",
+      "name": "Trà Vinh",
+      "capital": "Trà Vinh",
+      "lat": 9.934,
+      "lon": 106.345,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "55",
+      "name": "Vĩnh Long",
+      "capital": "Vĩnh Long",
+      "lat": 10.2537,
+      "lon": 105.9722,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 10.1667,
+        "lon": 106,
+        "deltaDeg": 0.09
+      }
+    },
+    {
+      "code": "56",
+      "name": "Đồng Tháp",
+      "capital": "Cao Lãnh",
+      "lat": 10.45,
+      "lon": 105.633,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 10.3883,
+        "lon": 106,
+        "deltaDeg": 0.37
+      }
+    },
+    {
+      "code": "57",
+      "name": "An Giang",
+      "capital": "Long Xuyên",
+      "lat": 10.386,
+      "lon": 105.435,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 10.5,
+        "lon": 105.1667,
+        "deltaDeg": 0.27
+      }
+    },
+    {
+      "code": "58",
+      "name": "Kiên Giang",
+      "capital": "Rạch Giá",
+      "lat": 10.0125,
+      "lon": 105.0809,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 10,
+        "lon": 105.1667,
+        "deltaDeg": 0.09
+      }
+    },
+    {
+      "code": "59",
+      "name": "Cần Thơ",
+      "capital": "Cần Thơ",
+      "lat": 10.0452,
+      "lon": 105.7469,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 10.1547,
+        "lon": 105.5005,
+        "deltaDeg": 0.25
+      }
+    },
+    {
+      "code": "60",
+      "name": "Hậu Giang",
+      "capital": "Vị Thanh",
+      "lat": 9.7845,
+      "lon": 105.47,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 9.7833,
+        "lon": 105.4667,
+        "deltaDeg": 0
+      }
+    },
+    {
+      "code": "61",
+      "name": "Sóc Trăng",
+      "capital": "Sóc Trăng",
+      "lat": 9.6025,
+      "lon": 105.9739,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "62",
+      "name": "Bạc Liêu",
+      "capital": "Bạc Liêu",
+      "lat": 9.2941,
+      "lon": 105.7278,
+      "mien_1960_1975": "nam"
+    },
+    {
+      "code": "63",
+      "name": "Cà Mau",
+      "capital": "Cà Mau",
+      "lat": 9.1769,
+      "lon": 105.1524,
+      "mien_1960_1975": "nam",
+      "crossCheck": {
+        "source": "wikidata:P625",
+        "lat": 9.0833,
+        "lon": 105.0833,
+        "deltaDeg": 0.09
+      }
+    }
+  ]
+}

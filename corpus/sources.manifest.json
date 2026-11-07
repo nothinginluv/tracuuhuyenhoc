@@ -1,0 +1,58 @@
+{
+  "$comment": "Nguồn Tầng A — văn bản cổ, public domain. Tải từ Wikisource bằng scripts/fetch-corpus.mjs. Không scrape ctext.org (điều khoản cấm tải tự động).",
+  "userAgent": "tracuuhuyenhoc-corpus/0.1 (corpus build; contact via repo)",
+  "sources": [
+    {
+      "key": "ziwei-quanshu",
+      "title": "紫微斗數全書",
+      "domain": "tuvi",
+      "tier": "A",
+      "license": "public-domain",
+      "author": "陳摶 (truyền thuyết) / 羅洪先 序",
+      "era": "Minh–Thanh",
+      "provider": "zh.wikisource",
+      "pages": [
+        "紫微斗數全書/卷一",
+        "紫微斗數全書/卷二",
+        "紫微斗數全書/卷三"
+      ]
+    },
+    {
+      "key": "sanming-tonghui",
+      "title": "三命通會 (四庫全書本)",
+      "domain": "bazi",
+      "tier": "A",
+      "license": "public-domain",
+      "author": "萬民英",
+      "era": "Minh",
+      "provider": "zh.wikisource",
+      "pages": [
+        "三命通會 (四庫全書本)/卷01",
+        "三命通會 (四庫全書本)/卷02",
+        "三命通會 (四庫全書本)/卷03",
+        "三命通會 (四庫全書本)/卷04",
+        "三命通會 (四庫全書本)/卷05",
+        "三命通會 (四庫全書本)/卷06",
+        "三命通會 (四庫全書本)/卷07",
+        "三命通會 (四庫全書本)/卷08",
+        "三命通會 (四庫全書本)/卷09",
+        "三命通會 (四庫全書本)/卷10",
+        "三命通會 (四庫全書本)/卷11",
+        "三命通會 (四庫全書本)/卷12"
+      ]
+    },
+    {
+      "key": "yuanhai-ziping",
+      "title": "淵海子平",
+      "domain": "bazi",
+      "tier": "A",
+      "license": "public-domain",
+      "author": "徐大升 (truyền)",
+      "era": "Tống–Minh",
+      "provider": "zh.wikisource",
+      "pages": [
+        "淵海子平"
+      ]
+    }
+  ]
+}

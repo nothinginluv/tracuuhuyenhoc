@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "$comment": "Mười hai cung. Thứ tự và cường nhược lấy nguyên văn 紫微斗數全書 卷二; phần phạm vi chỉ hiển thị khi corpus có câu nói chung về cung đó, còn lại ghi rõ là chưa có.",
+  "order_quote": "q_tv_0075",
+  "strength_quote": "q_tv_0076",
+  "strong": [
+    "财帛",
+    "官禄",
+    "福德",
+    "迁移",
+    "田宅"
+  ],
+  "weak": [
+    "子女",
+    "奴仆",
+    "兄弟",
+    "父母"
+  ],
+  "palaces": [
+    {
+      "id": "ming",
+      "zh": "命宫",
+      "vi": "Mệnh",
+      "scope_quote": "q_tv_0077"
+    },
+    {
+      "id": "xiongdi",
+      "zh": "兄弟",
+      "vi": "Huynh Đệ",
+      "note_vi": "Corpus 卷二 luận cung này theo từng sao, chưa có câu định nghĩa chung."
+    },
+    {
+      "id": "qieqie",
+      "zh": "妻妾",
+      "vi": "Phu Thê",
+      "note_vi": "Corpus 卷二 luận cung này theo từng sao, chưa có câu định nghĩa chung."
+    },
+    {
+      "id": "zinv",
+      "zh": "子女",
+      "vi": "Tử Nữ",
+      "scope_quote": "q_tv_0079"
+    },
+    {
+      "id": "caibo",
+      "zh": "财帛",
+      "vi": "Tài Bạch",
+      "scope_quote": "q_tv_0078"
+    },
+    {
+      "id": "jie",
+      "zh": "疾厄",
+      "vi": "Tật Ách",
+      "scope_quote": "q_tv_0080"
+    },
+    {
+      "id": "qianyi",
+      "zh": "迁移",
+      "vi": "Thiên Di",
+      "scope_quote": "q_tv_0078"
+    },
+    {
+      "id": "nupu",
+      "zh": "奴仆",
+      "vi": "Giao Hữu",
+      "note_vi": "Corpus 卷二 luận cung này theo từng sao, chưa có câu định nghĩa chung."
+    },
+    {
+      "id": "guanlu",
+      "zh": "官禄",
+      "vi": "Sự Nghiệp",
+      "scope_quote": "q_tv_0078"
+    },
+    {
+      "id": "tianzhai",
+      "zh": "田宅",
+      "vi": "Điền Trạch",
+      "note_vi": "Corpus 卷二 luận cung này theo từng sao, chưa có câu định nghĩa chung."
+    },
+    {
+      "id": "fude",
+      "zh": "福德",
+      "vi": "Phúc Đức",
+      "scope_quote": "q_tv_0081"
+    },
+    {
+      "id": "fumu",
+      "zh": "父母",
+      "vi": "Phụ Mẫu",
+      "scope_quote": "q_tv_0082"
+    }
+  ],
+  "strength_female_quote": "q_tv_0083"
+}

@@ -1,0 +1,21 @@
+{
+  "key": "ziwei-quanshu",
+  "title": "紫微斗數全書",
+  "segments": [
+    {
+      "locator": "卷一",
+      "start": 0,
+      "end": 23308
+    },
+    {
+      "locator": "卷二",
+      "start": 23310,
+      "end": 58584
+    },
+    {
+      "locator": "卷三",
+      "start": 58586,
+      "end": 71244
+    }
+  ]
+}

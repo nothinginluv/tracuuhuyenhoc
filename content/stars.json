@@ -1,0 +1,962 @@
+{
+  "version": 1,
+  "$comment": "Tầng B — định nghĩa 14 chính tinh + Văn Xương, rút từ 紫微斗數全書 卷一 (諸星問答論). Mỗi mục từ khoá (ngũ hành, đẩu, cung chủ, vai trò) đều được script scripts/verify-content.mjs đối chiếu với chính các câu trích dẫn của sao đó. Không có câu nào không dẫn nguồn.",
+  "stars": [
+    {
+      "id": "ziwei",
+      "elements": [
+        {
+          "zh": "土",
+          "vi": "Thổ"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [
+        {
+          "zh": "帝座",
+          "vi": "Đế Toạ"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0001",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0004",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tianji",
+      "elements": [
+        {
+          "zh": "木",
+          "vi": "Mộc"
+        }
+      ],
+      "dou": {
+        "zh": "南斗",
+        "vi": "Nam Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "善星",
+          "vi": "Thiện tinh"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0005",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0006",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "taiyang",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [
+        {
+          "zh": "日之精",
+          "vi": "Tinh hoa Mặt Trời"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0007",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0008",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "wuqu",
+      "elements": [
+        {
+          "zh": "金",
+          "vi": "Kim"
+        }
+      ],
+      "dou": {
+        "zh": "北斗",
+        "vi": "Bắc Đẩu"
+      },
+      "domains": [
+        {
+          "zh": "財帛宮",
+          "vi": "Tài Bạch"
+        }
+      ],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0009",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0010",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tiantong",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "dou": null,
+      "domains": [
+        {
+          "zh": "福德宮",
+          "vi": "Phúc Đức"
+        }
+      ],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0011",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0012",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "lianzhen",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        }
+      ],
+      "dou": {
+        "zh": "北斗",
+        "vi": "Bắc Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "品秩",
+          "vi": "Phẩm trật"
+        },
+        {
+          "zh": "權令",
+          "vi": "Quyền lệnh"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0013",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0014",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tianfu",
+      "elements": [
+        {
+          "zh": "土",
+          "vi": "Thổ"
+        }
+      ],
+      "dou": {
+        "zh": "南斗",
+        "vi": "Nam Đẩu"
+      },
+      "domains": [
+        {
+          "zh": "財帛",
+          "vi": "Tài Bạch"
+        }
+      ],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0003",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0015",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "taiyin",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "dou": null,
+      "domains": [
+        {
+          "zh": "田宅",
+          "vi": "Điền Trạch"
+        }
+      ],
+      "roles": [
+        {
+          "zh": "富",
+          "vi": "Phú"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0016",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0017",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tanlang",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "dou": {
+        "zh": "北斗",
+        "vi": "Bắc Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "解厄之神",
+          "vi": "Thần giải ách"
+        },
+        {
+          "zh": "桃花",
+          "vi": "Đào Hoa"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0018",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0019",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "jumen",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        },
+        {
+          "zh": "金",
+          "vi": "Kim"
+        }
+      ],
+      "dou": {
+        "zh": "北斗",
+        "vi": "Bắc Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "陰精",
+          "vi": "Âm tinh"
+        },
+        {
+          "zh": "暗",
+          "vi": "Ám"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0020",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0021",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tianxiang",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "dou": {
+        "zh": "南斗",
+        "vi": "Nam Đẩu"
+      },
+      "domains": [
+        {
+          "zh": "官祿",
+          "vi": "Quan Lộc"
+        }
+      ],
+      "roles": [
+        {
+          "zh": "印",
+          "vi": "Ấn"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0022",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0023",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tianliang",
+      "elements": [
+        {
+          "zh": "土",
+          "vi": "Thổ"
+        }
+      ],
+      "dou": {
+        "zh": "南斗",
+        "vi": "Nam Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "壽",
+          "vi": "Thọ"
+        },
+        {
+          "zh": "蔭",
+          "vi": "Ấm"
+        },
+        {
+          "zh": "福壽",
+          "vi": "Phúc thọ"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0024",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0025",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "qisha",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        },
+        {
+          "zh": "金",
+          "vi": "Kim"
+        }
+      ],
+      "dou": {
+        "zh": "南斗",
+        "vi": "Nam Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "上將",
+          "vi": "Thượng tướng"
+        },
+        {
+          "zh": "孤辰",
+          "vi": "Cô thần"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0026",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0027",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "pojun",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "dou": {
+        "zh": "北斗",
+        "vi": "Bắc Đẩu"
+      },
+      "domains": [
+        {
+          "zh": "夫妻",
+          "vi": "Phu Thê"
+        },
+        {
+          "zh": "子息",
+          "vi": "Tử Tức"
+        },
+        {
+          "zh": "奴僕",
+          "vi": "Nô Bộc"
+        }
+      ],
+      "roles": [
+        {
+          "zh": "殺氣",
+          "vi": "Sát khí"
+        },
+        {
+          "zh": "耗星",
+          "vi": "Hao tinh"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0028",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0029",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "wenchang",
+      "elements": [],
+      "dou": null,
+      "domains": [],
+      "roles": [
+        {
+          "zh": "科甲",
+          "vi": "Khoa giáp"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0030",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0031",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "zuofu",
+      "elements": [
+        {
+          "zh": "土",
+          "vi": "Thổ"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [
+        {
+          "zh": "帝极主宰",
+          "vi": "Chủ tể Đế cực"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0034",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0035",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0036",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "youbi",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [
+        {
+          "zh": "帝极主宰",
+          "vi": "Chủ tể Đế cực"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0037",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0038",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0036",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "wenqu",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "dou": {
+        "zh": "北斗",
+        "vi": "Bắc Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "科甲",
+          "vi": "Khoa giáp"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0032",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0033",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tiankui",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [
+        {
+          "zh": "司科",
+          "vi": "Giữ khoa"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0039",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0040",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0041",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tianyue",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [
+        {
+          "zh": "司科",
+          "vi": "Giữ khoa"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0039",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0040",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0041",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "lucun",
+      "elements": [
+        {
+          "zh": "土",
+          "vi": "Thổ"
+        }
+      ],
+      "dou": {
+        "zh": "北斗",
+        "vi": "Bắc Đẩu"
+      },
+      "domains": [
+        {
+          "zh": "田宅",
+          "vi": "Điền Trạch"
+        },
+        {
+          "zh": "财帛",
+          "vi": "Tài Bạch"
+        }
+      ],
+      "roles": [
+        {
+          "zh": "真人之宿",
+          "vi": "Ngôi chân nhân"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0042",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0043",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0044",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tianma",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [
+        {
+          "zh": "驿马",
+          "vi": "Dịch Mã"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0045",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0046",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0047",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "qingyang",
+      "elements": [
+        {
+          "zh": "金",
+          "vi": "Kim"
+        }
+      ],
+      "dou": {
+        "zh": "北斗",
+        "vi": "Bắc Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "助星",
+          "vi": "Phò tá"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0048",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0049",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0050",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tuoluo",
+      "elements": [
+        {
+          "zh": "金",
+          "vi": "Kim"
+        }
+      ],
+      "dou": {
+        "zh": "北斗",
+        "vi": "Bắc Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "助星",
+          "vi": "Phò tá"
+        },
+        {
+          "zh": "化忌",
+          "vi": "Hoá Kỵ"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0051",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0052",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0053",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "huoxing",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        }
+      ],
+      "dou": {
+        "zh": "南斗",
+        "vi": "Nam Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "大杀将",
+          "vi": "Đại sát tướng"
+        },
+        {
+          "zh": "杀神",
+          "vi": "Sát thần"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0054",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0055",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0056",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "lingxing",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        }
+      ],
+      "dou": {
+        "zh": "南斗",
+        "vi": "Nam Đẩu"
+      },
+      "domains": [],
+      "roles": [
+        {
+          "zh": "助星",
+          "vi": "Phò tá"
+        },
+        {
+          "zh": "从神",
+          "vi": "Thần tuỳ tùng"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0057",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0058",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0059",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "dikong",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0060",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0061",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0062",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "dijie",
+      "elements": [
+        {
+          "zh": "火",
+          "vi": "Hoả"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0060",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0061",
+          "role": "reading"
+        },
+        {
+          "quote_id": "q_tv_0062",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tianxing",
+      "elements": [],
+      "dou": null,
+      "domains": [],
+      "roles": [
+        {
+          "zh": "孤刑",
+          "vi": "Cô hình"
+        }
+      ],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0063",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0064",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tianyao",
+      "elements": [],
+      "dou": null,
+      "domains": [],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0065",
+          "role": "definition"
+        },
+        {
+          "quote_id": "q_tv_0066",
+          "role": "reading"
+        }
+      ]
+    }
+  ]
+}

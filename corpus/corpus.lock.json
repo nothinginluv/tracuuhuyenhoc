@@ -1,0 +1,76 @@
+{
+  "ziwei-quanshu": {
+    "title": "紫微斗數全書",
+    "domain": "tuvi",
+    "tier": "A",
+    "license": "public-domain",
+    "provider": "zh.wikisource",
+    "pages": [
+      "紫微斗數全書/卷一",
+      "紫微斗數全書/卷二",
+      "紫微斗數全書/卷三"
+    ],
+    "urls": [
+      "https://zh.wikisource.org/w/index.php?title=%E7%B4%AB%E5%BE%AE%E6%96%97%E6%95%B8%E5%85%A8%E6%9B%B8%2F%E5%8D%B7%E4%B8%80&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E7%B4%AB%E5%BE%AE%E6%96%97%E6%95%B8%E5%85%A8%E6%9B%B8%2F%E5%8D%B7%E4%BA%8C&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E7%B4%AB%E5%BE%AE%E6%96%97%E6%95%B8%E5%85%A8%E6%9B%B8%2F%E5%8D%B7%E4%B8%89&action=raw"
+    ],
+    "chars": 71244,
+    "sha256": "58cb9327f83daba0be879bec3baf4db88d0a94744203313f22b8ddecfb04e7c4",
+    "fetchedAt": "2026-11-03T11:14:15.228Z"
+  },
+  "sanming-tonghui": {
+    "title": "三命通會 (四庫全書本)",
+    "domain": "bazi",
+    "tier": "A",
+    "license": "public-domain",
+    "provider": "zh.wikisource",
+    "pages": [
+      "三命通會 (四庫全書本)/卷01",
+      "三命通會 (四庫全書本)/卷02",
+      "三命通會 (四庫全書本)/卷03",
+      "三命通會 (四庫全書本)/卷04",
+      "三命通會 (四庫全書本)/卷05",
+      "三命通會 (四庫全書本)/卷06",
+      "三命通會 (四庫全書本)/卷07",
+      "三命通會 (四庫全書本)/卷08",
+      "三命通會 (四庫全書本)/卷09",
+      "三命通會 (四庫全書本)/卷10",
+      "三命通會 (四庫全書本)/卷11",
+      "三命通會 (四庫全書本)/卷12"
+    ],
+    "urls": [
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B701&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B702&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B703&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B704&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B705&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B706&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B707&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B708&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B709&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B710&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B711&action=raw",
+      "https://zh.wikisource.org/w/index.php?title=%E4%B8%89%E5%91%BD%E9%80%9A%E6%9C%83%20(%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC)%2F%E5%8D%B712&action=raw"
+    ],
+    "chars": 471753,
+    "sha256": "dd9a1a1c0103d9a584ef992e398441b10f9a96d1aac8aee2bd96b787aa7e4312",
+    "fetchedAt": "2026-11-03T11:14:26.950Z"
+  },
+  "yuanhai-ziping": {
+    "title": "淵海子平",
+    "domain": "bazi",
+    "tier": "A",
+    "license": "public-domain",
+    "provider": "zh.wikisource",
+    "pages": [
+      "淵海子平"
+    ],
+    "urls": [
+      "https://zh.wikisource.org/w/index.php?title=%E6%B7%B5%E6%B5%B7%E5%AD%90%E5%B9%B3&action=raw"
+    ],
+    "chars": 61195,
+    "sha256": "642f88be0ffc41b0fd2591d69f0604c69a7867c834ed87b8e3902147b300bdd4",
+    "fetchedAt": "2026-11-03T11:14:27.615Z"
+  }
+}

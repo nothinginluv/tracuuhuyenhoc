@@ -1,0 +1,66 @@
+{
+  "key": "sanming-tonghui",
+  "title": "三命通會 (四庫全書本)",
+  "segments": [
+    {
+      "locator": "卷01",
+      "start": 0,
+      "end": 37457
+    },
+    {
+      "locator": "卷02",
+      "start": 37459,
+      "end": 74971
+    },
+    {
+      "locator": "卷03",
+      "start": 74973,
+      "end": 111184
+    },
+    {
+      "locator": "卷04",
+      "start": 111186,
+      "end": 149007
+    },
+    {
+      "locator": "卷05",
+      "start": 149009,
+      "end": 185798
+    },
+    {
+      "locator": "卷06",
+      "start": 185800,
+      "end": 223766
+    },
+    {
+      "locator": "卷07",
+      "start": 223768,
+      "end": 257146
+    },
+    {
+      "locator": "卷08",
+      "start": 257148,
+      "end": 310294
+    },
+    {
+      "locator": "卷09",
+      "start": 310296,
+      "end": 362621
+    },
+    {
+      "locator": "卷10",
+      "start": 362623,
+      "end": 396938
+    },
+    {
+      "locator": "卷11",
+      "start": 396940,
+      "end": 442204
+    },
+    {
+      "locator": "卷12",
+      "start": 442206,
+      "end": 471753
+    }
+  ]
+}

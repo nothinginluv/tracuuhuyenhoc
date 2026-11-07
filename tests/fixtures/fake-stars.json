@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "$comment": "Fixture âm cho content:selftest — cố tình sai để chứng minh cổng chặn được.",
+  "stars": [
+    {
+      "id": "ziwei",
+      "elements": [{ "zh": "木", "vi": "Mộc" }],
+      "dou": null,
+      "domains": [],
+      "roles": [],
+      "quotes": [
+        { "quote_id": "q_tv_0001", "role": "definition" },
+        { "quote_id": "q_tv_9999", "role": "reading" }
+      ]
+    },
+    {
+      "id": "khong-co-sao-nay",
+      "elements": [],
+      "dou": null,
+      "domains": [],
+      "roles": [],
+      "quotes": [{ "quote_id": "q_tv_0001", "role": "definition" }]
+    }
+  ]
+}
