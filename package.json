@@ -17,7 +17,7 @@
     "quotes:selftest": "node scripts/verify-quotes.mjs --quotes=tests/fixtures/fake-quotes.jsonl --expect-fail",
     "content:verify": "node scripts/verify-content.mjs",
     "content:selftest": "node scripts/verify-content.mjs --stars=tests/fixtures/fake-stars.json --expect-fail",
-    "test": "node --test packages/calendar-core/test/ packages/tuvi-engine/test/ packages/bazi-engine/test/ apps/web/test/",
+    "test": "node scripts/run-tests.mjs",
     "data:terms": "node scripts/gen-solar-terms.mjs",
     "data:lunar": "node scripts/gen-lunar-months.mjs",
     "data:provinces": "node scripts/gen-provinces.mjs",
