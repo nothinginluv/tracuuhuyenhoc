@@ -111,7 +111,7 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
               />
             </label>
           </div>
-          <span className="field-hint">Giờ 24h trên đồng hồ nơi sinh (vd 23:30).</span>
+          <span className="field-hint">Giờ 24h trên đồng hồ nơi sinh (ví dụ 23:30).</span>
         </div>
 
         <div className="field">
