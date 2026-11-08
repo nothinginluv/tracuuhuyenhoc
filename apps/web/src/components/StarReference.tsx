@@ -10,11 +10,10 @@ import {
 } from '../stars.ts';
 import { Cite } from '../quotes.tsx';
 
-function MetaChip({ label, zh, tone }: { label: string; zh?: string; tone?: string }) {
+function MetaChip({ label, tone }: { label: string; tone?: string }) {
   return (
     <span className={tone ? `meta-chip el-${tone}` : 'meta-chip'}>
       {label}
-      {zh && <span className="zh"> {zh}</span>}
     </span>
   );
 }
@@ -45,7 +44,6 @@ function StarCard({ star }: { star: StarRef }) {
       <header className="star-card-head">
         <div className="star-card-name">
           <h3>{star.def.vi}</h3>
-          <span className="zh">{star.def.zh}</span>
         </div>
         <span className={star.def.group === 'main' ? 'tag tag-main' : 'tag'}>
           {star.def.group === 'main' ? 'Chính tinh' : 'Phụ tinh'}
@@ -54,14 +52,14 @@ function StarCard({ star }: { star: StarRef }) {
 
       <div className="star-meta">
         {star.elements.map((el) => (
-          <MetaChip key={el.zh} label={el.vi} zh={el.zh} tone={ELEMENT_COLOR[el.zh]} />
+          <MetaChip key={el.zh} label={el.vi} tone={ELEMENT_COLOR[el.zh]} />
         ))}
-        {star.dou && <MetaChip label={star.dou.vi} zh={star.dou.zh} />}
+        {star.dou && <MetaChip label={star.dou.vi} />}
         {(star.domains ?? []).map((d) => (
-          <MetaChip key={d.zh} label={`chủ ${d.vi}`} zh={d.zh} />
+          <MetaChip key={d.zh} label={`chủ ${d.vi}`} />
         ))}
         {star.roles.map((r) => (
-          <MetaChip key={r.zh} label={r.vi} zh={r.zh} />
+          <MetaChip key={r.zh} label={r.vi} />
         ))}
       </div>
 
@@ -76,17 +74,16 @@ function HuaCard({ hua }: { hua: HuaRef }) {
       <header className="star-card-head">
         <div className="star-card-name">
           <h3>{hua.def.vi}</h3>
-          <span className="zh">{hua.def.zh}</span>
         </div>
         <span className="tag">Biến thái</span>
       </header>
 
       <div className="star-meta">
         {hua.elements.map((el) => (
-          <MetaChip key={el.zh} label={el.vi} zh={el.zh} tone={ELEMENT_COLOR[el.zh]} />
+          <MetaChip key={el.zh} label={el.vi} tone={ELEMENT_COLOR[el.zh]} />
         ))}
         {hua.roles.map((r) => (
-          <MetaChip key={r.zh} label={r.vi} zh={r.zh} />
+          <MetaChip key={r.zh} label={r.vi} />
         ))}
       </div>
 
@@ -102,7 +99,6 @@ function PalaceCard({ palace }: { palace: PalaceRef }) {
         <span className="palace-order">{palace.index + 1}</span>
         <div className="star-card-name">
           <h3>{palace.vi}</h3>
-          <span className="zh">{palace.zh}</span>
         </div>
         {palace.strength && (
           <span className={palace.strength === 'strong' ? 'tag tag-main' : 'tag'}>
@@ -134,7 +130,7 @@ export function StarReference({ onBack }: { onBack: () => void }) {
         <h1>Định nghĩa sao, nguyên văn.</h1>
         <p className="sub">
           {main.length} chính tinh, {aux.length} phụ tinh, 4 hoá và 12 cung — mỗi mục cắt từ{' '}
-          <span className="zh">紫微斗數全書</span>. Ngũ hành, đẩu, cung chủ, vai trò đều là từ khoá
+          <strong>Tử Vi Đẩu Số Toàn Thư</strong>. Ngũ hành, đẩu, cung chủ, vai trò đều là từ khoá
           xuất hiện trong chính câu trích; không có chữ nào do giao diện tự thêm.
         </p>
         <button type="button" className="link-btn" onClick={onBack}>
@@ -172,7 +168,7 @@ export function StarReference({ onBack }: { onBack: () => void }) {
 
       <h2 className="stars-subhead">Mười hai cung</h2>
       <p className="stars-lede">
-        Thứ tự cung theo nguyên văn <span className="zh">安十二宮例</span>. Cường nhược có bảng riêng
+        Thứ tự cung theo nguyên văn <strong>phép an mười hai cung</strong>. Cường nhược có bảng riêng
         cho mệnh nam và mệnh nữ; bảng nam được gắn nhãn trên từng cung.
       </p>
       {PALACE_META.order && <Cite id={PALACE_META.order.id} />}
@@ -206,8 +202,8 @@ export function StarReference({ onBack }: { onBack: () => void }) {
           bản này.
         </p>
         <p className="tiny muted">
-          Mục nào không có là vì corpus Tầng A chưa có câu định nghĩa tương ứng — chúng tôi không
-          viết thay nguồn. Muốn bổ sung: thêm câu vào <code>content/quotes.jsonl</code>, chạy{' '}
+          Mục nào không có là vì kho văn bản Tầng A chưa có câu định nghĩa tương ứng — chúng tôi
+          không viết thay nguồn. Muốn bổ sung: thêm câu vào <code>content/quotes.jsonl</code>, chạy{' '}
           <code>npm run quotes:verify</code>, rồi khai báo trong <code>content/*.json</code>.
         </p>
       </div>

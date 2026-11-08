@@ -696,12 +696,12 @@ h1 {
   white-space: nowrap;
 }
 
-.palace-branch-zh {
+.palace-branch {
   position: absolute;
   right: 6px;
-  bottom: -8px;
+  bottom: 2px;
   font-family: var(--serif);
-  font-size: 46px;
+  font-size: 26px;
   line-height: 1;
   color: rgba(28, 27, 25, 0.055);
   pointer-events: none;
@@ -739,21 +739,9 @@ h1 {
   font-family: var(--serif);
 }
 
-.star-main .star-zh {
-  font-family: var(--serif);
-  font-size: 10.5px;
-  color: var(--faint);
-}
-
 .star-aux {
   font-size: 11px;
   color: #555047;
-}
-
-.star-aux .star-zh {
-  font-family: var(--serif);
-  font-size: 9.5px;
-  color: #9a948a;
 }
 
 .hua {
@@ -909,13 +897,6 @@ h1 {
   line-height: 1.1;
 }
 
-.dm-zh {
-  display: block;
-  font-size: 18px;
-  opacity: 0.5;
-  margin-top: 2px;
-}
-
 .dm-meta {
   font: 500 12.5px/1.4 var(--mono);
   color: #4d4840;
@@ -960,13 +941,6 @@ h1 {
   font-size: 30px;
   font-weight: 600;
   line-height: 1.15;
-}
-
-.big-zh {
-  display: block;
-  font-size: 13px;
-  font-weight: 400;
-  opacity: 0.5;
 }
 
 .big-char.branch {
@@ -1193,6 +1167,15 @@ h1 {
   border-left: 2px solid #ddcdb6;
   background: #fdfbf7;
   border-radius: 0 6px 6px 0;
+}
+
+.cite-label {
+  margin: 0 0 3px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
 }
 
 .cite-zh {

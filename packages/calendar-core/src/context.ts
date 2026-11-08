@@ -587,7 +587,7 @@ export function buildChartContext(
       code: 'jie-proximity',
       severity: 'warn',
       message:
-        `Sinh cách mốc tiết khí "${term.zh}" chưa tới 2 giờ. Trụ tháng (và có thể cả trụ năm) rất nhạy với ` +
+        `Sinh cách mốc tiết khí "${term.vi}" chưa tới 2 giờ. Trụ tháng (và có thể cả trụ năm) rất nhạy với ` +
         'sai số giờ sinh — chỉ cần lệch vài phút là đổi tháng.',
     });
   }

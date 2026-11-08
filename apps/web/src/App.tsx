@@ -178,9 +178,9 @@ export function App() {
     <div className="app">
       <header className="site-head">
         <button className="brand" onClick={() => go('lookup')}>
-          <span className="brand-mark">紫</span>
+          <span className="brand-mark" aria-hidden="true">☯</span>
           <span className="brand-text">
-            tracuuhuyenhoc
+            Tra Cứu Huyền Học
             <small>Tử Vi · Bát Tự · minh bạch</small>
           </span>
         </button>
@@ -304,7 +304,8 @@ export function App() {
                           <strong>Hai lịch cho hai ngày âm khác nhau.</strong>{' '}
                           <span>
                             Lá số chính an theo lịch Trung Quốc (UTC+8). Bản đối chiếu an theo lịch
-                            Việt Nam (UTC+7) — thường là lý do app Việt và app Trung Quốc ra khác.
+                            Việt Nam (UTC+7) — thường là lý do ứng dụng Việt và ứng dụng Trung Quốc
+                            ra khác.
                           </span>
                         </div>
                         <div className="segmented" role="group" aria-label="Chọn lịch an sao">
@@ -359,11 +360,11 @@ export function App() {
           {!result && !error && (
             <section className="intro-grid">
               <div className="intro-card">
-                <h2>Vì sao lá số có thể khác app khác?</h2>
+                <h2>Vì sao lá số có thể khác ứng dụng khác?</h2>
                 <p>
-                  Vì mỗi app chọn một quy ước: giờ Bắc Kinh hay giờ nơi sinh, Tý sớm hay Tý muộn,
-                  tháng nhuận chia đôi hay giữ nguyên, năm đổi tại Tết hay Lập Xuân. Ở đây bạn thấy
-                  và đổi được từng lựa chọn.
+                  Vì mỗi ứng dụng chọn một quy ước: giờ Bắc Kinh hay giờ nơi sinh, Tý sớm hay Tý
+                  muộn, tháng nhuận chia đôi hay giữ nguyên, năm đổi tại Tết hay Lập Xuân. Ở đây bạn
+                  thấy và đổi được từng lựa chọn.
                 </p>
                 <button className="link-btn" onClick={() => setPage('method')}>
                   Đọc phương pháp →
@@ -389,7 +390,7 @@ export function App() {
               chính hay pháp lý.
             </p>
             <p className="tinier">
-              Lõi lịch và engine an sao có test đối chứng độc lập · trích dẫn qua cổng kiểm
+              Lõi lịch và phần an sao có bộ kiểm thử đối chứng độc lập · trích dẫn qua cổng kiểm
               SHA-256 · <code>npm run check</code>
             </p>
           </footer>

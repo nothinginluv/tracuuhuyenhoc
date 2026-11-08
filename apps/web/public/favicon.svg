@@ -1,5 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="tracuuhuyenhoc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Tra Cứu Huyền Học">
   <rect width="64" height="64" rx="14" fill="#fbfaf7"/>
   <rect x="3" y="3" width="58" height="58" rx="12" fill="none" stroke="#c9bda6" stroke-width="1.5"/>
-  <text x="32" y="45" font-family="Songti SC, Noto Serif CJK SC, SimSun, serif" font-size="38" text-anchor="middle" fill="#201d18">紫</text>
+  <g transform="translate(32 32)">
+    <circle r="19" fill="none" stroke="#6b2f3f" stroke-width="2"/>
+    <path d="M0 -19 A 19 19 0 0 1 0 19 A 9.5 9.5 0 0 1 0 0 A 9.5 9.5 0 0 0 0 -19 Z" fill="#6b2f3f"/>
+    <circle cx="0" cy="-9.5" r="2.6" fill="#fbfaf7"/>
+    <circle cx="0" cy="9.5" r="2.6" fill="#6b2f3f"/>
+  </g>
 </svg>

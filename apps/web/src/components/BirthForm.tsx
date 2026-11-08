@@ -208,7 +208,7 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
         <div className="advanced">
           <div className="field field-wide">
             <label className="field-label" htmlFor="birth-preset">
-              Quy ước tính (preset)
+              Quy ước tính
             </label>
             <select
               id="birth-preset"
@@ -237,7 +237,7 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
                 value={values.ziBoundary}
                 onChange={(e) => onChange({ ziBoundary: e.target.value as FormValues['ziBoundary'] })}
               >
-                <option value="">Theo preset</option>
+                <option value="">Theo quy ước chung</option>
                 <option value="late">Tý muộn — đổi ngày lúc 00:00</option>
                 <option value="early">Tý sớm — đổi ngày lúc 23:00</option>
               </select>
@@ -255,7 +255,7 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
                   onChange({ hourStemRule: e.target.value as FormValues['hourStemRule'] })
                 }
               >
-                <option value="">Theo preset</option>
+                <option value="">Theo quy ước chung</option>
                 <option value="current-day">Suy từ can ngày hiện tại</option>
                 <option value="next-day">Suy từ can ngày kế tiếp</option>
               </select>

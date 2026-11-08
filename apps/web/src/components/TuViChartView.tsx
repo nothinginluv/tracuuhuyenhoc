@@ -27,7 +27,6 @@ function StarRow({ star, main }: { star: PlacedStar; main: boolean }) {
   return (
     <span className={main ? 'star star-main' : 'star star-aux'}>
       <span className="star-vi">{star.vi}</span>
-      <span className="star-zh">{star.zh}</span>
       {star.mutagen && (
         <span className={`hua hua-${star.mutagen}`}>{HUA_SHORT[star.mutagen]}</span>
       )}
@@ -49,8 +48,8 @@ function PalaceCell({ palace }: { palace: Palace }) {
           {palace.stemVi} {palace.branchVi}
         </span>
       </div>
-      <div className="palace-branch-zh" aria-hidden="true">
-        {palace.branchZh}
+      <div className="palace-branch" aria-hidden="true">
+        {palace.branchVi}
       </div>
       <div className="palace-main">
         {main.map((s) => (
@@ -126,21 +125,19 @@ export function TuViChartView({ chart, calendarLabel = 'Âm lịch TQ' }: Props)
               <div>
                 <dt>Ngũ hành cục</dt>
                 <dd>
-                  {chart.bureau.vi} <span className="zh">{chart.bureau.zh}</span>
+                  {chart.bureau.vi}
                 </dd>
               </div>
               <div>
                 <dt>Mệnh chủ</dt>
                 <dd>
-                  {STAR_DEFS[chart.soulStar].vi}{' '}
-                  <span className="zh">{STAR_DEFS[chart.soulStar].zh}</span>
+                  {STAR_DEFS[chart.soulStar].vi}
                 </dd>
               </div>
               <div>
                 <dt>Thân chủ</dt>
                 <dd>
-                  {STAR_DEFS[chart.bodyStar].vi}{' '}
-                  <span className="zh">{STAR_DEFS[chart.bodyStar].zh}</span>
+                  {STAR_DEFS[chart.bodyStar].vi}
                 </dd>
               </div>
               <div>
@@ -165,7 +162,7 @@ export function TuViChartView({ chart, calendarLabel = 'Âm lịch TQ' }: Props)
                 <li key={m.star}>
                   <span className={`hua hua-${m.hua}`}>{m.vi}</span>
                   <span>
-                    {STAR_DEFS[m.star].vi} <span className="zh">{STAR_DEFS[m.star].zh}</span>
+                    {STAR_DEFS[m.star].vi}
                   </span>
                   <span className="muted">cung {BRANCHES_VI[m.branch]}</span>
                 </li>

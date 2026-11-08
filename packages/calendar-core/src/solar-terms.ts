@@ -15,7 +15,35 @@ export type TermKey =
   | 'xiaoshu' | 'dashu' | 'liqiu' | 'chushu' | 'bailu' | 'qiufen'
   | 'hanlu' | 'shuangjiang' | 'lidong' | 'xiaoxue' | 'daxue' | 'dongzhi';
 
-export type Term = { key: TermKey; zh: string; epoch: number };
+export type Term = { key: TermKey; zh: string; vi: string; epoch: number };
+
+/** Tên 24 tiết khí bằng tiếng Việt — dùng cho mọi chỗ hiển thị. */
+export const TERM_VI: Record<TermKey, string> = {
+  xiaohan: 'Tiểu Hàn',
+  dahan: 'Đại Hàn',
+  lichun: 'Lập Xuân',
+  yushui: 'Vũ Thuỷ',
+  jingzhe: 'Kinh Trập',
+  chunfen: 'Xuân Phân',
+  qingming: 'Thanh Minh',
+  guyu: 'Cốc Vũ',
+  lixia: 'Lập Hạ',
+  xiaoman: 'Tiểu Mãn',
+  mangzhong: 'Mang Chủng',
+  xiazhi: 'Hạ Chí',
+  xiaoshu: 'Tiểu Thử',
+  dashu: 'Đại Thử',
+  liqiu: 'Lập Thu',
+  chushu: 'Xử Thử',
+  bailu: 'Bạch Lộ',
+  qiufen: 'Thu Phân',
+  hanlu: 'Hàn Lộ',
+  shuangjiang: 'Sương Giáng',
+  lidong: 'Lập Đông',
+  xiaoxue: 'Tiểu Tuyết',
+  daxue: 'Đại Tuyết',
+  dongzhi: 'Đông Chí',
+};
 
 type TermsFile = {
   from: number;
@@ -50,7 +78,7 @@ const FLAT: Term[] = (() => {
     void yearStr;
     arr.forEach((epoch, i) => {
       const o = FILE.order[i];
-      out.push({ key: o.key, zh: o.zh, epoch });
+      out.push({ key: o.key, zh: o.zh, vi: TERM_VI[o.key], epoch });
     });
   }
   out.sort((a, b) => a.epoch - b.epoch);

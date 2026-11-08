@@ -152,7 +152,7 @@ export function CalcTrace({ ctx, tuvi, bazi }: Props) {
               Âm lịch Việt Nam (UTC+7)
               <small>
                 {ctx.lunar.diverges
-                  ? 'Lệch với lịch TQ tại thời điểm này — đây là lý do một số app ra lá số khác.'
+                  ? 'Lệch với lịch TQ tại thời điểm này — đây là lý do một số ứng dụng ra lá số khác.'
                   : 'Trùng với lịch Trung Quốc tại thời điểm này.'}
               </small>
             </div>
@@ -167,14 +167,14 @@ export function CalcTrace({ ctx, tuvi, bazi }: Props) {
             <div className="label">
               Tiết khí gần nhất / kế tiếp
               <small>
-                So theo instant UTC, không so giờ Việt Nam với bảng giờ Bắc Kinh.
+                So theo thời điểm UTC, không so giờ Việt Nam với bảng giờ Bắc Kinh.
               </small>
             </div>
             <div className="val">
-              {ctx.jie.current.zh} · {termStamp(ctx.jie.current.epoch)}
+              {ctx.jie.current.vi} · {termStamp(ctx.jie.current.epoch)}
               <br />
               <span className="muted">
-                {ctx.jie.next ? `${ctx.jie.next.zh} · ${termStamp(ctx.jie.next.epoch)}` : '—'}
+                {ctx.jie.next ? `${ctx.jie.next.vi} · ${termStamp(ctx.jie.next.epoch)}` : '—'}
               </span>
             </div>
           </li>
@@ -182,7 +182,7 @@ export function CalcTrace({ ctx, tuvi, bazi }: Props) {
           <li className="step done">
             <div className="label">
               Tứ trụ
-              <small>Năm đổi tại Lập Xuân; tháng đổi tại 12 “tiết”; ngày theo vòng 60; giờ theo 五鼠遁.</small>
+              <small>Năm đổi tại Lập Xuân; tháng đổi tại 12 “tiết”; ngày theo vòng 60; giờ theo phép Ngũ Thử Độn.</small>
             </div>
             <div className="val">
               {ctx.pillars.year.vi} · {ctx.pillars.month.vi}
@@ -232,7 +232,7 @@ export function CalcTrace({ ctx, tuvi, bazi }: Props) {
               {bazi.qiYun.startAge.years} năm {bazi.qiYun.startAge.months} tháng{' '}
               {bazi.qiYun.startAge.days} ngày
               <br />
-              <span className="muted">sau sinh (không phải 虚歲)</span>
+              <span className="muted">sau sinh (không phải tuổi mụ)</span>
             </div>
           </li>
         </ol>

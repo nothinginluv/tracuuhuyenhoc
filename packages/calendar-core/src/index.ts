@@ -69,6 +69,7 @@ export {
   TERM_COUNT,
   JIE_KEYS,
   JIE_TO_MONTH_OFFSET,
+  TERM_VI,
   assertYearSupported,
   termBefore,
   termAfter,

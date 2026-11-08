@@ -23,7 +23,7 @@ function ElementBars({ counts, max }: { counts: Record<string, number>; max: num
       {ELEMENTS.map((e) => (
         <div className="bar-row" key={e}>
           <span className={`bar-label ${ELEMENT_CLASS[e]}`}>
-            {ELEMENT_VI[e]} <span className="zh">{e === 'moc' ? '木' : e === 'hoa' ? '火' : e === 'tho' ? '土' : e === 'kim' ? '金' : '水'}</span>
+            {ELEMENT_VI[e]}
           </span>
           <span className="bar-track">
             <span
@@ -51,7 +51,7 @@ export function BaziView({ chart, ctx, gender }: Props) {
         <div>
           <h2>Lá số Bát Tự</h2>
           <p className="muted">
-            Tứ trụ lấy theo tiết khí (instant UTC), không theo ngày dương lịch.
+            Tứ trụ lấy theo tiết khí (thời điểm UTC), không theo ngày dương lịch.
           </p>
         </div>
         <div className="chart-badges">
@@ -64,14 +64,13 @@ export function BaziView({ chart, ctx, gender }: Props) {
 
       <div className="bazi-grid">
         <div className="day-master">
-          <div className="dm-eyebrow">Nhật chủ · 日主</div>
+          <div className="dm-eyebrow">Nhật chủ</div>
           <div className={`dm-stem ${ELEMENT_CLASS[chart.dayMaster.element]}`}>
             {chart.dayMaster.vi}
-            <span className="dm-zh">{chart.dayMaster.zh}</span>
           </div>
           <div className="dm-meta">
             {chart.dayMaster.yinYang === 'duong' ? 'Dương' : 'Âm'} ·{' '}
-            {chart.dayMaster.elementVi} ({chart.dayMaster.elementZh})
+            {chart.dayMaster.elementVi}
           </div>
           <p className="tiny muted">
             Can ngày là chủ thể của cả lá số; mọi thập thần đều tính tương quan với can này.
@@ -86,18 +85,15 @@ export function BaziView({ chart, ctx, gender }: Props) {
               <div className="pillar" key={stem.pillar}>
                 <div className="pillar-label">
                   {PILLAR_NAMES[stem.pillar].vi}
-                  <span className="zh">{PILLAR_NAMES[stem.pillar].zh}</span>
                 </div>
                 <div className="ten-god">
                   {stem.pillar === 'day' ? 'Nhật chủ' : stem.tenGod?.vi ?? '—'}
                 </div>
                 <div className={`big-char ${ELEMENT_CLASS[stem.element]}`}>
                   {stem.vi}
-                  <span className="big-zh">{stem.zh}</span>
                 </div>
                 <div className={`big-char branch ${ELEMENT_CLASS[branch.element]}`}>
                   {branch.vi}
-                  <span className="big-zh">{branch.zh}</span>
                 </div>
                 <div className={`pillar-element ${ELEMENT_CLASS[stem.element]}`}>
                   {stem.elementVi} · {stem.yinYang === 'duong' ? 'Dương' : 'Âm'}
@@ -107,7 +103,7 @@ export function BaziView({ chart, ctx, gender }: Props) {
                   {branch.hidden.map((h) => (
                     <div className="hidden-row" key={`${h.stem}-${h.role}`}>
                       <span className={`hidden-stem ${ELEMENT_CLASS[STEM_ELEMENT[h.stem]]}`}>
-                        {h.vi} <span className="zh">{h.zh}</span>
+                        {h.vi}
                       </span>
                       <span className="hidden-god">{h.tenGod.vi}</span>
                       <span className="hidden-role">{ROLE_LABEL[h.role] ?? h.role}</span>
@@ -165,7 +161,7 @@ export function BaziView({ chart, ctx, gender }: Props) {
             </div>
           </dl>
           <p className="tiny muted">
-            Tuổi ghi theo số năm kể từ lúc sinh, <em>không</em> phải 虚歲.
+            Tuổi ghi theo số năm kể từ lúc sinh, <em>không</em> phải tuổi mụ.
           </p>
           <Cite id={chart.citations.qiYunRule} />
           <Cite id={chart.citations.luckDirection} />
@@ -191,8 +187,7 @@ export function BaziView({ chart, ctx, gender }: Props) {
                   <td>
                     <span className={`luck-pillar ${ELEMENT_CLASS[STEM_ELEMENT[l.pillar.stem]]}`}>
                       {l.pillar.vi}
-                    </span>{' '}
-                    <span className="zh">{l.pillar.zh}</span>
+                    </span>
                   </td>
                   <td>{l.fromAge.toFixed(1)}</td>
                   <td>{l.toAge.toFixed(1)}</td>

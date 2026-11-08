@@ -7,3 +7,4 @@ probe*.mjs
 .DS_Store
 .vercel
 .next
+.env*

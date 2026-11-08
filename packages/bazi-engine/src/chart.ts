@@ -177,7 +177,7 @@ export function buildBaziChart(ctx: ChartContext, options: BaziOptions): BaziCha
   const luck = luckCycles(pillars.month.cycleIndex, qi, luckCount);
 
   const notes: string[] = [
-    'Tuổi khởi vận là số năm kể từ lúc sinh (không phải 虚歲).',
+    'Tuổi khởi vận là số năm kể từ lúc sinh (không phải tuổi mụ).',
     'Đại vận đi từ trụ tháng: thuận thì tiến, nghịch thì lùi; vận đầu không phải trụ tháng.',
   ];
 
