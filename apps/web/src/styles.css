@@ -73,6 +73,14 @@ h3 {
   min-height: 100vh;
 }
 
+.page-loading {
+  max-width: 1120px;
+  margin: 48px auto;
+  padding: 0 24px;
+  font: 500 14px/1.5 var(--mono);
+  color: var(--faint);
+}
+
 /* ─────────────────────────────────────────── đầu trang */
 
 .site-head {

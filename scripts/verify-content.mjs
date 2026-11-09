@@ -82,7 +82,7 @@ function readQuotes(where, refs, { min = 2, needDefinition = true } = {}) {
     if (local.has(ref.quote_id)) errors.push(`${where}: lặp quote ${ref.quote_id}`);
     local.add(ref.quote_id);
     usedQuotes.add(ref.quote_id);
-    if (ref.role === 'definition') hasDefinition = true;
+    if (ref.role === 'definition' || ref.role === 'rule') hasDefinition = true;
     texts.push(q.text_zh);
   }
   if ((refs ?? []).length < min) {

@@ -957,6 +957,84 @@
           "role": "reading"
         }
       ]
+    },
+    {
+      "id": "hongluan",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0084",
+          "role": "rule"
+        },
+        {
+          "quote_id": "q_tv_0085",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "tianxi",
+      "elements": [
+        {
+          "zh": "水",
+          "vi": "Thuỷ"
+        }
+      ],
+      "dou": null,
+      "domains": [],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0084",
+          "role": "rule"
+        },
+        {
+          "quote_id": "q_tv_0085",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "santai",
+      "elements": [],
+      "dou": null,
+      "domains": [],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0086",
+          "role": "rule"
+        },
+        {
+          "quote_id": "q_tv_0087",
+          "role": "reading"
+        }
+      ]
+    },
+    {
+      "id": "bazuo",
+      "elements": [],
+      "dou": null,
+      "domains": [],
+      "roles": [],
+      "quotes": [
+        {
+          "quote_id": "q_tv_0086",
+          "role": "rule"
+        },
+        {
+          "quote_id": "q_tv_0088",
+          "role": "reading"
+        }
+      ]
     }
   ]
 }

@@ -1,18 +1,30 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  PROVINCES,
-  type PresetName,
-} from '../../../packages/calendar-core/src/index.ts';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { PROVINCES } from '../../../packages/calendar-core/src/provinces.ts';
+import type { PresetName } from '../../../packages/calendar-core/src/index.ts';
 import type { Gender } from '../../../packages/bazi-engine/src/index.ts';
-import { computeCharts, type ComputeResult } from './engine.ts';
+import type { ComputeResult } from './engine.ts';
 import { BirthForm } from './components/BirthForm.tsx';
 import { DEFAULT_FORM, PRESET_INFO, parseForm, type FormValues } from './form.ts';
-import { TuViChartView } from './components/TuViChartView.tsx';
-import { BaziView } from './components/BaziView.tsx';
-import { CalcTrace, WarningList } from './components/CalcTrace.tsx';
-import { MethodPage } from './components/MethodPage.tsx';
-import { StarReference } from './components/StarReference.tsx';
+import { WarningList } from './components/WarningList.tsx';
 import { formatDate, formatTime, lunarShort, yearName } from './format.ts';
+
+// Hai trang chỉ đọc tài liệu được tách khỏi gói chính: người tra cứu không phải
+// tải toàn bộ nội dung Tinh diệu / Phương pháp mới xem được lá số.
+const MethodPage = lazy(() =>
+  import('./components/MethodPage.tsx').then((m) => ({ default: m.MethodPage })),
+);
+const StarReference = lazy(() =>
+  import('./components/StarReference.tsx').then((m) => ({ default: m.StarReference })),
+);
+const BaziView = lazy(() =>
+  import('./components/BaziView.tsx').then((m) => ({ default: m.BaziView })),
+);
+const CalcTrace = lazy(() =>
+  import('./components/CalcTrace.tsx').then((m) => ({ default: m.CalcTrace })),
+);
+const TuViChartView = lazy(() =>
+  import('./components/TuViChartView.tsx').then((m) => ({ default: m.TuViChartView })),
+);
 
 type Tab = 'tuvi' | 'bazi' | 'calc';
 type Page = 'lookup' | 'stars' | 'method';
@@ -107,7 +119,7 @@ export function App() {
   const resultsRef = useRef<HTMLElement>(null);
   const shouldFocus = useRef(false);
 
-  const computeFor = (v: FormValues, focus: boolean) => {
+  const computeFor = async (v: FormValues, focus: boolean) => {
     setBusy(true);
     setError(null);
     const parsed = parseForm(v);
@@ -119,6 +131,8 @@ export function App() {
       return;
     }
     try {
+      // Nạp engine + bảng lịch khi thực sự cần: lần đầu mở trang chỉ tải biểu mẫu.
+      const { computeCharts } = await import('./engine.ts');
       const res = computeCharts(parsed.input, {
         preset: v.preset,
         gender: v.gender,
@@ -152,7 +166,7 @@ export function App() {
 
   // Tự tính lại khi mở một URL có chia sẻ lá số.
   useEffect(() => {
-    if (initial?.active) computeFor(initial.values, false);
+    if (initial?.active) void computeFor(initial.values, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -167,7 +181,7 @@ export function App() {
     el.focus({ preventScroll: true });
   }, [result]);
 
-  const submit = () => computeFor(values, true);
+  const submit = () => void computeFor(values, true);
 
   const go = (next: Page) => {
     setPage(next);
@@ -201,10 +215,20 @@ export function App() {
         {announce}
       </p>
 
-      {page === 'method' ? (
-        <MethodPage onBack={() => go('lookup')} />
-      ) : page === 'stars' ? (
-        <StarReference onBack={() => go('lookup')} />
+      {page === 'method' || page === 'stars' ? (
+        <Suspense
+          fallback={
+            <p className="page-loading" role="status">
+              Đang tải…
+            </p>
+          }
+        >
+          {page === 'method' ? (
+            <MethodPage onBack={() => go('lookup')} />
+          ) : (
+            <StarReference onBack={() => go('lookup')} />
+          )}
+        </Suspense>
       ) : (
         <main className="lookup">
           <section className="hero">
@@ -295,8 +319,15 @@ export function App() {
 
               <WarningList ctx={result.ctx} />
 
-              {tab === 'tuvi' && (
-                result.tuvi ? (
+              <Suspense
+                fallback={
+                  <p className="page-loading" role="status">
+                    Đang tải…
+                  </p>
+                }
+              >
+                {tab === 'tuvi' && (
+                  result.tuvi ? (
                   <>
                     {result.ctx.lunar.diverges && result.tuviVn && (
                       <div className="variant-bar">
@@ -354,6 +385,7 @@ export function App() {
               {tab === 'calc' && (
                 <CalcTrace ctx={result.ctx} tuvi={result.tuvi} bazi={result.bazi} />
               )}
+              </Suspense>
             </section>
           )}
 

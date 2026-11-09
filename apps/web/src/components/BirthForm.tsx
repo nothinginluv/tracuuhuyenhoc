@@ -1,5 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react';
-import { PROVINCES, type PresetName } from '../../../../packages/calendar-core/src/index.ts';
+import { PROVINCES } from '../../../../packages/calendar-core/src/provinces.ts';
+import type { PresetName } from '../../../../packages/calendar-core/src/index.ts';
 import type { LeapMonthRule } from '../../../../packages/tuvi-engine/src/index.ts';
 import { PRESET_INFO, QUANG_TRI, type FormValues } from '../form.ts';
 

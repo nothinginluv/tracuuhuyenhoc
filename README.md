@@ -11,14 +11,14 @@ Tra cứu **Tử Vi Đẩu Số** và **Bát Tự / Tứ Trụ** — công cụ 
 | Hạng mục | Trạng thái |
 |---|---|
 | Corpus Tầng A (3 bộ văn bản cổ) | ✅ pin sha256 |
-| Cổng kiểm trích dẫn | ✅ 3 tầng + self-test âm · **91 câu** |
+| Cổng kiểm trích dẫn | ✅ 3 tầng + self-test âm · **96 câu** |
 | Bảng tiết khí 1899–2101 | ✅ 4.872 instant UTC |
 | Bảng tháng âm lịch 1899–2102 | ✅ 2.523 tháng, khớp chuẩn TQ 100% |
 | 63 tỉnh pre-2025 + múi giờ lịch sử | ✅ |
 | `calendar-core`: instant → tứ trụ | ✅ 74 test |
 | Engine an sao Tử Vi (`tuvi-engine`) | ✅ 39 test · khớp `iztro` 880 lá số |
 | Engine Bát Tự (`bazi-engine`) | ✅ 30 test · khớp `lunar-javascript` |
-| Nội dung Tầng B (30 sao · 4 hoá · 12 cung) | ✅ 82 câu · 97 khoá đối chiếu nguyên văn |
+| Nội dung Tầng B (34 sao · 4 hoá · 12 cung) | ✅ 87 câu · 99 khoá đối chiếu nguyên văn |
 | Web app (`apps/web`) | ✅ React 19 + Vite · kiểm nhập liệu có test · ErrorBoundary · a11y |
 | CI + deploy | ✅ GitHub Actions · `vercel.json` headers/CSP · OG/SEO |
 
@@ -33,7 +33,7 @@ npm run preview     # xem bản build
 npm run demo        # 6 ca lịch: Hà Nội 1990, Sài Gòn 1972, Quảng Trị 1970…
 npm run demo:tuvi   # 3 lá số Tử Vi đầy đủ 12 cung
 npm run demo:bazi   # 3 lá Bát Tự: tàng can, thập thần, đại vận
-npm test            # 157 test (calendar-core + tuvi-engine + bazi-engine + web)
+npm test            # 161 test (calendar-core + tuvi-engine + bazi-engine + web)
 npm run typecheck   # tsc --noEmit, strict
 npm run quotes:verify   # mọi câu Hán phải là chuỗi con thật của corpus đã pin
 npm run content:verify  # mọi câu/cụm từ của Tầng B phải khớp câu trích
@@ -51,7 +51,7 @@ npm run check       # typecheck + quotes + content + selftest + test
 - **Kết quả**: chip tóm tắt (giờ, âm lịch TQ, tứ trụ, preset), danh sách cảnh báo, ba tab **Tử Vi · Bát Tự · Cách tính**.
 - **Hai lá Tử Vi**: khi lịch TQ (+8) và lịch VN (+7) cho hai ngày âm khác nhau, thanh chọn cho phép xem lá chính (TQ) và lá đối chiếu (VN) — đây thường là lý do app Việt và app TQ ra khác.
 - **Trang Phương pháp**: chuỗi tính, bảng preset, quy tắc Tử Vi/Bát Tự, giới hạn, nguồn + trích dẫn mở được tại chỗ.
-- **Trang Tinh diệu**: 14 chính tinh + 16 phụ tinh + 4 Tứ Hoá + 12 cung, mỗi mục mở được nguyên văn và nguồn.
+- **Trang Tinh diệu**: 14 chính tinh + 20 phụ tinh + 4 Tứ Hoá + 12 cung, mỗi mục mở được nguyên văn và nguồn; 4 phụ tinh còn lại được nêu tên là chưa có định nghĩa trong kho Tầng A.
 - **Nhập liệu có test**: `parseForm` tách riêng khỏi component, 14 test cho biên ngày/giờ, năm 1900, tương lai và Quảng Trị.
 - **A11y**: `role="status" aria-live="polite"` thông báo khi lập lá số; focus chuyển tới `#ket-qua` sau khi kết quả vào DOM.
 - **ErrorBoundary**: lỗi render hiện thông báo + nút tải lại, không để màn hình trắng.
@@ -61,10 +61,10 @@ Cấu trúc:
 ```
 apps/web/
   index.html
-  src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · quotes.tsx · stars.ts · styles.css
+  src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · locator.ts · quotes.tsx · stars.ts · styles.css
   src/components/
-              BirthForm · TuViChartView · BaziView · CalcTrace · MethodPage · StarReference · ErrorBoundary
-  test/       form.test.ts (14 test)
+              BirthForm · TuViChartView · BaziView · CalcTrace · WarningList · MethodPage · StarReference · ErrorBoundary
+  test/       form.test.ts (14 test) · locator.test.ts (4 test)
   public/     favicon.svg · og.svg · og.png · robots.txt · sitemap.xml
 ```
 
@@ -251,7 +251,7 @@ Ba tệp nội dung, cùng một luật: mỗi câu, mỗi từ khoá đều ph�
 
 | Tệp | Nội dung | Số mục |
 |---|---|---|
-| `content/stars.json` | 14 chính tinh + 16 phụ tinh, cắt từ 諸星問答論 (卷一) và bảng 分屬五行 (卷二) | 30 |
+| `content/stars.json` | 14 chính tinh + 20 phụ tinh, cắt từ 諸星問答論 (卷一) và bảng 分屬五行 (卷二); 4 phụ tinh chưa có câu định nghĩa được nêu tên riêng | 34 |
 | `content/hua.json` | Tứ Hoá Lộc · Quyền · Khoa · Kỵ | 4 |
 | `content/palaces.json` | 12 cung: thứ tự, cường nhược nam/nữ, phạm vi từng cung | 12 |
 
@@ -272,10 +272,10 @@ Mỗi mục trong `stars.json` gồm:
 
 Hai lớp kiểm, chạy trong `npm run check`:
 
-1. **`quotes:verify`** — câu Hán trong `content/quotes.jsonl` phải là chuỗi con thật của corpus đã pin sha256, đúng quyển. Hiện **91/91 câu khớp chính xác**.
+1. **`quotes:verify`** — câu Hán trong `content/quotes.jsonl` phải là chuỗi con thật của corpus đã pin sha256, đúng quyển. Hiện **96/96 câu khớp chính xác**.
 2. **`content:verify`** — mọi `quote_id` phải tồn tại; và **mỗi từ khoá hiển thị** (ngũ hành, đẩu, cung chủ, vai trò) phải xuất hiện nguyên văn trong chính các câu trích của mục đó. Bỏ câu trích thì chip biến mất theo, không thể "viết thêm cho đẹp".
 
-Hiện trạng: **30 sao · 4 hoá · 12 cung · 82 câu trích được dùng · 97 khoá đối chiếu**.
+Hiện trạng: **34 sao · 4 hoá · 12 cung · 87 câu trích được dùng · 99 khoá đối chiếu**.
 
 `npm run content:selftest` chạy cùng cổng trên một fixture cố tình sai (quote không tồn tại, ngũ hành không có trong câu trích, id sao lạ) và đòi cổng phải chặn — hiện chặn đúng **16 lỗi** — để chứng minh cổng không phải đồ trang trí.
 
@@ -283,7 +283,8 @@ Trang **Tinh diệu** trên web đọc thẳng `content/*.json`, hiển thị b�
 
 Nguyên tắc khi corpus không có câu:
 
-- Phụ tinh chưa có câu định nghĩa **không được bịa** — để trống kèm ghi chú.
+- Phụ tinh chưa có câu định nghĩa **không được bịa** — để trống kèm ghi chú, và nêu đích danh trên trang Tinh diệu.
+- Câu an sao (安星訣) được đánh dấu vai trò `rule` ("Cách an sao") — chỉ định vị trí, không luận tính chất, nên không được tính là định nghĩa đầy đủ.
 - Cung không có câu định nghĩa chung hiển thị `note_vi` nói rõ "corpus luận theo từng sao, chưa có câu chung".
 - Bảng cường nhược mệnh nữ hiển thị **nguyên văn** (dùng 夫君/子息), không tự ánh xạ sang 12 id cung.
 
@@ -315,10 +316,10 @@ Dựng lại: `npm run data:terms` · `npm run data:lunar` · `npm run data:prov
 ```
 apps/web/
   index.html
-  src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · quotes.tsx · stars.ts · styles.css
+  src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · locator.ts · quotes.tsx · stars.ts · styles.css
   src/components/
-              BirthForm · TuViChartView · BaziView · CalcTrace · MethodPage · StarReference · ErrorBoundary
-  test/       14 test (node:test) cho parseForm
+              BirthForm · TuViChartView · BaziView · CalcTrace · WarningList · MethodPage · StarReference · ErrorBoundary
+  test/       form.test.ts (14 test) · locator.test.ts (4 test)
   public/     favicon.svg · og.svg · og.png · robots.txt · sitemap.xml
 .github/workflows/ci.yml
 docs/         mock giao diện (mock-cach-tinh.html)
@@ -336,8 +337,8 @@ packages/bazi-engine/
   test/       30 test (gồm đối chứng lunar-javascript)
   examples/   demo.ts
 corpus/       văn bản gốc đã làm sạch + lock hash + segments
-content/      sources.json (sổ nguồn) · quotes.jsonl (91 câu) · stars.json · hua.json · palaces.json
-scripts/      fetch-corpus · verify-quotes · verify-content · seed-quotes · gen-solar-terms · gen-lunar-months · gen-provinces
+content/      sources.json (sổ nguồn) · quotes.jsonl (96 câu) · stars.json · hua.json · palaces.json
+scripts/      fetch-corpus · verify-quotes · verify-content · seed-quotes · run-tests · gen-solar-terms · gen-lunar-months · gen-provinces
 tests/        fixtures âm cho self-test
 docs/         mock giao diện
 ```

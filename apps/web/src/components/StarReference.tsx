@@ -4,6 +4,7 @@ import {
   PALACE_META,
   PALACE_REFS,
   STAR_REFS,
+  UNDOCUMENTED_STARS,
   type HuaRef,
   type PalaceRef,
   type StarRef,
@@ -26,9 +27,11 @@ function CitedBlocks({ cited }: { cited: { role: string; quote: { id: string; cl
           <span className="star-block-label">
             {c.role === 'definition'
               ? 'Định nghĩa'
-              : i === 1
-                ? 'Nguyên văn bàn thêm'
-                : 'Nguyên văn bổ sung'}
+              : c.role === 'rule'
+                ? 'Cách an sao'
+                : i === 1
+                  ? 'Nguyên văn bàn thêm'
+                  : 'Nguyên văn bổ sung'}
           </span>
           <p>{c.quote.claim_vi}</p>
           <Cite id={c.quote.id} />
@@ -203,8 +206,10 @@ export function StarReference({ onBack }: { onBack: () => void }) {
         </p>
         <p className="tiny muted">
           Mục nào không có là vì kho văn bản Tầng A chưa có câu định nghĩa tương ứng — chúng tôi
-          không viết thay nguồn. Muốn bổ sung: thêm câu vào <code>content/quotes.jsonl</code>, chạy{' '}
-          <code>npm run quotes:verify</code>, rồi khai báo trong <code>content/*.json</code>.
+          không viết thay nguồn. Còn thiếu định nghĩa cho:{' '}
+          <strong>{UNDOCUMENTED_STARS.map((s) => s.vi).join(', ')}</strong>. Muốn bổ sung: thêm câu
+          vào <code>content/quotes.jsonl</code>, chạy <code>npm run quotes:verify</code>, rồi khai
+          báo trong <code>content/*.json</code>.
         </p>
       </div>
     </main>

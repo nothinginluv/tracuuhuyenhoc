@@ -2,6 +2,7 @@ import { formatWall, type ChartContext } from '../../../../packages/calendar-cor
 import type { BaziChart } from '../../../../packages/bazi-engine/src/index.ts';
 import type { TuViChart } from '../../../../packages/tuvi-engine/src/index.ts';
 import { Cite } from '../quotes.tsx';
+import { WarningList } from './WarningList.tsx';
 import {
   CLOCK_DESCRIPTION,
   formatDate,
@@ -22,20 +23,6 @@ const REGION_LABEL: Record<string, string> = {
 function termStamp(epochMs: number): string {
   const iso = new Date(epochMs).toISOString();
   return `${iso.slice(0, 10)} ${iso.slice(11, 16)} UTC`;
-}
-
-export function WarningList({ ctx }: { ctx: ChartContext }) {
-  if (ctx.warnings.length === 0) return null;
-  return (
-    <ul className="warnings">
-      {ctx.warnings.map((w, i) => (
-        <li key={`${w.code}-${i}`} className={`warning warning-${w.severity}`}>
-          <span className="warning-kind">{w.severity === 'warn' ? 'Cần lưu ý' : 'Thông tin'}</span>
-          <span>{w.message}</span>
-        </li>
-      ))}
-    </ul>
-  );
 }
 
 type Props = {

@@ -18,7 +18,8 @@ import {
 import { QUOTES, type Quote } from './quotes.tsx';
 
 export type Label = { zh: string; vi: string };
-export type StarQuoteRole = 'definition' | 'reading';
+/** `rule` = câu an sao (安星訣): nguồn chỉ cho biết vị trí, không luận tính chất. */
+export type StarQuoteRole = 'definition' | 'rule' | 'reading';
 
 type QuoteRef = { quote_id: string; role: StarQuoteRole };
 type Content = {
@@ -59,6 +60,14 @@ const BY_ID = new Map(STAR_REFS.map((s) => [s.id, s]));
 export function starRef(id: string): StarRef | undefined {
   return BY_ID.get(id);
 }
+
+/**
+ * Sao engine có an nhưng kho văn bản Tầng A chưa có câu định nghĩa — hiển thị
+ * đúng tên để người đọc biết mục nào còn thiếu, không lấp bằng suy diễn.
+ */
+export const UNDOCUMENTED_STARS: StarDef[] = Object.values(STAR_DEFS).filter(
+  (def) => !BY_ID.has(def.id),
+);
 
 // ── Tứ Hoá ───────────────────────────────────────────────────
 type HuaContent = Content & { id: HuaKey };

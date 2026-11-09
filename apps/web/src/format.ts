@@ -1,5 +1,7 @@
 /** Định dạng hiển thị — không tính toán, chỉ đổi cách viết. */
-import { BRANCHES_VI, STEMS_VI } from '../../../packages/bazi-engine/src/index.ts';
+// Nhập thẳng từ `constants.ts`: đi qua `index.ts` sẽ kéo cả engine Bát Tự và
+// bảng lịch của calendar-core vào gói chính, làm mất tác dụng nạp động.
+import { BRANCHES_VI, STEMS_VI } from '../../../packages/bazi-engine/src/constants.ts';
 import type { LunarDate } from '../../../packages/calendar-core/src/index.ts';
 
 const pad2 = (n: number): string => String(n).padStart(2, '0');
