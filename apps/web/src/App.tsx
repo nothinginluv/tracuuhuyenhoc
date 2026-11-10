@@ -6,6 +6,7 @@ import type { ComputeResult } from './engine.ts';
 import { BirthForm } from './components/BirthForm.tsx';
 import { DEFAULT_FORM, PRESET_INFO, parseForm, type FormValues } from './form.ts';
 import { WarningList } from './components/WarningList.tsx';
+import { LuopanArt, SealMark } from './components/Ornaments.tsx';
 import { formatDate, formatTime, lunarShort, yearName } from './format.ts';
 
 // Hai trang chỉ đọc tài liệu được tách khỏi gói chính: người tra cứu không phải
@@ -191,24 +192,26 @@ export function App() {
   return (
     <div className="app">
       <header className="site-head">
-        <button className="brand" onClick={() => go('lookup')}>
-          <span className="brand-mark" aria-hidden="true">☯</span>
-          <span className="brand-text">
-            Tra Cứu Huyền Học
-            <small>Tử Vi · Bát Tự · minh bạch</small>
-          </span>
-        </button>
-        <nav className="site-nav">
-          <button aria-pressed={page === 'lookup'} onClick={() => go('lookup')}>
-            Tra cứu
+        <div className="site-head-inner">
+          <button className="brand" onClick={() => go('lookup')}>
+            <SealMark className="brand-mark" size={42} />
+            <span className="brand-text">
+              Tra Cứu Huyền Học
+              <small>Tử Vi · Bát Tự · minh bạch</small>
+            </span>
           </button>
-          <button aria-pressed={page === 'stars'} onClick={() => go('stars')}>
-            Tinh diệu
-          </button>
-          <button aria-pressed={page === 'method'} onClick={() => go('method')}>
-            Phương pháp
-          </button>
-        </nav>
+          <nav className="site-nav">
+            <button aria-pressed={page === 'lookup'} onClick={() => go('lookup')}>
+              Tra cứu
+            </button>
+            <button aria-pressed={page === 'stars'} onClick={() => go('stars')}>
+              Tinh diệu
+            </button>
+            <button aria-pressed={page === 'method'} onClick={() => go('method')}>
+              Phương pháp
+            </button>
+          </nav>
+        </div>
       </header>
 
       <p className="sr-only" role="status" aria-live="polite">
@@ -230,19 +233,43 @@ export function App() {
           )}
         </Suspense>
       ) : (
-        <main className="lookup">
+        <>
           <section className="hero">
-            <div className="eyebrow">Tử Vi Đẩu Số · Bát Tự / Tứ Trụ</div>
-            <h1>
-              Lá số minh bạch.
-              <br />
-              Không phán.
-            </h1>
-            <p>
-              Mỗi con số đều có đường đi: từ giờ trên đồng hồ, qua múi giờ lịch sử, tiết khí, âm
-              lịch — đến ngôi sao. Chỗ nào có tranh cãi, chúng tôi cho bạn chọn và ghi rõ.
-            </p>
+            <div className="hero-art" aria-hidden="true">
+              <LuopanArt className="luopan" />
+            </div>
+            <div className="hero-inner">
+              <p className="eyebrow">Tử Vi Đẩu Số · Bát Tự / Tứ Trụ</p>
+              <h1>
+                Lá số minh bạch.
+                <br />
+                <span className="hero-accent">Không phán.</span>
+              </h1>
+              <p className="hero-lede">
+                Mỗi con số đều có đường đi: từ giờ trên đồng hồ, qua múi giờ lịch sử, tiết khí, âm
+                lịch — đến ngôi sao. Chỗ nào có tranh cãi, chúng tôi cho bạn chọn và ghi rõ.
+              </p>
+              <ul className="hero-facts">
+                <li>
+                  <span className="hero-fact-no">01</span>
+                  <strong>Lịch có kiểm chứng</strong>
+                  <small>Tiết khí theo UTC · bảng dựng cho 1899–2102</small>
+                </li>
+                <li>
+                  <span className="hero-fact-no">02</span>
+                  <strong>Quy ước công khai</strong>
+                  <small>Đổi được từng lựa chọn, khác biệt đều ghi rõ</small>
+                </li>
+                <li>
+                  <span className="hero-fact-no">03</span>
+                  <strong>Dẫn nguồn nguyên văn</strong>
+                  <small>Mỗi câu Hán qua cổng kiểm SHA-256</small>
+                </li>
+              </ul>
+            </div>
           </section>
+
+          <main className="lookup">
 
           <BirthForm
             values={values}
@@ -417,16 +444,20 @@ export function App() {
           )}
 
           <footer className="site-foot">
-            <p>
-              Kết quả là phép tính theo quy ước đã công bố, không phải lời khuyên về y tế, tài
-              chính hay pháp lý.
-            </p>
-            <p className="tinier">
-              Lõi lịch và phần an sao có bộ kiểm thử đối chứng độc lập · trích dẫn qua cổng kiểm
-              SHA-256 · <code>npm run check</code>
-            </p>
+            <SealMark className="foot-seal" size={34} />
+            <div className="foot-text">
+              <p>
+                Kết quả là phép tính theo quy ước đã công bố, không phải lời khuyên về y tế, tài
+                chính hay pháp lý.
+              </p>
+              <p className="tinier">
+                Lõi lịch và phần an sao có bộ kiểm thử đối chứng độc lập · trích dẫn qua cổng kiểm
+                SHA-256 · <code>npm run check</code>
+              </p>
+            </div>
           </footer>
         </main>
+        </>
       )}
     </div>
   );

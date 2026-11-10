@@ -63,12 +63,16 @@ apps/web/
   index.html
   src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · locator.ts · quotes.tsx · stars.ts · styles.css
   src/components/
-              BirthForm · TuViChartView · BaziView · CalcTrace · WarningList · MethodPage · StarReference · ErrorBoundary
+              BirthForm · TuViChartView · BaziView · CalcTrace · WarningList · MethodPage · StarReference
+              ErrorBoundary · Ornaments (ấn triện, la bàn — SVG hình học, không chữ Hán)
   test/       form.test.ts (14 test) · locator.test.ts (4 test)
   public/     favicon.svg · og.svg · og.png · robots.txt · sitemap.xml
 ```
 
-Thiết kế lấy từ `docs/mock-cach-tinh.html`: giấy ấm, chữ serif, số mono, không font ngoài, không tracking.
+Giao diện theo hướng huyền học Trung Hoa: nền giấy dó, dải mực tàu, son ấn, vàng cổ, ngọc bích.
+Hoạ tiết (ấn triện, la bàn bát quái) vẽ bằng SVG hình học và `aria-hidden` — không dùng chữ Hán
+trang trí; chữ Hán chỉ xuất hiện trong khối “Nguyên văn gốc”. Vẫn **không phụ thuộc font ngoài**:
+chỉ dùng font hệ thống (serif cho tiêu đề, mono cho số và nhãn, CJK stack riêng cho `.cite-zh`).
 
 ### Giới hạn của bản web
 

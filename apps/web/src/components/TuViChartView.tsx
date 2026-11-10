@@ -103,6 +103,9 @@ export function TuViChartView({ chart, calendarLabel = 'Âm lịch TQ' }: Props)
         </div>
       </div>
 
+      <p className="scroll-hint" aria-hidden="true">
+        Vuốt ngang để xem đủ 12 cung
+      </p>
       <div className="tuvi-scroll">
         <div className="tuvi-grid">
           {Array.from({ length: 12 }, (_, b) => cell(b))}

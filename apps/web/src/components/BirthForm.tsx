@@ -35,6 +35,14 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
 
   return (
     <form className="card form" onSubmit={submit}>
+      <div className="form-head">
+        <div>
+          <p className="eyebrow">Bước 1 · Dữ liệu gốc</p>
+          <h2>Ngày giờ sinh</h2>
+        </div>
+        <p className="form-note">Dương lịch · giờ tại nơi sinh</p>
+      </div>
+
       <div className="form-grid">
         <div className="field">
           <span className="field-label" id="birth-date-label">
