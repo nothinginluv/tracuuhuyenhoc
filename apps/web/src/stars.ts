@@ -15,7 +15,7 @@ import {
   type HuaKey,
   type StarDef,
 } from '../../../packages/tuvi-engine/src/index.ts';
-import { QUOTES, type Quote } from './quotes.tsx';
+import { QUOTES, type Quote } from './quotes-data.ts';
 
 export type Label = { zh: string; vi: string };
 /** `rule` = câu an sao (安星訣): nguồn chỉ cho biết vị trí, không luận tính chất. */

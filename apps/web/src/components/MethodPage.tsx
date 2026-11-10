@@ -1,4 +1,5 @@
-import { Cite, QUOTES, SOURCE_LABEL, SOURCE_LINK } from '../quotes.tsx';
+import { Cite } from '../quotes.tsx';
+import { QUOTES, SOURCE_LABEL, SOURCE_LINK } from '../quotes-data.ts';
 
 type Props = { onBack: () => void };
 

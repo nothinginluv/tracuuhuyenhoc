@@ -9,7 +9,8 @@
  */
 import { BRANCHES_VI } from '../../../../packages/tuvi-engine/src/index.ts';
 import { TEN_GODS, type TenGodId } from '../../../../packages/bazi-engine/src/index.ts';
-import { Cite, type Quote } from '../quotes.tsx';
+import { Cite } from '../quotes.tsx';
+import type { Quote } from '../quotes-data.ts';
 import { GlossaryTerm, quoteLine, useReadingMode } from '../glossary.tsx';
 import {
   DAHAN_QUOTES,

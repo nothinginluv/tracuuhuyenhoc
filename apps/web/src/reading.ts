@@ -28,7 +28,7 @@ import {
   type TenGodId,
 } from '../../../packages/bazi-engine/src/index.ts';
 import { HUA_REFS, starRef, type HuaRef, type StarRef } from './stars.ts';
-import { QUOTES, type Quote } from './quotes.tsx';
+import { QUOTES, type Quote } from './quotes-data.ts';
 
 // ── Bảng độ sáng ─────────────────────────────────────────────
 export type BrightnessLevel = { vi: string; tone: string; zh?: string };

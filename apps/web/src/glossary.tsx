@@ -8,7 +8,7 @@
  */
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import glossaryRaw from '../../../content/glossary.json';
-import type { Quote } from './quotes.tsx';
+import type { Quote } from './quotes-data.ts';
 
 const GLOSSARY = (glossaryRaw as { terms: Record<string, string> }).terms;
 
