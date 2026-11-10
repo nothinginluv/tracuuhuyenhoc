@@ -198,15 +198,39 @@ export function App() {
     localStorage.setItem('tracuuhuyenhoc:theme', next ? 'dark' : 'light');
   };
 
+  const flashAnnounce = (message: string) => {
+    setAnnounce(message);
+    window.setTimeout(() => setAnnounce(''), 2500);
+  };
+
   const shareCopy = async () => {
+    const url = window.location.href;
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      // Thông báo tạm thời qua aria-live đã có sẵn
-      setAnnounce('Đã sao chép URL lá số vào clipboard.');
-      setTimeout(() => setAnnounce(''), 2000);
+      if (!navigator.clipboard?.writeText) throw new Error('clipboard không khả dụng');
+      await navigator.clipboard.writeText(url);
+      flashAnnounce('Đã sao chép URL lá số vào clipboard.');
     } catch {
-      // Fallback cho trình duyệt cũ
-      void window.prompt('Sao chép URL này:', window.location.href);
+      // Fallback: chọn sẵn URL trong ô ẩn để người dùng tự copy (không dùng prompt —
+      // một số môi trường bị chặn và prompt() làm văng unhandled rejection).
+      const input = document.createElement('input');
+      input.value = url;
+      input.setAttribute('readonly', '');
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      let copied = false;
+      try {
+        copied = document.execCommand('copy');
+      } catch {
+        copied = false;
+      }
+      input.remove();
+      flashAnnounce(
+        copied
+          ? 'Đã sao chép URL lá số.'
+          : 'Không sao chép tự động được — hãy copy URL trên thanh địa chỉ.',
+      );
     }
   };
 
@@ -216,11 +240,15 @@ export function App() {
       text: 'Xem lá số Tử Vi / Bát Tự của tôi tại Tra Cứu Huyền Học.',
       url: window.location.href,
     };
-    if (navigator.share && navigator.canShare?.(shareData)) {
-      await navigator.share(shareData);
-    } else {
-      await shareCopy();
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+        return;
+      }
+    } catch {
+      // Người dùng huỷ hộp chia sẻ hoặc trình duyệt từ chối: rơi xuống sao chép.
     }
+    await shareCopy();
   };
 
   const go = (next: Page) => {
