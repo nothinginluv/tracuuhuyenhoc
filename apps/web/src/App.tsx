@@ -118,6 +118,10 @@ export function App() {
   const [tuviVariant, setTuviVariant] = useState<'cn' | 'vn'>('cn');
   const [busy, setBusy] = useState(false);
   const [announce, setAnnounce] = useState('');
+  const [isDark, setIsDark] = useState(() => {
+    const rootEl = document.documentElement;
+    return rootEl.hasAttribute('data-theme') && rootEl.getAttribute('data-theme') === 'dark';
+  });
   const resultsRef = useRef<HTMLElement>(null);
   const shouldFocus = useRef(false);
 
@@ -185,6 +189,40 @@ export function App() {
 
   const submit = () => void computeFor(values, true);
 
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    const rootEl = document.documentElement;
+    if (next) rootEl.setAttribute('data-theme', 'dark');
+    else rootEl.removeAttribute('data-theme');
+    localStorage.setItem('tracuuhuyenhoc:theme', next ? 'dark' : 'light');
+  };
+
+  const shareCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      // Thông báo tạm thời qua aria-live đã có sẵn
+      setAnnounce('Đã sao chép URL lá số vào clipboard.');
+      setTimeout(() => setAnnounce(''), 2000);
+    } catch {
+      // Fallback cho trình duyệt cũ
+      void window.prompt('Sao chép URL này:', window.location.href);
+    }
+  };
+
+  const shareWeb = async () => {
+    const shareData = {
+      title: 'Tra Cứu Huyền Học — Lá số minh bạch',
+      text: 'Xem lá số Tử Vi / Bát Tự của tôi tại Tra Cứu Huyền Học.',
+      url: window.location.href,
+    };
+    if (navigator.share && navigator.canShare?.(shareData)) {
+      await navigator.share(shareData);
+    } else {
+      await shareCopy();
+    }
+  };
+
   const go = (next: Page) => {
     setPage(next);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -212,6 +250,19 @@ export function App() {
               Phương pháp
             </button>
           </nav>
+          <button
+            aria-pressed={isDark}
+            aria-label={isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'}
+            className="theme-toggle"
+            onClick={toggleTheme}
+            title={isDark ? 'Chế độ sáng' : 'Chế độ tối'}
+          >
+            {isDark ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79"/></svg>
+            )}
+          </button>
         </div>
       </header>
 
@@ -280,6 +331,15 @@ export function App() {
             busy={busy}
           />
 
+          {busy && (
+            <div className="loading-overlay" aria-label="Đang tính toán lá số" aria-live="polite">
+              <div className="loading-spinner" aria-hidden="true"></div>
+              <span className="tiny muted" style={{ marginTop: '12px', display: 'block' }}>
+                Đang tính toán lá số…
+              </span>
+            </div>
+          )}
+
           {result && (
             <section
               id="ket-qua"
@@ -318,7 +378,23 @@ export function App() {
                   )}
                 </div>
                 <div className="result-head-right">
-                  <ReadingModeToggle />
+                  <div className="share-group">
+                    <button
+                      className="share-btn"
+                      onClick={shareCopy}
+                      title="Sao chép URL lá số"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M1 12h4M21 12h-4M21 12l-1.45-1.32a2 2 0 0 1-2.3-.96l-2.9-2.68A2 2 0 0 0 13.12 3H3a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v0M17 13l3 3"/></svg>
+                    </button>
+                    <button
+                      className="share-btn"
+                      onClick={shareWeb}
+                      title="Chia sẻ lá số"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/></svg>
+                    </button>
+                    <ReadingModeToggle />
+                  </div>
                   <div className="tabs" role="tablist" aria-label="Nội dung lá số">
                   <button
                     role="tab"
