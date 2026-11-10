@@ -40,5 +40,8 @@ export {
 export { MUTAGEN_TABLES, DEFAULT_MUTAGEN_TABLE, mutagensOf } from './mutagen.ts';
 export type { Mutagen, MutagenTable, MutagenTableId } from './mutagen.ts';
 
+export { daHanAt, daHanCycles, daHanDirection } from './dahan.ts';
+export type { DaHan, DaHanDirection, DaHanStep, TuViGender } from './dahan.ts';
+
 export { STAR_DEFS, PALACE_NAMES, HUA, STEMS_ZH, STEMS_VI, BRANCHES_ZH, BRANCHES_VI } from './constants.ts';
 export type { HuaKey, StarDef, StarGroup, StarId } from './constants.ts';

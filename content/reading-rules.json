@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "$comment": "Quy tắc đọc vận và tam phương tứ chính, sinh từ 紫微斗數全書. Chạy scripts/gen-tuvi-reading.mjs để dựng lại.",
+  "source": "ziwei-quanshu",
+  "steps": [
+    4,
+    6,
+    8
+  ],
+  "rules": {
+    "dahan-ten-years": {
+      "quote_id": "q_tv_0164",
+      "locator": "卷三"
+    },
+    "dahan-two-cycles": {
+      "quote_id": "q_tv_0165",
+      "locator": "卷三"
+    },
+    "dahan-nam-bac": {
+      "quote_id": "q_tv_0166",
+      "locator": "卷三"
+    },
+    "liunian": {
+      "quote_id": "q_tv_0167",
+      "locator": "卷三"
+    },
+    "ptc": {
+      "quote_id": "q_tv_0159",
+      "locator": "卷一"
+    }
+  }
+}

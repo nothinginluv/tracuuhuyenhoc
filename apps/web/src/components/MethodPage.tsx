@@ -106,6 +106,10 @@ export function MethodPage({ onBack }: Props) {
           <li>An 14 chính tinh theo cục và ngày, 24 phụ tinh theo tháng/ngày/giờ/năm.</li>
           <li>Gán Tứ Hoá theo can năm — bảng Nam phái (Tử Vi, Liêm Trinh, Vũ Khúc, Thái Dương…).</li>
           <li>Xác định Mệnh chủ theo chi cung Mệnh, Thân chủ theo chi năm sinh.</li>
+          <li>
+            Đại hạn: dương nam / âm nữ đi thuận từ cung Phụ Mẫu, âm nam / dương nữ đi nghịch từ
+            cung Huynh Đệ; tuổi khởi bằng số của ngũ hành cục (2–6), mỗi hạn 10 năm.
+          </li>
         </ul>
         <p>
           Riêng <strong>tháng nhuận</strong>, mặc định dùng quy tắc chia đôi: ngày 1–15 tính là
@@ -161,7 +165,11 @@ export function MethodPage({ onBack }: Props) {
 
         <h2>5. Giới hạn đã biết</h2>
         <ul>
-          <li>Chưa luận giải sâu: chỉ an sao, tàng can, thập thần, đại vận — không đưa lời khuyên.</li>
+          <li>
+            Luận giải đọc tới mức: sao ở cung nào, độ sáng tại cung đó, câu “thuận / trắc trở” của
+            cả cung, đại hạn và cung lưu niên; chưa luận ảnh hưởng từng sao tại từng cung, tổ hợp
+            sao, cách cục, tiểu hạn, vượng suy hay hình xung hợp hại — không đưa lời khuyên.
+          </li>
           <li>Chưa hỗ trợ người sinh ngoài Việt Nam hoặc không rõ tỉnh (chỉ tính được khi chọn quy ước Bắc Kinh).</li>
           <li>Chưa có trường hợp không rõ giờ sinh; hãy nhập giờ ước lượng và đọc cảnh báo.</li>
           <li>Phạm vi 1900–2100. Tử Vi cần năm âm lịch ≥ 1900, nên sinh trước Tết 1900 chỉ xem được Bát Tự.</li>

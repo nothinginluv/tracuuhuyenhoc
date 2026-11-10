@@ -8,6 +8,8 @@ import {
 import type { ChartContext } from '../../../../packages/calendar-core/src/index.ts';
 import { Cite } from '../quotes.tsx';
 import { ELEMENT_CLASS } from '../format.ts';
+import { GlossaryTerm } from '../glossary.tsx';
+import { BaziReadingSection } from './BaziReadingSection.tsx';
 
 const ROLE_LABEL: Record<string, string> = {
   'ban-khi': 'Bản khí',
@@ -44,6 +46,7 @@ export function BaziView({ chart, ctx, gender }: Props) {
   const yearYang = ctx.pillars.year.stem % 2 === 0;
   const directionLabel = chart.qiYun.direction === 'thuan' ? 'thuận' : 'nghịch';
   const qi = chart.qiYun;
+
 
   return (
     <section className="bazi">
@@ -169,7 +172,9 @@ export function BaziView({ chart, ctx, gender }: Props) {
       </div>
 
       <div className="luck">
-        <h3>Đại vận</h3>
+        <h3>
+          <GlossaryTerm term="đại vận">Đại vận</GlossaryTerm> (Bát Tự)
+        </h3>
         <div className="luck-scroll">
           <table className="luck-table">
             <thead>
@@ -200,6 +205,9 @@ export function BaziView({ chart, ctx, gender }: Props) {
           Vận đầu tiên là trụ tháng tiến/lùi một bước — không lấy chính trụ tháng.
         </p>
       </div>
+
+
+      <BaziReadingSection chart={chart} />
 
       <div className="sources">
         <h3>Nguồn của các quy tắc</h3>

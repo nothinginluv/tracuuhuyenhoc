@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "$comment": "Quy tắc an đại hạn (大限) và cách đọc mười năm, sinh từ 紫微斗數全書 卷二/卷三. Mọi con số ở đây đều lấy từ chính câu trích; scripts/verify-content.mjs đối chiếu lại.",
+  "source": "ziwei-quanshu",
+  "direction_quote": "q_tv_0110",
+  "ten_year_quote": "q_tv_0116",
+  "fortune_quote": "q_tv_0117",
+  "structure_quote": "q_tv_0118",
+  "start_age": {
+    "2": "q_tv_0111",
+    "3": "q_tv_0112",
+    "4": "q_tv_0113",
+    "5": "q_tv_0114",
+    "6": "q_tv_0115"
+  }
+}

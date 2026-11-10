@@ -3,9 +3,13 @@
  *
  * Không có câu nào do giao diện tự viết ra. Muốn thêm trích dẫn: thêm vào
  * `content/quotes.jsonl`, chạy `npm run quotes:verify`, rồi mới dùng id ở đây.
+ *
+ * Mỗi câu có ba bản: `claim_vi` (sát chữ), `short_vi` (một dòng), `plain_vi` (lời giảng).
+ * Khối "§" luôn hiện bản sát chữ; chế độ "Dễ hiểu" dùng bản giảng ở chỗ khác.
  */
 import raw from '../../../content/quotes.jsonl?raw';
 import { locatorVi } from './locator.ts';
+import { quoteLine, useReadingMode } from './glossary.tsx';
 
 export { locatorVi };
 
@@ -14,6 +18,10 @@ export type Quote = {
   source: string;
   text_zh: string;
   claim_vi: string;
+  /** Một dòng tóm ý (nếu có). */
+  short_vi?: string;
+  /** Lời giảng không thuật ngữ (nếu có) — dùng cho chế độ "Dễ hiểu". */
+  plain_vi?: string;
   locator: string;
 };
 
@@ -49,6 +57,7 @@ export function quoteSource(id: string): string {
 
 /** Một dòng "Nguồn" mở ra để đọc nguyên văn. */
 export function Cite({ id }: { id: string }) {
+  const { mode } = useReadingMode();
   const q = QUOTES[id];
   if (!q) return <span className="cite cite-missing">[{id}]</span>;
   return (
@@ -60,7 +69,13 @@ export function Cite({ id }: { id: string }) {
       <div className="cite-body">
         <p className="cite-label">Nguyên văn gốc</p>
         <p className="cite-zh">{q.text_zh}</p>
-        <p className="cite-vi">{q.claim_vi}</p>
+        {q.short_vi && <p className="cite-short">{q.short_vi}</p>}
+        <p className="cite-vi">{quoteLine(q, mode)}</p>
+        {mode === 'plain' && q.plain_vi && (
+          <p className="cite-literal">
+            <span className="cite-label">Bản sát chữ</span> {q.claim_vi}
+          </p>
+        )}
         <p className="cite-meta">
           <a href={SOURCE_LINK[q.source]} target="_blank" rel="noreferrer noopener">
             {SOURCE_LABEL[q.source] ?? q.source} trên Wikisource

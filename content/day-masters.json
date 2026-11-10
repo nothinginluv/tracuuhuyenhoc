@@ -1,0 +1,78 @@
+{
+  "version": 2,
+  "$comment": "Mười thiên can — bản tính nhật chủ. Nguyên văn 三命通會 卷02 (論天干隂陽生死), sinh bằng scripts/gen-bazi-content.mjs. claim_vi là bản dịch đầy đủ; `short_vi` là một dòng; `plain_vi` trong quotes.jsonl là bản giảng không dùng thuật ngữ.",
+  "source": "sanming-tonghui",
+  "locator": "卷02",
+  "entries": [
+    {
+      "stem": 0,
+      "zh": "甲",
+      "vi": "Giáp",
+      "quote_id": "q_bz_0009",
+      "short_vi": "Giống cây gỗ lớn, cột nhà: đứng đầu, gánh việc."
+    },
+    {
+      "stem": 1,
+      "zh": "乙",
+      "vi": "Ất",
+      "quote_id": "q_bz_0010",
+      "short_vi": "Giống cây leo, cỏ mềm: mềm dẻo, dễ thích nghi."
+    },
+    {
+      "stem": 2,
+      "zh": "丙",
+      "vi": "Bính",
+      "quote_id": "q_bz_0011",
+      "short_vi": "Giống mặt trời: toả sáng, rộng rãi, dễ nổi bật."
+    },
+    {
+      "stem": 3,
+      "zh": "丁",
+      "vi": "Đinh",
+      "quote_id": "q_bz_0012",
+      "short_vi": "Giống ngọn đèn: sáng nhỏ mà bền, tinh tế."
+    },
+    {
+      "stem": 4,
+      "zh": "戊",
+      "vi": "Mậu",
+      "quote_id": "q_bz_0013",
+      "short_vi": "Giống núi đá, thành luỹ: trầm, vững, chịu được sức nặng."
+    },
+    {
+      "stem": 5,
+      "zh": "己",
+      "vi": "Kỷ",
+      "quote_id": "q_bz_0014",
+      "short_vi": "Giống đất vườn: nuôi dưỡng, bao dung, hay nhường nhịn."
+    },
+    {
+      "stem": 6,
+      "zh": "庚",
+      "vi": "Canh",
+      "quote_id": "q_bz_0015",
+      "short_vi": "Giống sắt thô, lưỡi kiếm: quyết đoán, cần rèn mới thành tài."
+    },
+    {
+      "stem": 7,
+      "zh": "辛",
+      "vi": "Tân",
+      "quote_id": "q_bz_0016",
+      "short_vi": "Giống vàng, ngọc: tinh xảo, cầu toàn."
+    },
+    {
+      "stem": 8,
+      "zh": "壬",
+      "vi": "Nhâm",
+      "quote_id": "q_bz_0017",
+      "short_vi": "Giống sông lớn: bao la, cần bờ mới không tràn."
+    },
+    {
+      "stem": 9,
+      "zh": "癸",
+      "vi": "Quý",
+      "quote_id": "q_bz_0018",
+      "short_vi": "Giống mưa, mạch nước ngầm: lặng lẽ, thấm sâu."
+    }
+  ]
+}

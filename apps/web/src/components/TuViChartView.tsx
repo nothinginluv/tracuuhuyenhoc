@@ -5,8 +5,10 @@ import {
   type Palace,
   type PlacedStar,
   type TuViChart,
+  type TuViGender,
 } from '../../../../packages/tuvi-engine/src/index.ts';
 import { hourBranchName, hourRange } from '../format.ts';
+import { TuViReadingSection } from './TuViReadingSection.tsx';
 
 const HUA_SHORT: Record<string, string> = {
   loc: 'Lộc',
@@ -69,9 +71,9 @@ function PalaceCell({ palace }: { palace: Palace }) {
   );
 }
 
-type Props = { chart: TuViChart; calendarLabel?: string };
+type Props = { chart: TuViChart; calendarLabel?: string; gender: TuViGender };
 
-export function TuViChartView({ chart, calendarLabel = 'Âm lịch TQ' }: Props) {
+export function TuViChartView({ chart, calendarLabel = 'Âm lịch TQ', gender }: Props) {
   const byBranch = new Map(chart.palaces.map((p) => [p.branch, p]));
   const soulPalace = chart.palaces.find((p) => p.isSoul);
   const bodyPalace = chart.palaces.find((p) => p.isBody);
@@ -196,6 +198,8 @@ export function TuViChartView({ chart, calendarLabel = 'Âm lịch TQ' }: Props)
           </p>
         </div>
       </div>
+
+      <TuViReadingSection chart={chart} gender={gender} />
     </section>
   );
 }

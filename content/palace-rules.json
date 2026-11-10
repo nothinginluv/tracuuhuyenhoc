@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "$comment": "Luận theo cung, sinh từ 紫微斗數全書 (論太歲小限星辰庙陷遇十二宫中吉凶). Mỗi cung một câu thuận và một câu trắc trở. Chạy scripts/gen-tuvi-reading.mjs để dựng lại.",
+  "source": "ziwei-quanshu",
+  "locator": "論太歲小限星辰庙陷遇十二宫中吉凶",
+  "entries": [
+    {
+      "branch": 0,
+      "branchZh": "子",
+      "branchVi": "Tý",
+      "good_quote": "q_tv_0143",
+      "bad_quote": "q_tv_0120"
+    },
+    {
+      "branch": 1,
+      "branchZh": "丑",
+      "branchVi": "Sửu",
+      "good_quote": "q_tv_0144",
+      "bad_quote": "q_tv_0122"
+    },
+    {
+      "branch": 2,
+      "branchZh": "寅",
+      "branchVi": "Dần",
+      "good_quote": "q_tv_0145",
+      "bad_quote": "q_tv_0124"
+    },
+    {
+      "branch": 3,
+      "branchZh": "卯",
+      "branchVi": "Mão",
+      "good_quote": "q_tv_0146",
+      "bad_quote": "q_tv_0126"
+    },
+    {
+      "branch": 4,
+      "branchZh": "辰",
+      "branchVi": "Thìn",
+      "good_quote": "q_tv_0147",
+      "bad_quote": "q_tv_0128"
+    },
+    {
+      "branch": 5,
+      "branchZh": "巳",
+      "branchVi": "Tỵ",
+      "good_quote": "q_tv_0148",
+      "bad_quote": "q_tv_0130"
+    },
+    {
+      "branch": 6,
+      "branchZh": "午",
+      "branchVi": "Ngọ",
+      "good_quote": "q_tv_0149",
+      "bad_quote": "q_tv_0132"
+    },
+    {
+      "branch": 7,
+      "branchZh": "未",
+      "branchVi": "Mùi",
+      "good_quote": "q_tv_0150",
+      "bad_quote": "q_tv_0134"
+    },
+    {
+      "branch": 8,
+      "branchZh": "申",
+      "branchVi": "Thân",
+      "good_quote": "q_tv_0151",
+      "bad_quote": "q_tv_0136"
+    },
+    {
+      "branch": 9,
+      "branchZh": "酉",
+      "branchVi": "Dậu",
+      "good_quote": "q_tv_0152",
+      "bad_quote": "q_tv_0138"
+    },
+    {
+      "branch": 10,
+      "branchZh": "戌",
+      "branchVi": "Tuất",
+      "good_quote": "q_tv_0153",
+      "bad_quote": "q_tv_0140"
+    },
+    {
+      "branch": 11,
+      "branchZh": "亥",
+      "branchVi": "Hợi",
+      "good_quote": "q_tv_0154",
+      "bad_quote": "q_tv_0142"
+    }
+  ]
+}

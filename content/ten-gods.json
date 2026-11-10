@@ -1,0 +1,55 @@
+{
+  "version": 2,
+  "$comment": "Định nghĩa thập thần, nguyên văn 淵海子平, sinh bằng scripts/gen-bazi-content.mjs. Thần nào kho văn bản không có định nghĩa riêng thì ghi ở \"missing\", giao diện không lấp bằng suy diễn.",
+  "source": "yuanhai-ziping",
+  "entries": [
+    {
+      "id": "chinh-quan",
+      "quote_id": "q_bz_0019",
+      "short_vi": "Uy tín chính danh: dễ được quý trọng."
+    },
+    {
+      "id": "that-sat",
+      "quote_id": "q_bz_0020",
+      "short_vi": "Áp lực mạnh: khó nhọc nhưng rèn được nghị lực."
+    },
+    {
+      "id": "thuc-than",
+      "quote_id": "q_bz_0021",
+      "short_vi": "Dưỡng chất nuôi tài: ăn ngon, sống đủ đầy."
+    },
+    {
+      "id": "thuong-quan",
+      "quote_id": "q_bz_0022",
+      "short_vi": "Tài hoa lộ ra, khó chịu khuôn phép."
+    },
+    {
+      "id": "chinh-tai",
+      "quote_id": "q_bz_0023",
+      "short_vi": "Của cải do mình làm ra; thiên tài là phần đến bất ngờ."
+    },
+    {
+      "id": "thien-tai",
+      "quote_id": "q_bz_0023",
+      "short_vi": "Của cải do mình làm ra; thiên tài là phần đến bất ngờ."
+    },
+    {
+      "id": "chinh-an",
+      "quote_id": "q_bz_0024",
+      "short_vi": "Nền đỡ: người che chở, học vấn."
+    },
+    {
+      "id": "thien-an",
+      "quote_id": "q_bz_0025",
+      "short_vi": "Nghĩ nhiều, thiên về lý thuyết."
+    },
+    {
+      "id": "ty-kiep",
+      "quote_id": "q_bz_0026",
+      "short_vi": "Ngang vai: bạn bè, anh em, tự lực."
+    }
+  ],
+  "missing": [
+    "kiep-tai"
+  ]
+}

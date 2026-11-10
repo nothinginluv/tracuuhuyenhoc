@@ -8,6 +8,7 @@ import { DEFAULT_FORM, PRESET_INFO, parseForm, type FormValues } from './form.ts
 import { WarningList } from './components/WarningList.tsx';
 import { LuopanArt, SealMark } from './components/Ornaments.tsx';
 import { formatDate, formatTime, lunarShort, yearName } from './format.ts';
+import { ReadingModeToggle } from './glossary.tsx';
 
 // Hai trang chỉ đọc tài liệu được tách khỏi gói chính: người tra cứu không phải
 // tải toàn bộ nội dung Tinh diệu / Phương pháp mới xem được lá số.
@@ -316,7 +317,9 @@ export function App() {
                     </span>
                   )}
                 </div>
-                <div className="tabs" role="tablist" aria-label="Nội dung lá số">
+                <div className="result-head-right">
+                  <ReadingModeToggle />
+                  <div className="tabs" role="tablist" aria-label="Nội dung lá số">
                   <button
                     role="tab"
                     aria-selected={tab === 'tuvi'}
@@ -341,6 +344,7 @@ export function App() {
                   >
                     Cách tính
                   </button>
+                </div>
                 </div>
               </div>
 
@@ -389,6 +393,7 @@ export function App() {
                         tuviVariant === 'vn' && result.tuviVn ? result.tuviVn : result.tuvi
                       }
                       calendarLabel={tuviVariant === 'vn' ? 'Âm lịch VN' : 'Âm lịch TQ'}
+                      gender={computedWith?.gender ?? values.gender}
                     />
                   </>
                 ) : (
@@ -432,9 +437,9 @@ export function App() {
               <div className="intro-card">
                 <h2>Chỉ tính, không đoán</h2>
                 <p>
-                  Phiên bản này an sao, lập tứ trụ, tính tàng can, thập thần và đại vận. Chưa có
-                  lời luận giải vận mệnh — mọi câu chữ Hán dùng làm căn cứ đều mở ra đọc được
-                  nguyên văn.
+                  Phiên bản này an sao, lập tứ trụ, tính tàng can, thập thần và đại vận. Luận giải
+                  nằm ngay trong tab Tử Vi và Bát Tự — ghép nguyên văn đã kiểm với lá số, không có
+                  câu nào do giao diện tự viết.
                 </p>
                 <button className="link-btn" onClick={() => setPage('method')}>
                   Xem nguồn &amp; giới hạn →

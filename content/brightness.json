@@ -1,0 +1,474 @@
+{
+  "version": 1,
+  "$comment": "Bảng độ sáng sao theo 12 cung, sinh từ 紫微斗數全書 卷三 (论诸星同垣各司所宜). Chạy scripts/gen-tuvi-brightness.mjs để dựng lại; scripts/verify-content.mjs đối chiếu ngược từng ô với câu trích. Ô nào nguồn không chép thì để trống, giao diện ghi \"không chép\".",
+  "source": "ziwei-quanshu",
+  "locator": "卷三",
+  "levels": {
+    "庙": {
+      "vi": "Miếu",
+      "tone": "sang"
+    },
+    "廟": {
+      "vi": "Miếu",
+      "tone": "sang"
+    },
+    "旺": {
+      "vi": "Vượng",
+      "tone": "sang"
+    },
+    "利": {
+      "vi": "Lợi",
+      "tone": "sang"
+    },
+    "地": {
+      "vi": "Địa",
+      "tone": "sang"
+    },
+    "平": {
+      "vi": "Bình",
+      "tone": "trung"
+    },
+    "陷": {
+      "vi": "Hãm",
+      "tone": "toi"
+    }
+  },
+  "stars": {
+    "ziwei": {
+      "quote_id": "q_tv_0089",
+      "source_label_zh": "紫微",
+      "levels": {
+        "0": "平",
+        "1": "庙",
+        "2": "旺",
+        "3": "旺",
+        "5": "旺",
+        "6": "庙",
+        "7": "庙",
+        "8": "旺",
+        "9": "旺",
+        "11": "旺"
+      },
+      "no_fall": true,
+      "unspecified": [
+        4,
+        10
+      ]
+    },
+    "tianfu": {
+      "quote_id": "q_tv_0090",
+      "source_label_zh": "天府",
+      "levels": {
+        "0": "庙",
+        "1": "庙",
+        "2": "庙",
+        "3": "地",
+        "4": "庙",
+        "5": "地",
+        "6": "旺",
+        "7": "庙",
+        "8": "地",
+        "9": "旺",
+        "10": "庙",
+        "11": "地"
+      },
+      "no_fall": true,
+      "unspecified": []
+    },
+    "tianxiang": {
+      "quote_id": "q_tv_0091",
+      "source_label_zh": "天相",
+      "levels": {
+        "0": "庙",
+        "1": "庙",
+        "2": "庙",
+        "3": "陷",
+        "4": "地",
+        "5": "地",
+        "6": "庙",
+        "7": "地",
+        "8": "庙",
+        "9": "陷",
+        "10": "地",
+        "11": "地"
+      },
+      "no_fall": false,
+      "unspecified": []
+    },
+    "tianliang": {
+      "quote_id": "q_tv_0092",
+      "source_label_zh": "天梁",
+      "levels": {
+        "0": "庙",
+        "1": "旺",
+        "2": "庙",
+        "3": "庙",
+        "4": "庙",
+        "5": "陷",
+        "6": "庙",
+        "7": "旺",
+        "8": "陷",
+        "9": "地",
+        "10": "庙",
+        "11": "陷"
+      },
+      "no_fall": false,
+      "unspecified": []
+    },
+    "tiantong": {
+      "quote_id": "q_tv_0093",
+      "source_label_zh": "天同",
+      "levels": {
+        "0": "旺",
+        "5": "庙",
+        "6": "陷",
+        "8": "旺",
+        "11": "庙"
+      },
+      "no_fall": false,
+      "unspecified": [
+        1,
+        2,
+        3,
+        4,
+        7,
+        9,
+        10
+      ]
+    },
+    "tianji": {
+      "quote_id": "q_tv_0094",
+      "source_label_zh": "天机",
+      "levels": {
+        "0": "庙",
+        "1": "陷",
+        "4": "旺",
+        "6": "庙",
+        "7": "陷",
+        "9": "旺"
+      },
+      "no_fall": false,
+      "unspecified": [
+        2,
+        3,
+        5,
+        8,
+        10,
+        11
+      ]
+    },
+    "taiyang": {
+      "quote_id": "q_tv_0095",
+      "source_label_zh": "太阳",
+      "levels": {
+        "0": "陷",
+        "2": "旺",
+        "3": "庙",
+        "4": "旺",
+        "5": "旺",
+        "6": "旺"
+      },
+      "no_fall": false,
+      "unspecified": [
+        1,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "taiyin": {
+      "quote_id": "q_tv_0096",
+      "source_label_zh": "太阴",
+      "levels": {
+        "0": "庙",
+        "1": "庙",
+        "2": "旺",
+        "3": "陷",
+        "4": "陷",
+        "5": "陷",
+        "9": "旺",
+        "10": "旺",
+        "11": "庙"
+      },
+      "no_fall": false,
+      "unspecified": [
+        6,
+        7,
+        8
+      ]
+    },
+    "wenchang": {
+      "quote_id": "q_tv_0097",
+      "source_label_zh": "文昌",
+      "levels": {
+        "0": "地",
+        "1": "庙",
+        "2": "陷",
+        "4": "地",
+        "5": "庙",
+        "6": "陷",
+        "8": "地",
+        "9": "庙",
+        "10": "陷"
+      },
+      "no_fall": false,
+      "unspecified": [
+        3,
+        7,
+        11
+      ]
+    },
+    "wenqu": {
+      "quote_id": "q_tv_0098",
+      "source_label_zh": "文曲",
+      "levels": {
+        "0": "地",
+        "1": "庙",
+        "2": "陷",
+        "4": "地",
+        "5": "庙",
+        "6": "陷",
+        "8": "地",
+        "9": "庙",
+        "10": "陷"
+      },
+      "no_fall": false,
+      "unspecified": [
+        3,
+        7,
+        11
+      ]
+    },
+    "wuqu": {
+      "quote_id": "q_tv_0099",
+      "source_label_zh": "武曲",
+      "levels": {
+        "0": "旺",
+        "1": "庙",
+        "4": "庙",
+        "5": "平",
+        "6": "旺",
+        "7": "庙",
+        "10": "庙",
+        "11": "平"
+      },
+      "no_fall": true,
+      "unspecified": [
+        2,
+        3,
+        8,
+        9
+      ]
+    },
+    "tanlang": {
+      "quote_id": "q_tv_0100",
+      "source_label_zh": "贪狠",
+      "levels": {
+        "0": "旺",
+        "1": "庙",
+        "4": "庙",
+        "5": "陷",
+        "6": "旺",
+        "7": "庙",
+        "10": "庙",
+        "11": "陷"
+      },
+      "no_fall": false,
+      "unspecified": [
+        2,
+        3,
+        8,
+        9
+      ]
+    },
+    "lianzhen": {
+      "quote_id": "q_tv_0101",
+      "source_label_zh": "廉贞",
+      "levels": {
+        "1": "利",
+        "2": "庙",
+        "4": "利",
+        "5": "陷",
+        "7": "利",
+        "8": "庙",
+        "10": "利",
+        "11": "陷"
+      },
+      "no_fall": false,
+      "unspecified": [
+        0,
+        3,
+        6,
+        9
+      ]
+    },
+    "jumen": {
+      "quote_id": "q_tv_0102",
+      "source_label_zh": "巨门",
+      "levels": {
+        "0": "旺",
+        "2": "庙",
+        "3": "庙",
+        "4": "陷",
+        "5": "旺",
+        "6": "旺",
+        "8": "庙",
+        "9": "庙",
+        "10": "陷",
+        "11": "旺"
+      },
+      "no_fall": false,
+      "unspecified": [
+        1,
+        7
+      ]
+    },
+    "qisha": {
+      "quote_id": "q_tv_0103",
+      "source_label_zh": "七杀",
+      "levels": {
+        "0": "旺",
+        "1": "庙",
+        "2": "庙",
+        "3": "旺",
+        "4": "庙",
+        "5": "平",
+        "6": "旺",
+        "7": "庙",
+        "8": "庙",
+        "9": "旺",
+        "10": "庙",
+        "11": "平"
+      },
+      "no_fall": true,
+      "unspecified": []
+    },
+    "pojun": {
+      "quote_id": "q_tv_0104",
+      "source_label_zh": "破军",
+      "levels": {
+        "0": "庙",
+        "1": "旺",
+        "3": "陷",
+        "4": "旺",
+        "6": "庙",
+        "7": "旺",
+        "9": "陷",
+        "10": "旺"
+      },
+      "no_fall": false,
+      "unspecified": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    "qingyang": {
+      "quote_id": "q_tv_0105",
+      "source_label_zh": "擎羊",
+      "levels": {
+        "0": "陷",
+        "1": "庙",
+        "3": "陷",
+        "4": "庙",
+        "6": "陷",
+        "7": "庙",
+        "9": "陷",
+        "10": "庙"
+      },
+      "no_fall": false,
+      "unspecified": [
+        2,
+        5,
+        8,
+        11
+      ]
+    },
+    "tuoluo": {
+      "quote_id": "q_tv_0106",
+      "source_label_zh": "陀罗",
+      "levels": {
+        "1": "庙",
+        "2": "陷",
+        "4": "庙",
+        "5": "陷",
+        "7": "庙",
+        "8": "陷",
+        "10": "庙",
+        "11": "陷"
+      },
+      "no_fall": false,
+      "unspecified": [
+        0,
+        3,
+        6,
+        9
+      ]
+    },
+    "huoxing": {
+      "quote_id": "q_tv_0107",
+      "source_label_zh": "火星",
+      "levels": {
+        "0": "陷",
+        "1": "地",
+        "2": "庙",
+        "4": "陷",
+        "5": "地",
+        "6": "庙",
+        "8": "陷",
+        "9": "地",
+        "10": "庙"
+      },
+      "no_fall": false,
+      "unspecified": [
+        3,
+        7,
+        11
+      ]
+    },
+    "lingxing": {
+      "quote_id": "q_tv_0108",
+      "source_label_zh": "铃星",
+      "levels": {
+        "0": "陷",
+        "1": "地",
+        "2": "庙",
+        "4": "陷",
+        "5": "地",
+        "6": "庙",
+        "8": "陷",
+        "9": "地",
+        "10": "庙"
+      },
+      "no_fall": false,
+      "unspecified": [
+        3,
+        7,
+        11
+      ]
+    },
+    "lucun": {
+      "quote_id": "q_tv_0109",
+      "source_label_zh": "禄存",
+      "levels": {
+        "0": "庙",
+        "1": "庙",
+        "2": "庙",
+        "3": "庙",
+        "4": "庙",
+        "5": "庙",
+        "6": "庙",
+        "7": "庙",
+        "8": "庙",
+        "9": "庙",
+        "10": "庙",
+        "11": "庙"
+      },
+      "no_fall": false,
+      "unspecified": []
+    }
+  }
+}
