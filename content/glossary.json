@@ -32,6 +32,24 @@
     "dương nam": "Người nam sinh năm có can dương (Giáp, Bính, Mậu, Canh, Nhâm). Quyết định chiều đại hạn đi thuận.",
     "âm nữ": "Người nữ sinh năm có can âm (Ất, Đinh, Kỷ, Tân, Quý). Đại hạn đi thuận.",
     "âm nam": "Người nam sinh năm có can âm. Đại hạn đi nghịch.",
-    "dương nữ": "Người nữ sinh năm có can dương. Đại hạn đi nghịch."
+    "dương nữ": "Người nữ sinh năm có can dương. Đại hạn đi nghịch.",
+    "mệnh chủ": "Sao chủ của cung Mệnh — tra theo địa chi của cung Mệnh. Nói về trục chính của người xem.",
+    "thân chủ": "Sao chủ của cung Thân — tra theo địa chi năm sinh. Nói về phần hành động của người xem.",
+    "tam phương": "Ba cung tam hợp với nhau, đọc chung khi xét một cung: cung đang xét, cung cách 4 bước và cung cách 8 bước.",
+    "chiếu": "Nói tắt của \"chiếu hội\": sao ở cung khác nhưng có ảnh hưởng tới cung đang xét (qua tam hợp hoặc đối cung).",
+    "nhị hợp": "Cặp địa chi đứng cạnh nhau theo vòng sinh: Tý–Sửu, Dần–Hợi, Mão–Tuất, Thìn–Dậu, Tỵ–Thân, Ngọ–Mùi.",
+    "xung": "Hai cung đối nhau (cách 6 cung), như Tý–Ngọ, Sửu–Mùi. Thường chỉ sự đối kháng, thay đổi mạnh.",
+    "ngũ hành": "Năm hành Mộc, Hoả, Thổ, Kim, Thuỷ — cơ sở phân loại của can, chi và sao.",
+    "thiên can": "Mười can: Giáp, Ất, Bính, Đinh, Mậu, Kỷ, Canh, Tân, Nhâm, Quý. Can có âm dương.",
+    "địa chi": "Mười hai chi: Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ, Mùi, Thân, Dậu, Tuất, Hợi. Chi gắn với 12 cung.",
+    "can chi": "Cặp can + chi (như Giáp Tý), tạo thành một trụ trong Bát Tự hoặc một năm.",
+    "tứ trụ": "Bốn trụ năm, tháng, ngày, giờ của Bát Tự; mỗi trụ gồm một can và một chi.",
+    "tiết khí": "24 mốc thời gian theo Mặt Trời (Lập Xuân, Vũ Thuỷ, Kinh Trập…). Dùng để chia tháng trong Bát Tự.",
+    "giờ Tý": "Khung giờ 23:00–01:00. Có hai quy ước: Tý sớm (đổi ngày 23:00) và Tý muộn (đổi ngày 00:00).",
+    "âm lịch": "Lịch theo cả Mặt Trăng và Mặt Trời — tháng đủ 30 ngày, tháng thiếu 29 ngày, có tháng nhuận.",
+    "tháng nhuận": "Tháng thêm vào âm lịch để khớp vòng Mặt Trời. Có ba cách an sao: chia đôi, giữ nguyên, hoặc dồn sang tháng sau.",
+    "đại hạn": "Mười năm trong Tử Vi, rơi vào một cung. Đi thuận hay nghịch tuỳ âm dương của năm sinh và giới tính.",
+    "cung vô chính tinh": "Cung không có sao chính nào đóng. Khi luận thường phải xem cung đối diện (đối cung) và hai cung tam hợp.",
+    "phá cách": "Các sao hoặc cung có yếu tố chống nhau làm giảm hoặc hỏng cấu trúc tốt của lá số (khái niệm chung, chưa luận trong bản này)."
   }
 }

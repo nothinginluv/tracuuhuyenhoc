@@ -2091,6 +2091,20 @@ h1 {
   color: var(--ink-soft);
 }
 
+.stars-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.star-block-short {
+  margin: 0 0 4px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
 .stars-subhead {
   margin: 34px 0 12px;
   padding-bottom: 8px;
@@ -2983,9 +2997,27 @@ h1 {
   color: var(--gold-deep);
 }
 
+.reading-mode .segmented {
+  min-height: 0;
+}
+
 .reading-mode .segmented button {
-  padding: 5px 10px;
+  padding: 10px 12px;
   font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  min-height: 40px;
+}
+
+@media (max-width: 560px) {
+  .reading-mode {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .reading-mode-label {
+    width: 100%;
+  }
 }
 
 .reading-claim-short {
@@ -3092,4 +3124,149 @@ h1 {
   border: 1px dashed var(--line-strong);
   border-radius: 4px;
   background: var(--paper-2);
+}
+
+/* ── Chế độ tối: ghi đè các nền màu cứng còn lại ───────────── */
+[data-theme="dark"] .field input,
+[data-theme="dark"] .field select,
+[data-theme="dark"] .segmented,
+[data-theme="dark"] .variant-bar .segmented {
+  background: var(--paper-3);
+}
+
+[data-theme="dark"] .field input:hover,
+[data-theme="dark"] .field select:hover {
+  background: var(--paper-4);
+}
+
+[data-theme="dark"] .district,
+[data-theme="dark"] .variant-bar,
+[data-theme="dark"] .empty,
+[data-theme="dark"] .warning-warn,
+[data-theme="dark"] .chip-key {
+  background: #241c13;
+  border-color: var(--line-strong);
+  color: #e2cfa8;
+}
+
+[data-theme="dark"] .error {
+  background: #2e1a16;
+  color: #e8bdb2;
+}
+
+[data-theme="dark"] .palace.is-soul,
+[data-theme="dark"] .day-master,
+[data-theme="dark"] .tuvi-center {
+  background-color: #241c13;
+  background-image: radial-gradient(circle at 50% 38%, rgba(201, 168, 104, 0.12), transparent 66%);
+}
+
+[data-theme="dark"] .palace,
+[data-theme="dark"] .pillar,
+[data-theme="dark"] .star-card,
+[data-theme="dark"] .palace-card,
+[data-theme="dark"] .mini-card,
+[data-theme="dark"] .sources,
+[data-theme="dark"] .luck,
+[data-theme="dark"] .reading-star,
+[data-theme="dark"] .reading-god {
+  background: var(--paper-2);
+}
+
+[data-theme="dark"] .palace-card.is-strong {
+  background: #1c2a22;
+  border-color: #35503f;
+}
+
+[data-theme="dark"] .palace-card.is-weak,
+[data-theme="dark"] .hua-card {
+  background: #1e1811;
+}
+
+[data-theme="dark"] .palace-rule-good {
+  background: #1b2a22;
+  border-color: #33513f;
+}
+
+[data-theme="dark"] .palace-rule-bad {
+  background: #2c1b17;
+  border-color: #57332b;
+}
+
+[data-theme="dark"] .cite summary {
+  background: #241c13;
+  border-color: var(--line-strong);
+  color: #cdbb9a;
+}
+
+[data-theme="dark"] .cite summary:hover,
+[data-theme="dark"] .cite[open] summary {
+  background: #2d2417;
+  border-color: var(--gold-deep);
+}
+
+[data-theme="dark"] .cite-body {
+  background: #1e1811;
+  border-left-color: var(--gold);
+}
+
+[data-theme="dark"] .cite-zh {
+  color: #e6d8bd;
+}
+
+[data-theme="dark"] .bar-track {
+  background: #2d2417;
+}
+
+[data-theme="dark"] .tag,
+[data-theme="dark"] .meta-chip {
+  background: #2d2417;
+  border-color: var(--line);
+  color: #c9b795;
+}
+
+[data-theme="dark"] .meta-chip.el-moc { background: #1b2a22; border-color: #33513f; color: #8fd0a9; }
+[data-theme="dark"] .meta-chip.el-hoa { background: #2c1b17; border-color: #57332b; color: #e8a893; }
+[data-theme="dark"] .meta-chip.el-tho { background: #2a2318; border-color: #574a30; color: #dcc08a; }
+[data-theme="dark"] .meta-chip.el-kim { background: #24231f; border-color: #4a4740; color: #c9c5b8; }
+[data-theme="dark"] .meta-chip.el-thuy { background: #16222b; border-color: #2f4a5c; color: #9dc6e0; }
+
+[data-theme="dark"] .tag-soul { background: #3a1f19; color: #eab5a8; }
+[data-theme="dark"] .tag-body { background: #1c2a22; color: #8fd0a9; }
+[data-theme="dark"] .tag-main { background: #2a2318; color: #dcc08a; }
+
+[data-theme="dark"] .chip-sang { background: #1b2a22; border-color: #33513f; color: #8fd0a9; }
+[data-theme="dark"] .chip-trung { background: #2a2318; border-color: #574a30; color: #dcc08a; }
+[data-theme="dark"] .chip-toi { background: #2c1b17; border-color: #57332b; color: #e8a893; }
+
+[data-theme="dark"] .palace-card.is-strong,
+[data-theme="dark"] .error,
+[data-theme="dark"] .empty {
+  color: #e2d4bb;
+}
+
+[data-theme="dark"] .warning-info {
+  background: #241c13;
+  color: #d6c6a8;
+}
+
+/* Chữ trên nền mực sâu (hero, header) giữ nguyên — vốn đã tối */
+[data-theme="dark"] .prose > p,
+[data-theme="dark"] .prose ul,
+[data-theme="dark"] .prose ol,
+[data-theme="dark"] .star-block > p {
+  color: #d5c6ab;
+}
+
+[data-theme="dark"] .kv dd,
+[data-theme="dark"] .hidden-god,
+[data-theme="dark"] .center-dl dd,
+[data-theme="dark"] .step .val {
+  color: #d8c9ae;
+}
+
+[data-theme="dark"] .chip {
+  background: var(--paper-2);
+  border-color: var(--line);
+  color: #c9b795;
 }

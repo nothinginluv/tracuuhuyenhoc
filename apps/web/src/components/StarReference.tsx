@@ -10,6 +10,8 @@ import {
   type StarRef,
 } from '../stars.ts';
 import { Cite } from '../quotes.tsx';
+import type { Quote } from '../quotes-data.ts';
+import { ReadingModeToggle, quoteLine, useReadingMode } from '../glossary.tsx';
 
 function MetaChip({ label, tone }: { label: string; tone?: string }) {
   return (
@@ -19,7 +21,8 @@ function MetaChip({ label, tone }: { label: string; tone?: string }) {
   );
 }
 
-function CitedBlocks({ cited }: { cited: { role: string; quote: { id: string; claim_vi: string } }[] }) {
+function CitedBlocks({ cited }: { cited: { role: string; quote: Quote }[] }) {
+  const { mode } = useReadingMode();
   return (
     <>
       {cited.map((c, i) => (
@@ -33,7 +36,8 @@ function CitedBlocks({ cited }: { cited: { role: string; quote: { id: string; cl
                   ? 'Nguyên văn bàn thêm'
                   : 'Nguyên văn bổ sung'}
           </span>
-          <p>{c.quote.claim_vi}</p>
+          {c.quote.short_vi && <p className="star-block-short">{c.quote.short_vi}</p>}
+          <p>{quoteLine(c.quote, mode)}</p>
           <Cite id={c.quote.id} />
         </div>
       ))}
@@ -96,6 +100,7 @@ function HuaCard({ hua }: { hua: HuaRef }) {
 }
 
 function PalaceCard({ palace }: { palace: PalaceRef }) {
+  const { mode } = useReadingMode();
   return (
     <article className={`palace-card${palace.strength ? ` is-${palace.strength}` : ''}`}>
       <header className="palace-card-head">
@@ -112,7 +117,7 @@ function PalaceCard({ palace }: { palace: PalaceRef }) {
 
       {palace.scope ? (
         <div className="star-block">
-          <p>{palace.scope.claim_vi}</p>
+          <p>{quoteLine(palace.scope, mode)}</p>
           <Cite id={palace.scope.id} />
         </div>
       ) : (
@@ -123,6 +128,7 @@ function PalaceCard({ palace }: { palace: PalaceRef }) {
 }
 
 export function StarReference({ onBack }: { onBack: () => void }) {
+  const { mode } = useReadingMode();
   const main = STAR_REFS.filter((s) => s.def.group === 'main');
   const aux = STAR_REFS.filter((s) => s.def.group !== 'main');
 
@@ -136,9 +142,12 @@ export function StarReference({ onBack }: { onBack: () => void }) {
           <strong>Tử Vi Đẩu Số Toàn Thư</strong>. Ngũ hành, đẩu, cung chủ, vai trò đều là từ khoá
           xuất hiện trong chính câu trích; không có chữ nào do giao diện tự thêm.
         </p>
-        <button type="button" className="link-btn" onClick={onBack}>
-          ← Về trang tra cứu
-        </button>
+        <div className="stars-head-actions">
+          <button type="button" className="link-btn" onClick={onBack}>
+            ← Về trang tra cứu
+          </button>
+          <ReadingModeToggle />
+        </div>
       </div>
 
       <h2 className="stars-subhead">Chính tinh</h2>
@@ -184,13 +193,13 @@ export function StarReference({ onBack }: { onBack: () => void }) {
         <h3>Cường nhược</h3>
         {PALACE_META.strength && (
           <>
-            <p>{PALACE_META.strength.claim_vi}</p>
+            <p>{quoteLine(PALACE_META.strength, mode)}</p>
             <Cite id={PALACE_META.strength.id} />
           </>
         )}
         {PALACE_META.strengthFemale && (
           <>
-            <p>{PALACE_META.strengthFemale.claim_vi}</p>
+            <p>{quoteLine(PALACE_META.strengthFemale, mode)}</p>
             <Cite id={PALACE_META.strengthFemale.id} />
           </>
         )}

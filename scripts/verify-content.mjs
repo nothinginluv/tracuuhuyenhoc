@@ -46,6 +46,22 @@ for (const [i, line] of readFileSync('content/quotes.jsonl', 'utf8')
   quotes.set(q.id, q);
 }
 
+/* Bản giảng cho người mới: phải là tiếng Việt, không lẫn chữ Hán. */
+const HAN_RE = /[\u3400-\u9fff]/;
+for (const [id, q] of quotes) {
+  for (const field of ['short_vi', 'plain_vi']) {
+    const value = q[field];
+    if (value === undefined) continue;
+    if (typeof value !== 'string' || value.trim().length < 10) {
+      errors.push(`quotes.jsonl "${id}": ${field} quá ngắn`);
+      continue;
+    }
+    if (HAN_RE.test(value)) {
+      errors.push(`quotes.jsonl "${id}": ${field} còn chữ Hán — phải là tiếng Việt thường`);
+    }
+  }
+}
+
 const usedQuotes = new Set();
 let tokenChecks = 0;
 
