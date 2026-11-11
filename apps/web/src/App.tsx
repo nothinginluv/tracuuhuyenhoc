@@ -6,7 +6,8 @@ import type { ComputeResult } from './engine.ts';
 import { BirthForm } from './components/BirthForm.tsx';
 import { DEFAULT_FORM, PRESET_INFO, parseForm, type FormValues } from './form.ts';
 import { WarningList } from './components/WarningList.tsx';
-import { LuopanArt, SealMark } from './components/Ornaments.tsx';
+import { SealMark } from './components/Ornaments.tsx';
+import { Hero } from './components/Hero.tsx';
 import { formatDate, formatTime, lunarShort, yearName } from './format.ts';
 import { ReadingModeToggle } from './glossary.tsx';
 import { copyUrl, shareUrl } from './share.ts';
@@ -268,42 +269,9 @@ export function App() {
         </Suspense>
       ) : (
         <>
-          <section className="hero">
-            <div className="hero-art" aria-hidden="true">
-              <LuopanArt className="luopan" />
-            </div>
-            <div className="hero-inner">
-              <p className="eyebrow">Tử Vi Đẩu Số · Bát Tự / Tứ Trụ</p>
-              <h1>
-                Lá số minh bạch.
-                <br />
-                <span className="hero-accent">Không phán.</span>
-              </h1>
-              <p className="hero-lede">
-                Mỗi con số đều có đường đi: từ giờ trên đồng hồ, qua múi giờ lịch sử, tiết khí, âm
-                lịch — đến ngôi sao. Chỗ nào có tranh cãi, chúng tôi cho bạn chọn và ghi rõ.
-              </p>
-              <ul className="hero-facts">
-                <li>
-                  <span className="hero-fact-no">01</span>
-                  <strong>Lịch có kiểm chứng</strong>
-                  <small>Tiết khí theo UTC · bảng dựng cho 1899–2102</small>
-                </li>
-                <li>
-                  <span className="hero-fact-no">02</span>
-                  <strong>Quy ước công khai</strong>
-                  <small>Đổi được từng lựa chọn, khác biệt đều ghi rõ</small>
-                </li>
-                <li>
-                  <span className="hero-fact-no">03</span>
-                  <strong>Dẫn nguồn nguyên văn</strong>
-                  <small>Mỗi câu Hán qua cổng kiểm SHA-256</small>
-                </li>
-              </ul>
-            </div>
-          </section>
+          <Hero onMethod={() => go('method')} />
 
-          <main className="lookup">
+          <main className="lookup" id="bieu-mau">
 
           <BirthForm
             values={values}

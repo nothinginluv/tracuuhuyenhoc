@@ -338,6 +338,15 @@ h3 {
   .luopan-rotor {
     animation: none !important;
   }
+
+  /* Bìa: sao vẽ tĩnh (xử lý trong StarField), nút không nhún, la bàn không dời. */
+  .hero-cta:active {
+    transform: none;
+  }
+
+  .hero-art {
+    transform: translateY(-50%);
+  }
 }
 
 /* Loading overlay khi đang tính toán */
@@ -409,6 +418,26 @@ h3 {
   margin: 0 auto;
   padding: 0 24px 72px;
   flex: 1;
+}
+
+/* Neo "Lập lá số của bạn" trên bìa: chừa chỗ cho header dính.
+   Hero tính offset chính xác theo header thật; đây là mức dự phòng khi không có JS. */
+#bieu-mau {
+  scroll-margin-top: 84px;
+}
+
+@media (max-width: 700px) {
+  /* Thẻ biểu mẫu kéo lên đè mép bìa 44px. */
+  #bieu-mau {
+    scroll-margin-top: 128px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Header hai hàng: thương hiệu + thanh tab. */
+  #bieu-mau {
+    scroll-margin-top: 208px;
+  }
 }
 
 .method {
@@ -513,12 +542,78 @@ h1 {
   right: -110px;
   width: min(660px, 64vw);
   aspect-ratio: 1;
-  transform: translateY(-50%);
+  transform: translateY(calc(-50% + var(--hero-shift, 0px)));
   color: var(--gold-bright);
   opacity: 0.42;
   pointer-events: none;
   -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 48%, transparent 76%);
   mask-image: radial-gradient(circle at 50% 50%, #000 48%, transparent 76%);
+}
+
+/* Nền sao vẽ bằng canvas — nằm dưới la bàn, không nhận sự kiện. */
+.star-field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero-stars {
+  z-index: 0;
+  opacity: 0.85;
+}
+
+/* ── Nút trên bìa ───────────────────────────────────────────── */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 34px;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 11px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--gold-bright);
+  background: var(--gold-bright);
+  color: #221a0f;
+  font: 600 14.5px/1.2 var(--sans);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 120ms ease;
+}
+
+.hero-cta svg {
+  width: 16px;
+  height: 16px;
+}
+
+.hero-cta:hover {
+  background: #e8c98c;
+  border-color: #e8c98c;
+}
+
+.hero-cta:active {
+  transform: translateY(1px);
+}
+
+.hero-cta--ghost {
+  background: transparent;
+  border-color: rgba(216, 185, 120, 0.42);
+  color: var(--cream);
+}
+
+.hero-cta--ghost:hover {
+  background: rgba(216, 185, 120, 0.12);
+  border-color: rgba(216, 185, 120, 0.72);
+  color: var(--cream);
 }
 
 .luopan {
@@ -567,7 +662,7 @@ h1 {
 
 .hero-lede {
   max-width: 590px;
-  margin: 0 0 40px;
+  margin: 0 0 28px;
   color: var(--cream-muted);
   font-size: 16px;
   line-height: 1.72;

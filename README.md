@@ -53,13 +53,14 @@ npm run check       # typecheck + quotes + content + selftest + test
 - **Hai lá Tử Vi**: khi lịch TQ (+8) và lịch VN (+7) cho hai ngày âm khác nhau, thanh chọn cho phép xem lá chính (TQ) và lá đối chiếu (VN) — đây thường là lý do app Việt và app TQ ra khác.
 - **Trang Phương pháp**: chuỗi tính, bảng preset, quy tắc Tử Vi/Bát Tự, giới hạn, nguồn + trích dẫn mở được tại chỗ.
 - **Trang Tinh diệu**: 14 chính tinh + 20 phụ tinh + 4 Tứ Hoá + 12 cung, mỗi mục mở được nguyên văn và nguồn; 4 phụ tinh còn lại được nêu tên là chưa có định nghĩa trong kho Tầng A.
+- **Bìa “Cổng Thiên Môn”**: nền sao vẽ bằng canvas 2D (số sao theo diện tích, tối đa 160, DPR chặn ở 2; dừng vẽ khi ra khỏi khung nhìn hoặc tab bị ẩn; `prefers-reduced-motion` vẽ một khung tĩnh), la bàn dịch nhẹ theo cuộn. Nút **Lập lá số của bạn** cuộn tới biểu mẫu theo chiều cao thật của header dính (không bị khuất sau header trên điện thoại), **Xem cách tính** mở trang Phương pháp.
 - **Luận giải ngay trong tab**: dưới lá số Tử Vi là khối “Đọc lá số theo 12 cung” (tóm tắt Mệnh/Thân/sao chủ/tứ hoá/đại hạn/lưu niên + 12 cung mở được: **câu “thuận / trắc trở” của cả cung**, chính tinh, phụ tinh, độ sáng, tứ hoá, tam hợp/đối cung, đại hạn); dưới lá Bát Tự là khối “Nhật chủ, thập thần và các vận”.
 - **Bảng chi tiết từng cung**: mỗi ô trong lá số là một nút thật — bấm (hoặc Enter/Space) mở bảng trượt từ cạnh phải (điện thoại: trượt từ đáy lên) với toàn bộ nội dung cung: câu “thuận / trắc trở”, chính tinh, phụ tinh kèm độ sáng và tứ hoá, tam hợp — đối cung. Escape để đóng, Tab quay vòng trong bảng, đóng xong focus trả về đúng ô vừa bấm; nền bị khoá cuộn. Nút “Cung trước / Cung sau” đi theo đúng thứ tự 12 cung tính từ Mệnh.
 - **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/185` câu đã có bản giảng; 21 câu còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**).
 - **Chế độ tối**: mặc định theo `prefers-color-scheme` (chế độ `system`), nút trong header chuyển sáng/tối và lựa chọn được lưu trong `localStorage` — xem mục *Design system*. Nền mực sâu, giữ độ tương phản chữ ≥ 4.5:1.
 - **Chia sẻ lá số**: sao chép URL (có fallback), chia sẻ qua Web Share API. Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
-- **Responsive**: lá số Tử Vi co từ 716px xuống 480px (và 360px dưới 480px) — không tràn ngang trên điện thoại.
-- **Giảm chuyển động**: tôn trọng `prefers-reduced-motion` (tắt la bàn xoay, cảm ứng).
+- **Responsive**: lá số Tử Vi co từ 716px xuống 480px (và 360px dưới 480px) — không tràn ngang trên điện thoại. Bìa kiểm ở 360/480/716/900px: không tràn ngang, nút chính cao 44px, danh sách cam kết chuyển 3 → 2 → 1 cột.
+- **Giảm chuyển động**: tôn trọng `prefers-reduced-motion` (tắt la bàn xoay, parallax, nền sao động, nhún nút, cảm ứng).
 - **Mỗi câu có nút “§”** mở đúng đoạn chữ Hán, kèm câu tóm và bản sát chữ; chỗ nguồn không chép ghi rõ “nguồn không chép”, chỗ sách chưa có ghi rõ “chưa có, để không đoán”.
 - **Nhập liệu có test**: `parseForm` tách riêng khỏi component, 14 test cho biên ngày/giờ, năm 1900, tương lai và Quảng Trị.
 - **A11y**: `role="status" aria-live="polite"` thông báo khi lập lá số; focus chuyển tới `#ket-qua` sau khi kết quả vào DOM.
@@ -78,6 +79,7 @@ apps/web/
   src/components/ui/
               BaseComponents.tsx — Button · Card · Input · Textarea · Select · Checkbox · Radio · Switch
   src/components/
+              Hero (bìa "cổng vào" + CTA cuộn tới biểu mẫu) · StarField (nền sao canvas, tự dừng)
               BirthForm · TuViChartView · PalaceCard (ô cung + bảng chi tiết trượt) · BaziView · CalcTrace
               WarningList · MethodPage · StarReference
               TuViReadingSection · BaziReadingSection · reading-blocks (khối luận giải dùng chung)
