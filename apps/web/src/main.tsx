@@ -3,18 +3,22 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { ReadingModeProvider } from './glossary.tsx';
+import { ThemeProvider } from './design-system/ThemeProvider.tsx';
 import './styles.css';
+import './design-system/ui.css';
 
-/* Khởi tạo chế độ tối trước khi React render để tránh nháy màu. */
+/* Đặt theme trước khi React render để tránh nháy màu.
+   Cùng quy tắc với ThemeProvider: mặc định theo hệ điều hành. */
 (function initTheme() {
-  const rootEl = document.documentElement;
-  const saved = localStorage.getItem('tracuuhuyenhoc:theme');
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (saved === 'dark' || (!saved && systemDark)) {
-    rootEl.setAttribute('data-theme', 'dark');
-  } else {
-    rootEl.removeAttribute('data-theme');
+  let saved: string | null = null;
+  try {
+    saved = localStorage.getItem('tracuuhuyenhoc:theme');
+  } catch {
+    /* chế độ riêng tư có thể chặn đọc */
   }
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const dark = saved === 'dark' || ((!saved || saved === 'system') && systemDark);
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
 })();
 
 const root = document.getElementById('root');
@@ -23,9 +27,11 @@ if (!root) throw new Error('Không tìm thấy #root');
 createRoot(root).render(
   <StrictMode>
     <ErrorBoundary>
-      <ReadingModeProvider>
-        <App />
-      </ReadingModeProvider>
+      <ThemeProvider>
+        <ReadingModeProvider>
+          <App />
+        </ReadingModeProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   </StrictMode>,
 );

@@ -55,7 +55,7 @@ npm run check       # typecheck + quotes + content + selftest + test
 - **Trang Tinh diệu**: 14 chính tinh + 20 phụ tinh + 4 Tứ Hoá + 12 cung, mỗi mục mở được nguyên văn và nguồn; 4 phụ tinh còn lại được nêu tên là chưa có định nghĩa trong kho Tầng A.
 - **Luận giải ngay trong tab**: dưới lá số Tử Vi là khối “Đọc lá số theo 12 cung” (tóm tắt Mệnh/Thân/sao chủ/tứ hoá/đại hạn/lưu niên + 12 cung mở được: **câu “thuận / trắc trở” của cả cung**, chính tinh, phụ tinh, độ sáng, tứ hoá, tam hợp/đối cung, đại hạn); dưới lá Bát Tự là khối “Nhật chủ, thập thần và các vận”.
 - **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/185` câu đã có bản giảng; 21 câu còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**).
-- **Chế độ tối**: nút bật/tắt trong header, tự phát hiện `prefers-color-scheme`, lựa chọn lưu trong `localStorage`, không nháy màu khi tải trang. Bảng màu riêng cho nền mực sâu, giữ độ tương phản chữ ≥ 4.5:1.
+- **Chế độ tối**: mặc định theo `prefers-color-scheme` (chế độ `system`), nút trong header chuyển sáng/tối và lựa chọn được lưu trong `localStorage` — xem mục *Design system*. Nền mực sâu, giữ độ tương phản chữ ≥ 4.5:1.
 - **Chia sẻ lá số**: sao chép URL (có fallback), chia sẻ qua Web Share API. Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
 - **Responsive**: lá số Tử Vi co từ 716px xuống 480px (và 360px dưới 480px) — không tràn ngang trên điện thoại.
 - **Giảm chuyển động**: tôn trọng `prefers-reduced-motion` (tắt la bàn xoay, cảm ứng).
@@ -69,7 +69,13 @@ Cấu trúc:
 ```
 apps/web/
   index.html
+  design-preview.html   thư viện component (chỉ chạy ở dev, không vào gói build)
   src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · locator.ts · quotes.tsx · stars.ts · reading.ts · styles.css
+  src/design-system/
+              tokens.ts (thang đo + biến CSS ánh xạ sang JS) · ThemeProvider.tsx (light/dark/system)
+              ui.css (style component base) · preview.css (chỉ dùng cho thư viện)
+  src/components/ui/
+              BaseComponents.tsx — Button · Card · Input · Textarea · Select · Checkbox · Radio · Switch
   src/components/
               BirthForm · TuViChartView · BaziView · CalcTrace · WarningList · MethodPage · StarReference
               TuViReadingSection · BaziReadingSection · reading-blocks (khối luận giải dùng chung)
@@ -78,6 +84,25 @@ apps/web/
   test/       form.test.ts (14 test) · locator.test.ts (4 test)
   public/     favicon.svg · og.svg · og.png · robots.txt · sitemap.xml
 ```
+
+### Design system
+
+Nền tảng cho bản giao diện mới, đặt ở `src/design-system` + `src/components/ui`:
+
+- **Một nguồn màu duy nhất**: `styles.css` giữ biến CSS (`--ink`, `--paper`, `--cinnabar`, `--gold`…),
+  `[data-theme="dark"]` lật lại giá trị. `tokens.ts` chỉ *ánh xạ* các biến đó sang JS (cho canvas/SVG)
+  và giữ thang khoảng cách 4px, cỡ chữ, breakpoints 360/480/716/900/1140 — **không khai báo lại mã màu**
+  để tránh lệch giữa CSS và JS.
+- **`ThemeProvider`**: `light | dark | system`, lưu `localStorage`, theo dõi `prefers-color-scheme` khi ở
+  chế độ `system`, cập nhật `meta[theme-color]`. `main.tsx` đặt `data-theme` trước khi React render
+  để không nháy màu.
+- **Component base** dùng class `ds-*` thuần (không Tailwind): `Button` (6 biến thể × 4 cỡ, có loading),
+  `Card` + header/title/description/footer, `Input`/`Textarea`/`Select` (nhãn, gợi ý, lỗi, icon),
+  `Checkbox`/`Radio`/`Switch`. Mọi id sinh bằng `useId`; lỗi form đi kèm `aria-invalid` +
+  `aria-describedby`; vòng focus dùng `--gold`; mọi chuyển động tắt theo `prefers-reduced-motion`.
+- **Thư viện xem trước**: mở `/design-preview.html` khi chạy `npm run dev` để duyệt mọi biến thể ở cả
+  hai chế độ. Trang này không nằm trong `dist/web` (Vite chỉ build `index.html`).
+
 
 Giao diện theo hướng huyền học Trung Hoa: nền giấy dó, dải mực tàu, son ấn, vàng cổ, ngọc bích.
 Hoạ tiết (ấn triện, la bàn bát quái) vẽ bằng SVG hình học và `aria-hidden` — không dùng chữ Hán
