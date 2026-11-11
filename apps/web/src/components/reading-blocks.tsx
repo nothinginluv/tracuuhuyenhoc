@@ -101,6 +101,92 @@ function PalaceRule({ quote, tone }: { quote?: Quote; tone: 'good' | 'bad' }) {
   );
 }
 
+/**
+ * Toàn bộ nội dung một cung: câu "thuận / trắc trở", chính tinh, phụ tinh
+ * (kèm độ sáng và tứ hoá) và tam hợp — đối cung.
+ *
+ * Dùng chung cho khối sổ xuống trong trang luận giải và cho bảng trượt mở từ
+ * lá số, để hai chỗ không bao giờ lệch nội dung.
+ */
+export function PalaceDetail({
+  reading,
+  rules,
+}: {
+  reading: PalaceReading;
+  rules?: { good?: Quote; bad?: Quote };
+}) {
+  const { stars, triads } = reading;
+  const main = stars.filter((s) => s.star.group === 'main');
+  const aux = stars.filter((s) => s.star.group === 'aux');
+
+  return (
+    <>
+      {rules && (
+        <div className="palace-rules">
+          <PalaceRule quote={rules.good} tone="good" />
+          <PalaceRule quote={rules.bad} tone="bad" />
+        </div>
+      )}
+
+      {stars.length === 0 ? (
+        <p className="muted">Cung này không có sao nào trong 38 sao engine an được.</p>
+      ) : (
+        <>
+          {main.length === 0 ? (
+            <>
+              <h4>Chính tinh</h4>
+              <p className="muted">
+                Không có chính tinh tại cung. Các sao ở tam hợp và đối cung dưới đây là phần bổ
+                trợ — nguồn không nói riêng về trường hợp vô chính tinh tại đây.
+              </p>
+            </>
+          ) : (
+            <>
+              <h4>Chính tinh</h4>
+              <ul className="reading-stars">
+                {main.map((s) => (
+                  <StarLine key={s.star.id} item={s} />
+                ))}
+              </ul>
+            </>
+          )}
+
+          {aux.length > 0 && (
+            <>
+              <h4>Phụ tinh</h4>
+              <ul className="reading-stars reading-stars-aux">
+                {aux.map((s) => (
+                  <StarLine key={s.star.id} item={s} />
+                ))}
+              </ul>
+            </>
+          )}
+        </>
+      )}
+
+      <h4>
+        <GlossaryTerm term="tam phương tứ chính">Tam hợp · đối cung</GlossaryTerm>
+      </h4>
+      <ul className="reading-triads">
+        {triads.map((p, i) => {
+          const label = ['Tam hợp', 'Đối cung', 'Tam hợp'][i];
+          const names = p.mainStars.map((s) => s.vi).join(', ') || 'không có chính tinh';
+          return (
+            <li key={p.branch}>
+              <span className="muted">{label}</span> {p.nameVi} ({BRANCHES_VI[p.branch]}) —{' '}
+              {names}
+            </li>
+          );
+        })}
+      </ul>
+      <p className="tiny muted">
+        Ba cung hợp chiếu và cung đối được liệt kê theo cấu trúc; câu luận về cách cục cụ thể
+        chưa có trong kho văn bản nên không thêm nhận định.
+      </p>
+    </>
+  );
+}
+
 export function PalaceBlock({
   reading,
   open,
@@ -110,10 +196,12 @@ export function PalaceBlock({
   open: boolean;
   rules?: { good?: Quote; bad?: Quote };
 }) {
-  const { palace, dahan, stars, triads } = reading;
-  const main = stars.filter((s) => s.star.group === 'main');
-  const aux = stars.filter((s) => s.star.group === 'aux');
-  const mainNames = main.map((s) => s.star.vi).join(' · ') || 'không có chính tinh';
+  const { palace, dahan, stars } = reading;
+  const mainNames =
+    stars
+      .filter((s) => s.star.group === 'main')
+      .map((s) => s.star.vi)
+      .join(' · ') || 'không có chính tinh';
 
   return (
     <details className="reading-palace" open={open}>
@@ -129,68 +217,7 @@ export function PalaceBlock({
       </summary>
 
       <div className="reading-palace-body">
-        {rules && (
-          <div className="palace-rules">
-            <PalaceRule quote={rules.good} tone="good" />
-            <PalaceRule quote={rules.bad} tone="bad" />
-          </div>
-        )}
-
-        {stars.length === 0 ? (
-          <p className="muted">Cung này không có sao nào trong 38 sao engine an được.</p>
-        ) : (
-          <>
-            {main.length === 0 ? (
-              <>
-                <h4>Chính tinh</h4>
-                <p className="muted">
-                  Không có chính tinh tại cung. Các sao ở tam hợp và đối cung dưới đây là phần bổ
-                  trợ — nguồn không nói riêng về trường hợp vô chính tinh tại đây.
-                </p>
-              </>
-            ) : (
-              <>
-                <h4>Chính tinh</h4>
-                <ul className="reading-stars">
-                  {main.map((s) => (
-                    <StarLine key={s.star.id} item={s} />
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {aux.length > 0 && (
-              <>
-                <h4>Phụ tinh</h4>
-                <ul className="reading-stars reading-stars-aux">
-                  {aux.map((s) => (
-                    <StarLine key={s.star.id} item={s} />
-                  ))}
-                </ul>
-              </>
-            )}
-          </>
-        )}
-
-        <h4>
-          <GlossaryTerm term="tam phương tứ chính">Tam hợp · đối cung</GlossaryTerm>
-        </h4>
-        <ul className="reading-triads">
-          {triads.map((p, i) => {
-            const label = ['Tam hợp', 'Đối cung', 'Tam hợp'][i];
-            const names = p.mainStars.map((s) => s.vi).join(', ') || 'không có chính tinh';
-            return (
-              <li key={p.branch}>
-                <span className="muted">{label}</span> {p.nameVi} ({BRANCHES_VI[p.branch]}) —{' '}
-                {names}
-              </li>
-            );
-          })}
-        </ul>
-        <p className="tiny muted">
-          Ba cung hợp chiếu và cung đối được liệt kê theo cấu trúc; câu luận về cách cục cụ thể
-          chưa có trong kho văn bản nên không thêm nhận định.
-        </p>
+        <PalaceDetail reading={reading} rules={rules} />
       </div>
     </details>
   );

@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { STAR_DEFS, type TuViChart, type TuViGender } from '../../../../packages/tuvi-engine/src/index.ts';
 import { Cite } from '../quotes.tsx';
 import { GlossaryTerm, quoteLine, useReadingMode } from '../glossary.tsx';
@@ -7,22 +8,26 @@ import {
   buildTuViReading,
   liuNianStep,
   palaceRules,
+  type TuViReading,
 } from '../reading.ts';
 import { PalaceList } from './reading-blocks.tsx';
 
 const HUA_ORDER: Record<string, number> = { loc: 0, quyen: 1, khoa: 2, ky: 3 };
 
-type Props = { chart: TuViChart; gender: TuViGender };
+type Props = { chart: TuViChart; gender: TuViGender; reading?: TuViReading };
 
 /**
  * Phần luận giải nằm ngay dưới lá số Tử Vi: tổng quan + 12 cung (kèm câu "thuận /
  * trắc trở" theo cung) + lưu niên + đại hạn.
  */
-export function TuViReadingSection({ chart, gender }: Props) {
+export function TuViReadingSection({ chart, gender, reading: provided }: Props) {
   const { mode } = useReadingMode();
-  const reading = buildTuViReading(chart, gender);
+  const reading = useMemo(
+    () => provided ?? buildTuViReading(chart, gender),
+    [provided, chart, gender],
+  );
   const { dahan } = reading;
-  const rules = palaceRules();
+  const rules = useMemo(() => palaceRules(), []);
 
   const currentYear = new Date().getFullYear();
   const liuNian = liuNianStep(currentYear);

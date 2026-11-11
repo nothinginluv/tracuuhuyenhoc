@@ -9,6 +9,7 @@ import { WarningList } from './components/WarningList.tsx';
 import { LuopanArt, SealMark } from './components/Ornaments.tsx';
 import { formatDate, formatTime, lunarShort, yearName } from './format.ts';
 import { ReadingModeToggle } from './glossary.tsx';
+import { copyUrl, shareUrl } from './share.ts';
 import { useTheme } from './design-system/ThemeProvider';
 
 // Hai trang chỉ đọc tài liệu được tách khỏi gói chính: người tra cứu không phải
@@ -195,51 +196,13 @@ export function App() {
   };
 
   const shareCopy = async () => {
-    const url = window.location.href;
-    try {
-      if (!navigator.clipboard?.writeText) throw new Error('clipboard không khả dụng');
-      await navigator.clipboard.writeText(url);
-      flashAnnounce('Đã sao chép URL lá số vào clipboard.');
-    } catch {
-      // Fallback: chọn sẵn URL trong ô ẩn để người dùng tự copy (không dùng prompt —
-      // một số môi trường bị chặn và prompt() làm văng unhandled rejection).
-      const input = document.createElement('input');
-      input.value = url;
-      input.setAttribute('readonly', '');
-      input.style.position = 'fixed';
-      input.style.opacity = '0';
-      document.body.appendChild(input);
-      input.select();
-      let copied = false;
-      try {
-        copied = document.execCommand('copy');
-      } catch {
-        copied = false;
-      }
-      input.remove();
-      flashAnnounce(
-        copied
-          ? 'Đã sao chép URL lá số.'
-          : 'Không sao chép tự động được — hãy copy URL trên thanh địa chỉ.',
-      );
-    }
+    const outcome = await copyUrl(window.location.href);
+    flashAnnounce(outcome.message);
   };
 
   const shareWeb = async () => {
-    const shareData = {
-      title: 'Tra Cứu Huyền Học — Lá số minh bạch',
-      text: 'Xem lá số Tử Vi / Bát Tự của tôi tại Tra Cứu Huyền Học.',
-      url: window.location.href,
-    };
-    try {
-      if (navigator.share && navigator.canShare?.(shareData)) {
-        await navigator.share(shareData);
-        return;
-      }
-    } catch {
-      // Người dùng huỷ hộp chia sẻ hoặc trình duyệt từ chối: rơi xuống sao chép.
-    }
-    await shareCopy();
+    const outcome = await shareUrl(window.location.href);
+    if (outcome) flashAnnounce(outcome.message);
   };
 
   const go = (next: Page) => {

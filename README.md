@@ -54,6 +54,7 @@ npm run check       # typecheck + quotes + content + selftest + test
 - **Trang Phương pháp**: chuỗi tính, bảng preset, quy tắc Tử Vi/Bát Tự, giới hạn, nguồn + trích dẫn mở được tại chỗ.
 - **Trang Tinh diệu**: 14 chính tinh + 20 phụ tinh + 4 Tứ Hoá + 12 cung, mỗi mục mở được nguyên văn và nguồn; 4 phụ tinh còn lại được nêu tên là chưa có định nghĩa trong kho Tầng A.
 - **Luận giải ngay trong tab**: dưới lá số Tử Vi là khối “Đọc lá số theo 12 cung” (tóm tắt Mệnh/Thân/sao chủ/tứ hoá/đại hạn/lưu niên + 12 cung mở được: **câu “thuận / trắc trở” của cả cung**, chính tinh, phụ tinh, độ sáng, tứ hoá, tam hợp/đối cung, đại hạn); dưới lá Bát Tự là khối “Nhật chủ, thập thần và các vận”.
+- **Bảng chi tiết từng cung**: mỗi ô trong lá số là một nút thật — bấm (hoặc Enter/Space) mở bảng trượt từ cạnh phải (điện thoại: trượt từ đáy lên) với toàn bộ nội dung cung: câu “thuận / trắc trở”, chính tinh, phụ tinh kèm độ sáng và tứ hoá, tam hợp — đối cung. Escape để đóng, Tab quay vòng trong bảng, đóng xong focus trả về đúng ô vừa bấm; nền bị khoá cuộn. Nút “Cung trước / Cung sau” đi theo đúng thứ tự 12 cung tính từ Mệnh.
 - **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/185` câu đã có bản giảng; 21 câu còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**).
 - **Chế độ tối**: mặc định theo `prefers-color-scheme` (chế độ `system`), nút trong header chuyển sáng/tối và lựa chọn được lưu trong `localStorage` — xem mục *Design system*. Nền mực sâu, giữ độ tương phản chữ ≥ 4.5:1.
 - **Chia sẻ lá số**: sao chép URL (có fallback), chia sẻ qua Web Share API. Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
@@ -70,14 +71,15 @@ Cấu trúc:
 apps/web/
   index.html
   design-preview.html   thư viện component (chỉ chạy ở dev, không vào gói build)
-  src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · locator.ts · quotes.tsx · stars.ts · reading.ts · styles.css
+  src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · locator.ts · quotes.tsx · stars.ts · reading.ts · share.ts · styles.css
   src/design-system/
               tokens.ts (thang đo + biến CSS ánh xạ sang JS) · ThemeProvider.tsx (light/dark/system)
               ui.css (style component base) · preview.css (chỉ dùng cho thư viện)
   src/components/ui/
               BaseComponents.tsx — Button · Card · Input · Textarea · Select · Checkbox · Radio · Switch
   src/components/
-              BirthForm · TuViChartView · BaziView · CalcTrace · WarningList · MethodPage · StarReference
+              BirthForm · TuViChartView · PalaceCard (ô cung + bảng chi tiết trượt) · BaziView · CalcTrace
+              WarningList · MethodPage · StarReference
               TuViReadingSection · BaziReadingSection · reading-blocks (khối luận giải dùng chung)
               glossary.tsx (chú thích thuật ngữ + chế độ Dễ hiểu / Sát nguyên văn)
               ErrorBoundary · Ornaments (ấn triện, la bàn — SVG hình học, không chữ Hán)
