@@ -10,7 +10,7 @@ import {
   palaceRules,
   type TuViReading,
 } from '../reading.ts';
-import { PalaceList } from './reading-blocks.tsx';
+import { ReadingPanel } from './ReadingPanel.tsx';
 
 const HUA_ORDER: Record<string, number> = { loc: 0, quyen: 1, khoa: 2, ky: 3 };
 
@@ -38,8 +38,9 @@ export function TuViReadingSection({ chart, gender, reading: provided }: Props) 
         <p className="eyebrow">Luận giải</p>
         <h3 id="tuvi-reading-title">Đọc lá số theo 12 cung</h3>
         <p className="muted">
-          Mỗi cung có hai câu ngắn nói về sao ở cung đó, kèm câu của sao. Bấm “§” để mở đúng đoạn
-          chữ Hán trong sách. Từ còn lạ thì rê chuột hoặc bấm vào để xem nghĩa.
+          Chọn một cung trong danh mục để đọc: câu ngắn về sao ở cung đó, chính tinh, phụ tinh,
+          độ sáng và tứ hoá, kèm câu của từng sao. Nút “§” mở đúng đoạn chữ Hán trong sách; từ
+          còn lạ thì rê chuột hoặc bấm vào để xem nghĩa.
         </p>
       </div>
 
@@ -126,7 +127,7 @@ export function TuViReadingSection({ chart, gender, reading: provided }: Props) 
         </div>
       )}
 
-      <PalaceList reading={reading} rules={rules} />
+      <ReadingPanel reading={reading} rules={rules} />
 
       <p className="tiny muted reading-limit">
         Chưa có, ghi rõ để không đoán: ảnh hưởng của từng sao tại từng cung (kiểu “Tử Vi tại Mệnh”)

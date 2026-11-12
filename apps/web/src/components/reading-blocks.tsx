@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Khối luận giải dùng chung cho tab Tử Vi và tab Bát Tự.
  *
  * Mỗi khối chỉ chứa: dữ liệu engine (cung, sao, tuổi, thần) + câu của nguồn + nút "§"
@@ -105,17 +105,21 @@ function PalaceRule({ quote, tone }: { quote?: Quote; tone: 'good' | 'bad' }) {
  * Toàn bộ nội dung một cung: câu "thuận / trắc trở", chính tinh, phụ tinh
  * (kèm độ sáng và tứ hoá) và tam hợp — đối cung.
  *
- * Dùng chung cho khối sổ xuống trong trang luận giải và cho bảng trượt mở từ
- * lá số, để hai chỗ không bao giờ lệch nội dung.
+ * Dùng chung cho khung đọc trong trang luận giải và cho bảng trượt mở từ lá
+ * số, để hai chỗ không bao giờ lệch nội dung. `headingLevel` chỉ đổi cấp tiêu
+ * đề con cho khớp cấp của khung chứa (khung đọc đã có tiêu đề cung riêng).
  */
 export function PalaceDetail({
   reading,
   rules,
+  headingLevel = 4,
 }: {
   reading: PalaceReading;
   rules?: { good?: Quote; bad?: Quote };
+  headingLevel?: 4 | 5;
 }) {
   const { stars, triads } = reading;
+  const H = headingLevel === 5 ? 'h5' : 'h4';
   const main = stars.filter((s) => s.star.group === 'main');
   const aux = stars.filter((s) => s.star.group === 'aux');
 
@@ -134,7 +138,7 @@ export function PalaceDetail({
         <>
           {main.length === 0 ? (
             <>
-              <h4>Chính tinh</h4>
+              <H>Chính tinh</H>
               <p className="muted">
                 Không có chính tinh tại cung. Các sao ở tam hợp và đối cung dưới đây là phần bổ
                 trợ — nguồn không nói riêng về trường hợp vô chính tinh tại đây.
@@ -142,7 +146,7 @@ export function PalaceDetail({
             </>
           ) : (
             <>
-              <h4>Chính tinh</h4>
+              <H>Chính tinh</H>
               <ul className="reading-stars">
                 {main.map((s) => (
                   <StarLine key={s.star.id} item={s} />
@@ -153,7 +157,7 @@ export function PalaceDetail({
 
           {aux.length > 0 && (
             <>
-              <h4>Phụ tinh</h4>
+              <H>Phụ tinh</H>
               <ul className="reading-stars reading-stars-aux">
                 {aux.map((s) => (
                   <StarLine key={s.star.id} item={s} />
@@ -164,9 +168,9 @@ export function PalaceDetail({
         </>
       )}
 
-      <h4>
+      <H>
         <GlossaryTerm term="tam phương tứ chính">Tam hợp · đối cung</GlossaryTerm>
-      </h4>
+      </H>
       <ul className="reading-triads">
         {triads.map((p, i) => {
           const label = ['Tam hợp', 'Đối cung', 'Tam hợp'][i];
@@ -187,58 +191,7 @@ export function PalaceDetail({
   );
 }
 
-export function PalaceBlock({
-  reading,
-  open,
-  rules,
-}: {
-  reading: PalaceReading;
-  open: boolean;
-  rules?: { good?: Quote; bad?: Quote };
-}) {
-  const { palace, dahan, stars } = reading;
-  const mainNames =
-    stars
-      .filter((s) => s.star.group === 'main')
-      .map((s) => s.star.vi)
-      .join(' · ') || 'không có chính tinh';
-
-  return (
-    <details className="reading-palace" open={open}>
-      <summary>
-        <span className="reading-palace-name">
-          {palace.nameVi}
-          {palace.isSoul && <span className="tag tag-soul">Mệnh</span>}
-          {palace.isBody && <span className="tag tag-body">Thân</span>}
-        </span>
-        <span className="reading-palace-meta">
-          {palace.stemVi} {palace.branchVi} · đại hạn {dahan.fromAge}–{dahan.toAge} · {mainNames}
-        </span>
-      </summary>
-
-      <div className="reading-palace-body">
-        <PalaceDetail reading={reading} rules={rules} />
-      </div>
-    </details>
-  );
-}
-
 export type PalaceRules = Map<number, { good?: Quote; bad?: Quote }>;
-
-export function PalaceList({ reading, rules }: { reading: TuViReading; rules?: PalaceRules }) {
-  return (
-    <div className="reading-palaces">
-      {reading.palaces.map((p) => (
-        <PalaceBlock
-          key={p.palace.branch}
-          reading={p}
-          open={p.palace.isSoul}
-          rules={rules?.get(p.palace.branch)}
-        />
-      ))}
-    </div>
-  );
-}
 
 export function DaHanSection({ reading }: { reading: TuViReading }) {
   const { mode } = useReadingMode();
