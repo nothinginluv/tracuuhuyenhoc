@@ -11,7 +11,8 @@
  * Nhờ vậy không có chip nào do giao diện tự bịa ra: bỏ câu trích thì chip mất theo.
  */
 import { readFileSync } from 'node:fs';
-import { HUA, STAR_DEFS } from '../packages/tuvi-engine/src/constants.ts';
+import * as OpenCC from 'opencc-js';
+import { HUA, PALACE_NAMES, STAR_DEFS } from '../packages/tuvi-engine/src/constants.ts';
 import { TEN_GODS } from '../packages/bazi-engine/src/ten-gods.ts';
 
 const errors = [];
@@ -462,6 +463,87 @@ for (const entry of palaceRuleEntries) {
   }
 }
 
+// ── Sao tại từng cung (卷二) ─────────────────────────────────
+/**
+ * `content/star-in-palace.json` gắn mỗi chính tinh với câu "sao này ở cung này
+ * thì…" của 卷二. Cổng kiểm không tin bảng ánh xạ: nó mở lại câu Hán và đòi
+ * câu ấy mở đầu đúng tên sao, lấy từ 卷二, có bản dịch; đồng thời đối chiếu
+ * `missing` để không mục nào lặng lẽ biến mất hay bị coi là "nguồn không chép".
+ */
+const starAtDoc = JSON.parse(readFileSync('content/star-in-palace.json', 'utf8'));
+const starAtPalaces = starAtDoc.palaces ?? [];
+const MAIN_STARS = Object.keys(STAR_DEFS).filter((id) => STAR_DEFS[id].group === 'main');
+const toSimp = OpenCC.Converter({ from: 'tw', to: 'cn' });
+
+if (starAtPalaces.length !== 11) {
+  errors.push(`star-in-palace.json: phải có 11 cung (1–11), đang ${starAtPalaces.length}`);
+}
+const seenStarAt = new Set();
+let starAtQuotes = 0;
+for (const entry of starAtPalaces) {
+  const where = `star-in-palace.json (${entry.vi ?? '?'})`;
+  if (!Number.isInteger(entry.id) || entry.id < 1 || entry.id > 11) {
+    errors.push(`${where}: id phải trong 1–11`);
+    continue;
+  }
+  if (seenStarAt.has(entry.id)) {
+    errors.push(`${where}: trùng cung id ${entry.id}`);
+    continue;
+  }
+  seenStarAt.add(entry.id);
+  if (entry.vi !== PALACE_NAMES[entry.id].vi) {
+    errors.push(`${where}: vi phải là "${PALACE_NAMES[entry.id].vi}" theo PALACE_NAMES`);
+  }
+  if (!entry.locator?.startsWith('卷二')) {
+    errors.push(`${where}: locator phải bắt đầu bằng "卷二"`);
+  }
+
+  const stars = entry.stars ?? {};
+  const missing = entry.missing ?? [];
+  if (new Set(missing).size !== missing.length) {
+    errors.push(`${where}: missing bị lặp`);
+  }
+  for (const id of missing) {
+    if (!MAIN_STARS.includes(id)) errors.push(`${where}: missing "${id}" không phải chính tinh`);
+    if (stars[id]) errors.push(`${where}: "${id}" vừa có câu vừa đánh dấu thiếu`);
+  }
+  for (const [id, quoteId] of Object.entries(stars)) {
+    if (!MAIN_STARS.includes(id)) {
+      errors.push(`${where}: "${id}" không phải chính tinh`);
+      continue;
+    }
+    const q = quotes.get(quoteId);
+    if (!q) {
+      errors.push(`${where}: quote_id "${quoteId}" không có trong content/quotes.jsonl`);
+      continue;
+    }
+    usedQuotes.add(q.id);
+    starAtQuotes++;
+    if (q.source !== 'ziwei-quanshu') {
+      errors.push(`${where} (${quoteId}): lấy từ ${q.source}, không phải ziwei-quanshu`);
+    }
+    if (q.locator !== '卷二') {
+      errors.push(`${where} (${quoteId}): locator "${q.locator}" phải là 卷二`);
+    }
+    const zh = STAR_DEFS[id].zh;
+    if (!q.text_zh.startsWith(zh) && !q.text_zh.startsWith(toSimp(zh))) {
+      errors.push(`${where} (${quoteId}): câu Hán không mở đầu bằng tên sao "${zh}"`);
+    }
+    if (!q.claim_vi || q.claim_vi.trim().length < 8) {
+      errors.push(`${where} (${quoteId}): thiếu claim_vi để hiển thị tiếng Việt`);
+    }
+  }
+  const accounted = new Set([...Object.keys(stars), ...missing]);
+  for (const id of MAIN_STARS) {
+    if (!accounted.has(id)) {
+      errors.push(`${where}: chính tinh "${id}" chưa có câu và không được đánh dấu thiếu`);
+    }
+  }
+}
+for (let id = 1; id <= 11; id++) {
+  if (!seenStarAt.has(id)) errors.push(`star-in-palace.json: thiếu cung id ${id}`);
+}
+
 const readingRulesDoc = JSON.parse(readFileSync('content/reading-rules.json', 'utf8'));
 const REQUIRED_RULES = ['ptc', 'dahan-ten-years', 'dahan-two-cycles', 'dahan-nam-bac', 'liunian'];
 for (const key of REQUIRED_RULES) {
@@ -501,6 +583,7 @@ console.log(
     ` · Độ sáng: ${Object.keys(brightnessDoc.stars ?? {}).length} sao / ${brightnessCells} ô` +
     ` · Nhật chủ: ${dayEntries.length} · Thập thần: ${seenGods.size}` +
     ` · Cung luận: ${palaceRuleEntries.length}×2 · Thuật ngữ: ${Object.keys(terms).length}` +
+    ` · Sao/cung: ${starAtQuotes} câu` +
     ` · câu trích dùng: ${usedQuotes.size} · khoá đối chiếu: ${tokenChecks}`,
 );
 if (warnings.length) {

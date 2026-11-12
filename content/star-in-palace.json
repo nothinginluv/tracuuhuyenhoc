@@ -1,0 +1,264 @@
+{
+  "version": 1,
+  "$comment": "Chính tinh tại từng cung, sinh từ 紫微斗數全書 卷二 (các mục 二 兄弟 … 十二 父母). Cung Mệnh dùng câu định nghĩa sao ở 卷一. Chạy scripts/gen-star-in-palace.mjs để dựng lại.",
+  "source": "ziwei-quanshu",
+  "palaces": [
+    {
+      "id": 1,
+      "zh": "兄弟",
+      "vi": "Huynh Đệ",
+      "locator": "卷二 · 二 兄弟",
+      "stars": {
+        "ziwei": "q_tv_0168",
+        "tianji": "q_tv_0169",
+        "taiyang": "q_tv_0170",
+        "wuqu": "q_tv_0171",
+        "tiantong": "q_tv_0172",
+        "lianzhen": "q_tv_0173",
+        "tianfu": "q_tv_0174",
+        "taiyin": "q_tv_0175",
+        "tanlang": "q_tv_0176",
+        "jumen": "q_tv_0177",
+        "tianxiang": "q_tv_0178",
+        "tianliang": "q_tv_0179",
+        "qisha": "q_tv_0180",
+        "pojun": "q_tv_0181"
+      },
+      "missing": []
+    },
+    {
+      "id": 2,
+      "zh": "妻妾",
+      "vi": "Phu Thê",
+      "locator": "卷二 · 三 妻妾",
+      "stars": {
+        "ziwei": "q_tv_0182",
+        "tianji": "q_tv_0183",
+        "taiyang": "q_tv_0184",
+        "wuqu": "q_tv_0185",
+        "tiantong": "q_tv_0186",
+        "lianzhen": "q_tv_0187",
+        "tianfu": "q_tv_0188",
+        "taiyin": "q_tv_0189",
+        "tanlang": "q_tv_0190",
+        "jumen": "q_tv_0191",
+        "tianxiang": "q_tv_0192",
+        "tianliang": "q_tv_0193",
+        "qisha": "q_tv_0194",
+        "pojun": "q_tv_0195"
+      },
+      "missing": []
+    },
+    {
+      "id": 3,
+      "zh": "子女",
+      "vi": "Tử Nữ",
+      "locator": "卷二 · 四 子女",
+      "stars": {
+        "ziwei": "q_tv_0196",
+        "tianji": "q_tv_0197",
+        "taiyang": "q_tv_0198",
+        "wuqu": "q_tv_0199",
+        "tiantong": "q_tv_0200",
+        "lianzhen": "q_tv_0201",
+        "tianfu": "q_tv_0202",
+        "taiyin": "q_tv_0203",
+        "tanlang": "q_tv_0204",
+        "jumen": "q_tv_0205",
+        "tianxiang": "q_tv_0206",
+        "tianliang": "q_tv_0207",
+        "qisha": "q_tv_0208",
+        "pojun": "q_tv_0209"
+      },
+      "missing": []
+    },
+    {
+      "id": 4,
+      "zh": "財帛",
+      "vi": "Tài Bạch",
+      "locator": "卷二 · 五 财帛",
+      "stars": {
+        "ziwei": "q_tv_0210",
+        "tianji": "q_tv_0211",
+        "taiyang": "q_tv_0212",
+        "wuqu": "q_tv_0213",
+        "tiantong": "q_tv_0214",
+        "lianzhen": "q_tv_0215",
+        "tianfu": "q_tv_0216",
+        "taiyin": "q_tv_0217",
+        "tanlang": "q_tv_0218",
+        "jumen": "q_tv_0219",
+        "tianxiang": "q_tv_0220",
+        "tianliang": "q_tv_0221",
+        "pojun": "q_tv_0222"
+      },
+      "missing": [
+        "qisha"
+      ]
+    },
+    {
+      "id": 5,
+      "zh": "疾厄",
+      "vi": "Tật Ách",
+      "locator": "卷二 · 六 疾厄",
+      "stars": {
+        "ziwei": "q_tv_0223",
+        "tianji": "q_tv_0224",
+        "taiyang": "q_tv_0225",
+        "wuqu": "q_tv_0226",
+        "tiantong": "q_tv_0227",
+        "lianzhen": "q_tv_0228",
+        "tianfu": "q_tv_0229",
+        "taiyin": "q_tv_0230",
+        "jumen": "q_tv_0231",
+        "tianxiang": "q_tv_0232",
+        "qisha": "q_tv_0233",
+        "pojun": "q_tv_0234"
+      },
+      "missing": [
+        "tanlang",
+        "tianliang"
+      ]
+    },
+    {
+      "id": 6,
+      "zh": "遷移",
+      "vi": "Thiên Di",
+      "locator": "卷二 · 七 迁移",
+      "stars": {
+        "ziwei": "q_tv_0235",
+        "tianji": "q_tv_0236",
+        "taiyang": "q_tv_0237",
+        "wuqu": "q_tv_0238",
+        "tiantong": "q_tv_0239",
+        "lianzhen": "q_tv_0240",
+        "tianfu": "q_tv_0241",
+        "taiyin": "q_tv_0242",
+        "tanlang": "q_tv_0243",
+        "jumen": "q_tv_0244",
+        "tianxiang": "q_tv_0245",
+        "tianliang": "q_tv_0246",
+        "qisha": "q_tv_0247",
+        "pojun": "q_tv_0248"
+      },
+      "missing": []
+    },
+    {
+      "id": 7,
+      "zh": "奴僕",
+      "vi": "Giao Hữu",
+      "locator": "卷二 · 八 奴仆",
+      "stars": {
+        "ziwei": "q_tv_0249",
+        "tianji": "q_tv_0250",
+        "taiyang": "q_tv_0251",
+        "wuqu": "q_tv_0252",
+        "tiantong": "q_tv_0253",
+        "lianzhen": "q_tv_0254",
+        "tianfu": "q_tv_0255",
+        "taiyin": "q_tv_0256",
+        "tanlang": "q_tv_0257",
+        "jumen": "q_tv_0258",
+        "tianxiang": "q_tv_0259",
+        "tianliang": "q_tv_0260",
+        "qisha": "q_tv_0261",
+        "pojun": "q_tv_0262"
+      },
+      "missing": []
+    },
+    {
+      "id": 8,
+      "zh": "官祿",
+      "vi": "Sự Nghiệp",
+      "locator": "卷二 · 九 官禄",
+      "stars": {
+        "ziwei": "q_tv_0263",
+        "tianji": "q_tv_0264",
+        "taiyang": "q_tv_0265",
+        "wuqu": "q_tv_0266",
+        "tiantong": "q_tv_0267",
+        "lianzhen": "q_tv_0268",
+        "tianfu": "q_tv_0269",
+        "taiyin": "q_tv_0270",
+        "tanlang": "q_tv_0271",
+        "jumen": "q_tv_0272",
+        "tianxiang": "q_tv_0273",
+        "tianliang": "q_tv_0274",
+        "qisha": "q_tv_0275",
+        "pojun": "q_tv_0276"
+      },
+      "missing": []
+    },
+    {
+      "id": 9,
+      "zh": "田宅",
+      "vi": "Điền Trạch",
+      "locator": "卷二 · 十 田宅",
+      "stars": {
+        "ziwei": "q_tv_0277",
+        "tianji": "q_tv_0278",
+        "taiyang": "q_tv_0279",
+        "wuqu": "q_tv_0280",
+        "tiantong": "q_tv_0281",
+        "lianzhen": "q_tv_0282",
+        "tianfu": "q_tv_0283",
+        "taiyin": "q_tv_0284",
+        "tanlang": "q_tv_0285",
+        "jumen": "q_tv_0286",
+        "tianxiang": "q_tv_0287",
+        "tianliang": "q_tv_0288",
+        "pojun": "q_tv_0289"
+      },
+      "missing": [
+        "qisha"
+      ]
+    },
+    {
+      "id": 10,
+      "zh": "福德",
+      "vi": "Phúc Đức",
+      "locator": "卷二 · 十一 福德",
+      "stars": {
+        "ziwei": "q_tv_0290",
+        "tianji": "q_tv_0291",
+        "taiyang": "q_tv_0292",
+        "wuqu": "q_tv_0293",
+        "tiantong": "q_tv_0294",
+        "lianzhen": "q_tv_0295",
+        "tianfu": "q_tv_0296",
+        "taiyin": "q_tv_0297",
+        "tanlang": "q_tv_0298",
+        "jumen": "q_tv_0299",
+        "tianxiang": "q_tv_0300",
+        "qisha": "q_tv_0301",
+        "pojun": "q_tv_0302"
+      },
+      "missing": [
+        "tianliang"
+      ]
+    },
+    {
+      "id": 11,
+      "zh": "父母",
+      "vi": "Phụ Mẫu",
+      "locator": "卷二 · 十二 父母",
+      "stars": {
+        "ziwei": "q_tv_0303",
+        "tianji": "q_tv_0304",
+        "taiyang": "q_tv_0305",
+        "wuqu": "q_tv_0306",
+        "tiantong": "q_tv_0307",
+        "lianzhen": "q_tv_0308",
+        "tianfu": "q_tv_0309",
+        "taiyin": "q_tv_0310",
+        "tanlang": "q_tv_0311",
+        "jumen": "q_tv_0312",
+        "tianxiang": "q_tv_0313",
+        "tianliang": "q_tv_0314",
+        "qisha": "q_tv_0315",
+        "pojun": "q_tv_0316"
+      },
+      "missing": []
+    }
+  ]
+}

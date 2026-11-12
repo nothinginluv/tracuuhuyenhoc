@@ -3530,6 +3530,22 @@ h1 {
   color: var(--gold-deep);
 }
 
+/* Câu "tại cung X" — mục theo cung ở 卷二, đứng trước định nghĩa chung. */
+.reading-claim-at {
+  padding-left: 10px;
+  border-left: 3px solid var(--gold);
+  color: var(--ink);
+}
+
+.reading-claim-label {
+  display: block;
+  margin-bottom: 2px;
+  font: 600 9.5px/1.3 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
 /* ── Câu luận theo cung ──────────────────────────────────── */
 .palace-rules {
   display: grid;
@@ -3702,6 +3718,11 @@ h1 {
 [data-theme="dark"] .palace-rule-bad {
   background: #2c1b17;
   border-color: #57332b;
+}
+
+/* Nhãn 9.5px: --gold-deep ở nền tối chỉ đạt ~4.3:1, dùng --gold (7.4:1). */
+[data-theme="dark"] .reading-claim-label {
+  color: var(--gold);
 }
 
 [data-theme="dark"] .cite summary {

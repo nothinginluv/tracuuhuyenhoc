@@ -10,9 +10,11 @@ import brightnessRaw from '../../../content/brightness.json';
 import dahanRaw from '../../../content/dahan.json';
 import palaceRulesRaw from '../../../content/palace-rules.json';
 import readingRulesRaw from '../../../content/reading-rules.json';
+import starInPalaceRaw from '../../../content/star-in-palace.json';
 import dayMastersRaw from '../../../content/day-masters.json';
 import tenGodsRaw from '../../../content/ten-gods.json';
 import {
+  PALACE_NAMES,
   daHanCycles,
   type DaHan,
   type DaHanStep,
@@ -178,6 +180,49 @@ export function palaceRules(): Map<number, PalaceRulePair> {
     ]),
   );
   return palaceRuleCache;
+}
+
+/**
+ * Câu "sao này ở cung này thì sao" — lấy từ các mục theo cung ở 卷二
+ * (二 兄弟 … 十二 父母). Cung Mệnh không có trong bảng: ở đó dùng câu định
+ * nghĩa sao của 卷一, vốn đã nói về người có sao ấy tại Mệnh.
+ */
+type StarInPalaceDoc = {
+  palaces: {
+    id: number;
+    zh: string;
+    vi: string;
+    locator: string;
+    stars: Record<string, string>;
+    missing: string[];
+  }[];
+};
+
+const STAR_IN_PALACE = starInPalaceRaw as StarInPalaceDoc;
+const STAR_IN_PALACE_BY_ID = new Map(STAR_IN_PALACE.palaces.map((p) => [p.id, p]));
+
+/**
+ * Mục của một cung. `stars` đã là câu trích; `missing` là những chính tinh mà
+ * sách không chép mục riêng ở cung đó — giao diện phải nói rõ "nguồn không
+ * chép", không được coi là thiếu bản dịch.
+ */
+export function starInPalaceData(palace: Palace): {
+  quote: (starId: string) => Quote | undefined;
+  missing: string[];
+  locator?: string;
+} {
+  const index = PALACE_NAMES.findIndex((p) => p.vi === palace.nameVi);
+  const entry = STAR_IN_PALACE_BY_ID.get(index);
+  if (!entry) return { quote: () => undefined, missing: [] };
+  return {
+    quote: (starId) => QUOTES[entry.stars[starId] ?? ''],
+    missing: entry.missing,
+    locator: entry.locator,
+  };
+}
+
+export function starInPalaceQuote(palace: Palace, starId: string): Quote | undefined {
+  return starInPalaceData(palace).quote(starId);
 }
 
 /** Quy tắc đọc vận — tam phương, đại hạn, tiểu hạn, lưu niên. */

@@ -38,9 +38,9 @@ export function TuViReadingSection({ chart, gender, reading: provided }: Props) 
         <p className="eyebrow">Luận giải</p>
         <h3 id="tuvi-reading-title">Đọc lá số theo 12 cung</h3>
         <p className="muted">
-          Chọn một cung trong danh mục để đọc: câu ngắn về sao ở cung đó, chính tinh, phụ tinh,
-          độ sáng và tứ hoá, kèm câu của từng sao. Nút “§” mở đúng đoạn chữ Hán trong sách; từ
-          còn lạ thì rê chuột hoặc bấm vào để xem nghĩa.
+          Chọn một cung trong danh mục để đọc: câu ngắn về cung, câu riêng của từng chính tinh tại
+          cung đó, định nghĩa chung của sao, phụ tinh, độ sáng và tứ hoá. Nút “§” mở đúng đoạn
+          chữ Hán trong sách; từ còn lạ thì rê chuột hoặc bấm vào để xem nghĩa.
         </p>
       </div>
 
@@ -130,9 +130,9 @@ export function TuViReadingSection({ chart, gender, reading: provided }: Props) 
       <ReadingPanel reading={reading} rules={rules} />
 
       <p className="tiny muted reading-limit">
-        Chưa có, ghi rõ để không đoán: ảnh hưởng của từng sao tại từng cung (kiểu “Tử Vi tại Mệnh”)
-        và tổ hợp sao; cách cục; tiểu hạn. Bản này đọc tới mức: sao nào ở cung nào, độ sáng tại
-        cung đó, câu chung của cung, đại hạn và cung lưu niên.
+        Chưa có, ghi rõ để không đoán: mục phụ tinh theo từng cung và tổ hợp sao; cách cục; tiểu
+        hạn. Bản này đọc tới mức: sao nào ở cung nào, câu riêng của 14 chính tinh tại cung (卷二),
+        câu chung của cung, độ sáng tại cung đó, đại hạn và cung lưu niên.
       </p>
     </div>
   );

@@ -7,13 +7,15 @@
  *   · Sát nguyên văn → `claim_vi`: bản dịch giữ chữ của nguồn.
  * Không có câu nào do giao diện tự viết.
  */
-import { BRANCHES_VI } from '../../../../packages/tuvi-engine/src/index.ts';
+import { BRANCHES_VI, STAR_DEFS, type Palace } from '../../../../packages/tuvi-engine/src/index.ts';
 import { TEN_GODS, type TenGodId } from '../../../../packages/bazi-engine/src/index.ts';
 import { Cite } from '../quotes.tsx';
 import type { Quote } from '../quotes-data.ts';
 import { GlossaryTerm, quoteLine, useReadingMode } from '../glossary.tsx';
 import {
   DAHAN_QUOTES,
+  starInPalaceData,
+  starInPalaceQuote,
   starQuote,
   type BaziReading,
   type PalaceReading,
@@ -49,10 +51,30 @@ export function BrightnessChip({ item }: { item: ReadingStar }) {
   return <span className="chip chip-thieu">nguồn không chép cung này</span>;
 }
 
-function StarLine({ item }: { item: ReadingStar }) {
+/** Một câu luận kèm nhãn nhỏ phía trên (nguồn nào, ở đâu). */
+function ClaimBlock({ label, text, at }: { label?: string; text: string; at?: boolean }) {
+  return (
+    <p className={at ? 'reading-claim reading-claim-at' : 'reading-claim'}>
+      {label && <span className="reading-claim-label">{label}</span>}
+      {text}
+    </p>
+  );
+}
+
+/**
+ * Một sao trong một cung.
+ *
+ * Thứ tự đọc: câu **theo cung** (卷二: "Tử Vi ở cung Phu Thê thì…") trước, rồi
+ * câu **định nghĩa chung** của sao (卷一). Cung Mệnh không có câu theo cung —
+ * câu định nghĩa chung của 卷一 vốn nói về người có sao ấy tại Mệnh, nên chỉ
+ * hiện một câu và không dán nhãn "định nghĩa chung".
+ */
+function StarLine({ item, palace }: { item: ReadingStar; palace: Palace }) {
   const { mode } = useReadingMode();
   const quote = starQuote(item.ref);
+  const at = starInPalaceQuote(palace, item.star.id);
   const line = quoteLine(quote, mode);
+  const atLine = quoteLine(at, mode);
   const short = mode === 'plain' ? undefined : quote?.short_vi;
   return (
     <li className="reading-star">
@@ -61,12 +83,18 @@ function StarLine({ item }: { item: ReadingStar }) {
         <BrightnessChip item={item} />
         {item.hua && <HuaChip hua={item.hua} />}
       </div>
-      {quote ? (
+      {at || quote ? (
         <>
-          {short && <p className="reading-claim reading-claim-short">{short}</p>}
-          <p className="reading-claim">{line}</p>
+          {!at && short && <p className="reading-claim reading-claim-short">{short}</p>}
+          {at && atLine && (
+            <ClaimBlock label={`Tại cung ${palace.nameVi}`} text={atLine} at />
+          )}
+          {quote && line && (
+            <ClaimBlock label={at ? 'Định nghĩa chung' : undefined} text={line} />
+          )}
           <div className="cite-row">
-            <Cite id={quote.id} />
+            {at && <Cite id={at.id} />}
+            {quote && <Cite id={quote.id} />}
             {item.brightness?.quote && <Cite id={item.brightness.quote.id} />}
             {item.hua?.cited[0] && <Cite id={item.hua.cited[0].quote.id} />}
           </div>
@@ -122,6 +150,15 @@ export function PalaceDetail({
   const H = headingLevel === 5 ? 'h5' : 'h4';
   const main = stars.filter((s) => s.star.group === 'main');
   const aux = stars.filter((s) => s.star.group === 'aux');
+  const atData = starInPalaceData(reading.palace);
+  // Sách có mục riêng cho 14 chính tinh ở từng cung trừ cung Mệnh; vài mục
+  // nguồn không chép (xem `missing` trong content/star-in-palace.json). Chỉ
+  // báo khi sao ấy thật sự đóng tại cung này — nếu không thì là nhiễu.
+  const mainIds = new Set<string>(main.map((s) => s.star.id));
+  const notWritten = atData.missing
+    .filter((id) => mainIds.has(id))
+    .map((id) => (STAR_DEFS as Record<string, { vi: string } | undefined>)[id]?.vi)
+    .filter((vi): vi is string => Boolean(vi));
 
   return (
     <>
@@ -149,9 +186,15 @@ export function PalaceDetail({
               <H>Chính tinh</H>
               <ul className="reading-stars">
                 {main.map((s) => (
-                  <StarLine key={s.star.id} item={s} />
+                  <StarLine key={s.star.id} item={s} palace={reading.palace} />
                 ))}
               </ul>
+              {notWritten.length > 0 && (
+                <p className="tiny muted">
+                  Sách không chép mục riêng cho {notWritten.join(', ')} tại cung{' '}
+                  {reading.palace.nameVi} — câu hiện có là định nghĩa chung của sao.
+                </p>
+              )}
             </>
           )}
 
@@ -160,9 +203,13 @@ export function PalaceDetail({
               <H>Phụ tinh</H>
               <ul className="reading-stars reading-stars-aux">
                 {aux.map((s) => (
-                  <StarLine key={s.star.id} item={s} />
+                  <StarLine key={s.star.id} item={s} palace={reading.palace} />
                 ))}
               </ul>
+              <p className="tiny muted">
+                Bản này mới trích mục theo cung cho 14 chính tinh; phụ tinh hiện chỉ có câu định
+                nghĩa chung.
+              </p>
             </>
           )}
         </>
