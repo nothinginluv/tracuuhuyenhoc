@@ -28,7 +28,8 @@
     "demo": "node packages/calendar-core/examples/demo.ts",
     "demo:tuvi": "node packages/tuvi-engine/examples/demo.ts",
     "demo:bazi": "node packages/bazi-engine/examples/demo.ts",
-    "check": "npm run typecheck && npm run quotes:verify && npm run content:verify && npm run content:selftest && npm test"
+    "check": "npm run typecheck && npm run quotes:verify && npm run content:verify && npm run content:selftest && npm test",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "lunar-javascript": "^1.7.7",
@@ -38,6 +39,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",

@@ -40,6 +40,9 @@ npm run quotes:verify   # mọi câu Hán phải là chuỗi con thật của co
 npm run content:verify  # mọi câu/cụm từ của Tầng B phải khớp câu trích
 npm run content:selftest # chứng minh cổng Tầng B chặn được dữ liệu sai
 npm run check       # typecheck + quotes + content + selftest + test
+
+npm run e2e         # E2E Playwright: nhập → lá số → cung → nguyên văn → URL chia sẻ
+                    # lần đầu cần: npx playwright install chromium
 ```
 
 ## Web app
@@ -331,6 +334,8 @@ Hiện trạng: **34 sao · 4 hoá · 12 cung · 21 bảng độ sáng / 190 ô 
 
 `npm run content:selftest` chạy cùng cổng trên một fixture cố tình sai (quote không tồn tại, ngũ hành không có trong câu trích, id sao lạ) và đòi cổng phải chặn — hiện chặn đúng **16 lỗi** — để chứng minh cổng không phải đồ trang trí.
 
+**`npm run e2e`** (Playwright, Chromium) chạy luồng thật trên trình duyệt: nhập 20/05/1985 11:00 nam → bấm “Lập lá số” → URL chia sẻ mang đủ tham số → tải lại trang vẫn ra lá số → chọn cung Tài Bạch → nhãn “Tại cung Tài Bạch · câu chung cho Tả Phụ, Hữu Bật” → mở `§` đọc câu Hán và nguồn → phím → chuyển cung → tab Bát Tự dựng đúng tứ trụ. Cấu hình ở `playwright.config.ts`, tự dựng dev server. Không nằm trong `npm run check` vì cần tải Chromium; CI chạy ở job `e2e` riêng.
+
 Trang **Tinh diệu** trên web đọc thẳng `content/*.json`, hiển thị bản dịch + mở được nguyên văn kèm nguồn. Đây là định nghĩa **cơ học**; khối luận giải trong tab **Tử Vi / Bát Tự** mới ghép định nghĩa với cung vị, độ sáng, tứ hoá, tam hợp/đối cung và đại hạn.
 
 ### Tầng luận giải — cách ghép
@@ -397,6 +402,8 @@ apps/web/
   test/       form.test.ts (14 test) · locator.test.ts (4 test) · reading.test.ts (7 test)
   public/     favicon.svg · og.svg · og.png · robots.txt · sitemap.xml
 .github/workflows/ci.yml
+e2e/          reading.spec.ts (Playwright: nhập → lá số → cung → nguyên văn → URL)
+playwright.config.ts
 docs/         mock giao diện (mock-cach-tinh.html)
 packages/calendar-core/
   src/        jdn · new-moon · lunar · solar-terms · vn-tz-history · true-solar · provinces · convention · context
@@ -405,7 +412,7 @@ packages/calendar-core/
   examples/   demo.ts
 packages/tuvi-engine/
   src/        constants · bureau · palaces · main-stars · aux-stars · mutagen · chart
-  test/       39 test (gồm đối chứng iztro 880 lá số)
+  test/       45 test (gồm đối chứng iztro 880 lá số)
   examples/   demo.ts
 packages/bazi-engine/
   src/        constants · hidden-stems · ten-gods · luck · chart
@@ -431,7 +438,7 @@ docs/         mock giao diện
 - Header bảo mật: CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`, HSTS, COOP.
 - Cache asset có hash 1 năm; `og.png` cache 1 ngày.
 - SEO: canonical, OG/Twitter, `robots.txt`, `sitemap.xml`, `favicon.svg`, `og.png` 1200×630.
-- `.github/workflows/ci.yml`: Node 24, `npm ci` → `npm run check` → `npm run build` trên mọi push/PR.
+- `.github/workflows/ci.yml`: Node 24, hai job — `check` (`npm ci` → `npm run check` → `npm run build`) và `e2e` (cài Chromium → `npm run e2e`, lưu `playwright-report`/`test-results` khi hỏng) trên mọi push/PR.
 
 Quy trình hiện tại:
 
@@ -454,4 +461,3 @@ Còn thiếu — cần cắt thêm câu từ corpus trước khi viết, không 
 4. **Bát Tự**: vượng suy, dụng thần, hình xung hợp hại — kho đã pin chỉ có đoạn lẻ, chưa đủ quy tắc kiểm được nên chưa dựng.
 5. Độ sáng: 17 sao chưa có bảng, vài ô nguồn không chép.
 6. Bundle: đã tách theo route (Tinh diệu, Bát Tự, Phương pháp, Cách tính, khối luận giải); còn tối ưu tiếp — entry 273 kB / 86 kB gzip, toàn bộ JS ~823 kB / ~251 kB gzip.
-7. E2E Playwright cho luồng nhập → kết quả → chia sẻ URL → khối luận giải trong tab.
