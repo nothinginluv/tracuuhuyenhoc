@@ -19,6 +19,7 @@
  * không nhân đôi id.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
+import { TEN_GODS as TEN_GOD_DEFS } from '../packages/bazi-engine/src/ten-gods.ts';
 
 const SAN = 'corpus/sanming-tonghui.txt';
 const YUAN = 'corpus/yuanhai-ziping.txt';
@@ -135,10 +136,16 @@ const TEN_GODS = [
     'Thương Quan là tài lộ ra ngoài: giỏi, sắc sảo, nói thẳng, khó ngồi yên trong khuôn khổ. Tài giỏi mà lỡ đụng quyền lực thì dễ sinh chuyện.',
   ],
   [
-    ['chinh-tai', 'thien-tai'], '正财为正妻，偏财妾也', '戊土为偏财。',
-    'Chính Tài là vợ chính, Thiên Tài là vợ lẽ. Giáp thấy Kỷ Thổ là chính tài, Mậu Thổ là thiên tài.',
-    'Của cải do mình làm ra; thiên tài là phần đến bất ngờ.',
-    'Tài là tài sản: Chính Tài là phần do mình làm mà có, bền, gắn với vợ/chồng chính; Thiên Tài là phần đến từ bên ngoài, bất ngờ, ít ổn định hơn.',
+    ['chinh-tai'], '何谓之正财？犹如正官之意', '吾妻之财也。',
+    'Thế nào là Chính Tài? Cũng như nghĩa của Chính Quan: âm thấy tài dương, dương thấy tài âm. Đại để Chính Tài là của cải của vợ ta.',
+    'Của cải chính đáng, gắn với vợ/chồng chính.',
+    'Chính Tài là phần của cải do chính mình làm ra và giữ được, gắn với người bạn đời chính thức. Sách nói muốn hưởng được nó thì thân phải đủ khoẻ.',
+  ],
+  [
+    ['thien-tai'], '何谓之偏财？盖阳见阳财', '祸患百出。',
+    'Thế nào là Thiên Tài? Dương thấy tài dương, âm thấy tài âm. Nhưng Thiên Tài là của cải của mọi người, chỉ sợ anh chị em tranh đoạt thì phúc không toàn; nếu có quan tinh thì hoạ hoạn trăm đường.',
+    'Của đến từ ngoài, bất ngờ, dễ bị chia.',
+    'Thiên Tài là phần tiền không chỉ do mình làm ra: đến từ cơ hội, từ người khác, hoặc nhiều nguồn cùng lúc. Sách nói nó dễ bị anh chị em, bạn bè chia mất nên không bền bằng Chính Tài.',
   ],
   [
     ['chinh-an'], '正印者，乃生我之身也', '。',
@@ -157,6 +164,12 @@ const TEN_GODS = [
     'Tỷ Kiên là anh em. Như Giáp thấy Giáp là anh, Ất là em; Dần Mão cũng vậy.',
     'Ngang vai: bạn bè, anh em, tự lực.',
     'Tỷ Kiên là người ngang hàng với mình: anh em, bạn bè, người cùng vai. Có nó thì mạnh phần tự lập, nhưng cũng dễ san sẻ phần của mình.',
+  ],
+  [
+    ['kiep-tai'], '五曰同类之阴阳，曰劫财', '甲乙见甲乙是也。',
+    'Thứ năm là đồng loại mà khác âm dương: gọi là Kiếp Tài, gọi là Dương Nhận; Giáp Ất thấy Giáp Ất là vậy.',
+    'Cùng hành khác âm dương: như Giáp gặp Ất.',
+    'Kiếp Tài là sao cùng hành với mình nhưng khác âm dương — như Giáp gặp Ất. Sách xếp nó chung nhóm với Dương Nhận và chỉ định nghĩa tới đó, không chép thêm lời luận riêng; ở đây không thêm.',
   ],
 ];
 
@@ -243,6 +256,9 @@ for (const [ids, anchor, until, claim, short, plain] of TEN_GODS) {
   for (const id of ids) godEntries.push({ id, quote_id: res.id, short_vi: short });
 }
 
+const godCovered = new Set(godEntries.map((e) => e.id));
+const godMissing = Object.keys(TEN_GOD_DEFS).filter((id) => !godCovered.has(id));
+
 writeFileSync(
   'content/ten-gods.json',
   JSON.stringify(
@@ -253,7 +269,7 @@ writeFileSync(
         'Thần nào kho văn bản không có định nghĩa riêng thì ghi ở "missing", giao diện không lấp bằng suy diễn.',
       source: 'yuanhai-ziping',
       entries: godEntries,
-      missing: ['kiep-tai'],
+      missing: godMissing,
     },
     null,
     2,
@@ -270,5 +286,5 @@ const missing = targets.filter((id) => !quotes.find((q) => q.id === id && q.plai
 if (missing.length) throw new Error(`thiếu bản giảng cho: ${[...new Set(missing)].join(', ')}`);
 
 console.log(`day-masters.json: ${dayEntries.length} can`);
-console.log(`ten-gods.json: ${godEntries.length} thần · thiếu: kiep-tai`);
+console.log(`ten-gods.json: ${godEntries.length} thần`);
 console.log(`câu thêm mới: ${added} · tổng: ${quotes.length}`);

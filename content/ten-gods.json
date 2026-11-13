@@ -25,13 +25,13 @@
     },
     {
       "id": "chinh-tai",
-      "quote_id": "q_bz_0023",
-      "short_vi": "Của cải do mình làm ra; thiên tài là phần đến bất ngờ."
+      "quote_id": "q_bz_0407",
+      "short_vi": "Của cải chính đáng, gắn với vợ/chồng chính."
     },
     {
       "id": "thien-tai",
-      "quote_id": "q_bz_0023",
-      "short_vi": "Của cải do mình làm ra; thiên tài là phần đến bất ngờ."
+      "quote_id": "q_bz_0408",
+      "short_vi": "Của đến từ ngoài, bất ngờ, dễ bị chia."
     },
     {
       "id": "chinh-an",
@@ -47,9 +47,12 @@
       "id": "ty-kiep",
       "quote_id": "q_bz_0026",
       "short_vi": "Ngang vai: bạn bè, anh em, tự lực."
+    },
+    {
+      "id": "kiep-tai",
+      "quote_id": "q_bz_0409",
+      "short_vi": "Cùng hành khác âm dương: như Giáp gặp Ất."
     }
   ],
-  "missing": [
-    "kiep-tai"
-  ]
+  "missing": []
 }

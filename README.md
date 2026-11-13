@@ -6,12 +6,12 @@ Tra cứu **Tử Vi Đẩu Số** và **Bát Tự / Tứ Trụ** — công cụ 
 
 ## Trạng thái
 
-Đã xong **lõi lịch**, **engine an sao Tử Vi**, **engine Bát Tự**, **nội dung Tầng B**, **tầng luận giải có dẫn nguồn** và **web app** — chạy được, có test, có đối chứng với thư viện độc lập. Còn thiếu bước đẩy lên GitHub/Vercel (cần tài khoản).
+Đã xong **lõi lịch**, **engine an sao Tử Vi**, **engine Bát Tự**, **nội dung Tầng B**, **tầng luận giải có dẫn nguồn** và **web app** — chạy được, có test, có đối chứng với thư viện độc lập; bản chạy thật ở `https://tracuuhuyenhoc.vercel.app/`.
 
 | Hạng mục | Trạng thái |
 |---|---|
 | Corpus Tầng A (3 bộ văn bản cổ) | ✅ pin sha256 |
-| Cổng kiểm trích dẫn | ✅ 3 tầng + self-test âm · **424 câu** |
+| Cổng kiểm trích dẫn | ✅ 3 tầng + self-test âm · **427 câu** |
 | Bảng tiết khí 1899–2101 | ✅ 4.872 instant UTC |
 | Bảng tháng âm lịch 1899–2102 | ✅ 2.523 tháng, khớp chuẩn TQ 100% |
 | 63 tỉnh pre-2025 + múi giờ lịch sử | ✅ |
@@ -19,7 +19,7 @@ Tra cứu **Tử Vi Đẩu Số** và **Bát Tự / Tứ Trụ** — công cụ 
 | Engine an sao Tử Vi (`tuvi-engine`) | ✅ 45 test · khớp `iztro` 880 lá số · thêm đại hạn 12 cung |
 | Engine Bát Tự (`bazi-engine`) | ✅ 30 test · khớp `lunar-javascript` |
 | Nội dung Tầng B (34 sao · 4 hoá · 12 cung) | ✅ 87 câu · 99 khoá đối chiếu nguyên văn |
-| Luận giải (Tử Vi + Bát Tự) | ✅ độ sáng 21 sao / 190 ô · 149 câu sao tại cung · đại hạn · 10 nhật chủ · 9 thập thần |
+| Luận giải (Tử Vi + Bát Tự) | ✅ độ sáng 21 sao / 190 ô · 246 câu sao tại cung · đại hạn · 10 nhật chủ · 10 thập thần |
 | Web app (`apps/web`) | ✅ React 19 + Vite · 4 tab kết quả · kiểm nhập liệu có test · ErrorBoundary · a11y |
 | CI + deploy | ✅ GitHub Actions · `vercel.json` headers/CSP · OG/SEO |
 
@@ -56,7 +56,7 @@ npm run check       # typecheck + quotes + content + selftest + test
 - **Bìa “Cổng Thiên Môn”**: nền sao vẽ bằng canvas 2D (số sao theo diện tích, tối đa 160, DPR chặn ở 2; dừng vẽ khi ra khỏi khung nhìn hoặc tab bị ẩn; `prefers-reduced-motion` vẽ một khung tĩnh), la bàn dịch nhẹ theo cuộn. Nút **Lập lá số của bạn** cuộn tới biểu mẫu theo chiều cao thật của header dính (không bị khuất sau header trên điện thoại), **Xem cách tính** mở trang Phương pháp.
 - **Khung đọc 12 cung**: dưới lá số Tử Vi là khối “Đọc lá số theo 12 cung” — tóm tắt Mệnh/Thân/sao chủ/tứ hoá/đại hạn/lưu niên, rồi một **khung đọc** gồm danh mục 12 cung (tên cung, can chi, đại hạn, chính tinh) và nội dung của đúng cung đang chọn: câu “thuận / trắc trở”, **câu riêng của từng chính tinh và từng phụ tinh tại cung này** (卷二), định nghĩa chung của sao, độ sáng, tứ hoá, tam hợp/đối cung. Desktop: danh mục dọc bên trái; điện thoại: dải cuộn ngang. Dùng mẫu tab ARIA (`tablist`/`tab`/`tabpanel`), phím ←/→/↑/↓/Home/End, nút “Cung trước / Sau”. Chỉ dựng nội dung một cung — nhẹ hơn 12 khối sổ xuống cũ. Dưới lá Bát Tự là khối “Nhật chủ, thập thần và các vận”.
 - **Bảng chi tiết từng cung**: mỗi ô trong lá số là một nút thật — bấm (hoặc Enter/Space) mở bảng trượt từ cạnh phải (điện thoại: trượt từ đáy lên) với toàn bộ nội dung cung: câu “thuận / trắc trở”, **câu riêng của chính tinh và phụ tinh tại cung**, định nghĩa chung, độ sáng và tứ hoá, tam hợp — đối cung. Escape để đóng, Tab quay vòng trong bảng, đóng xong focus trả về đúng ô vừa bấm; nền bị khoá cuộn. Nút “Cung trước / Cung sau” đi theo đúng thứ tự 12 cung tính từ Mệnh.
-- **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/424` câu đã có bản giảng; 246 câu “sao tại cung” (149 chính tinh + 97 phụ tinh) mới dùng bản dịch sát chữ (chế độ “Dễ hiểu” hiển thị chính bản đó, không viết lại thành lời giảng để tránh diễn giải sai); phần còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**); trên điện thoại nghĩa hiện thành thẻ ở đáy màn hình để không bị cắt ở mép.
+- **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/427` câu đã có bản giảng; 246 câu “sao tại cung” (149 chính tinh + 97 phụ tinh) mới dùng bản dịch sát chữ (chế độ “Dễ hiểu” hiển thị chính bản đó, không viết lại thành lời giảng để tránh diễn giải sai); phần còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**); trên điện thoại nghĩa hiện thành thẻ ở đáy màn hình để không bị cắt ở mép.
 - **Chế độ tối**: mặc định theo `prefers-color-scheme` (chế độ `system`), nút trong header chuyển sáng/tối và lựa chọn được lưu trong `localStorage` — xem mục *Design system*. Nền mực sâu, giữ độ tương phản chữ ≥ 4.5:1.
 - **Chia sẻ lá số**: sao chép URL (có fallback), chia sẻ qua Web Share API. Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
 - **Responsive**: lá số Tử Vi co từ 716px xuống 480px (và 360px dưới 480px) — không tràn ngang trên điện thoại. Bìa kiểm ở 360/480/716/900px: không tràn ngang, nút chính cao 44px, danh sách cam kết chuyển 3 → 2 → 1 cột.
@@ -86,7 +86,7 @@ apps/web/
               TuViReadingSection · BaziReadingSection · reading-blocks (khối luận giải dùng chung)
               glossary.tsx (chú thích thuật ngữ + chế độ Dễ hiểu / Sát nguyên văn)
               ErrorBoundary · Ornaments (ấn triện, la bàn — SVG hình học, không chữ Hán)
-  test/       form.test.ts (14 test) · locator.test.ts (4 test)
+  test/       form.test.ts (14 test) · locator.test.ts (4 test) · reading.test.ts (7 test)
   public/     favicon.svg · og.svg · og.png · robots.txt · sitemap.xml
 ```
 
@@ -301,7 +301,7 @@ Các tệp nội dung, cùng một luật: mỗi câu, mỗi từ khoá đều p
 | `content/brightness.json` | Độ sáng 21 sao theo 12 cung, cắt từ 卷三 (论诸星同垣各司所宜) | 190 ô |
 | `content/dahan.json` | Quy tắc đại hạn: chiều, tuổi khởi theo cục, cách đọc mười năm | 8 câu |
 | `content/day-masters.json` | Mười thiên can — bản tính nhật chủ, 三命通會 卷02 | 10 |
-| `content/ten-gods.json` | Định nghĩa thập thần, 淵海子平; 劫財 chưa có định nghĩa riêng | 9 |
+| `content/ten-gods.json` | Định nghĩa thập thần, 淵海子平 (`論正財`, `論偏財` riêng; 劫財 theo `論日為主`) | 10 |
 | `content/palace-rules.json` | Luận theo cung: câu “thuận” và “trắc trở” cho từng chi (論太歲小限…十二宫中吉凶) | 12 × 2 |
 | `content/star-in-palace.json` | Chính tinh + phụ tinh tại từng cung, cắt từ 卷二 (`二 兄弟` … `十二 父母`); cung Mệnh dùng định nghĩa 卷一, 5 mục chính tinh nguồn không chép ghi trong `missing`, 13 phụ tinh không có mục ghi trong `auxMissing` | 11 × (14 + 11) |
 | `content/reading-rules.json` | Đọc vận: tam phương tứ chính, đại hạn, hai hạn chồng nhau, Nam/Bắc Đẩu, lưu niên | 5 |
@@ -324,10 +324,10 @@ Mỗi mục trong `stars.json` gồm:
 
 Hai lớp kiểm, chạy trong `npm run check`:
 
-1. **`quotes:verify`** — câu Hán trong `content/quotes.jsonl` phải là chuỗi con thật của corpus đã pin sha256, đúng quyển. Hiện **424/424 câu khớp chính xác**.
+1. **`quotes:verify`** — câu Hán trong `content/quotes.jsonl` phải là chuỗi con thật của corpus đã pin sha256, đúng quyển. Hiện **427/427 câu khớp chính xác**.
 2. **`content:verify`** — mọi `quote_id` phải tồn tại; và **mỗi từ khoá hiển thị** (ngũ hành, đẩu, cung chủ, vai trò) phải xuất hiện nguyên văn trong chính các câu trích của mục đó. Bỏ câu trích thì chip biến mất theo, không thể "viết thêm cho đẹp". Bảng độ sáng còn được **đọc ngược độc lập** từ câu trích gốc để bắt lỗi generator.
 
-Hiện trạng: **34 sao · 4 hoá · 12 cung · 21 bảng độ sáng / 190 ô · 149 câu chính tinh + 97 câu phụ tinh “sao tại cung” · 10 nhật chủ · 9 thập thần · 403 câu trích được dùng · 99 khoá đối chiếu**.
+Hiện trạng: **34 sao · 4 hoá · 12 cung · 21 bảng độ sáng / 190 ô · 149 câu chính tinh + 97 câu phụ tinh “sao tại cung” · 10 nhật chủ · 10 thập thần · 405 câu trích được dùng · 99 khoá đối chiếu**.
 
 `npm run content:selftest` chạy cùng cổng trên một fixture cố tình sai (quote không tồn tại, ngũ hành không có trong câu trích, id sao lạ) và đòi cổng phải chặn — hiện chặn đúng **16 lỗi** — để chứng minh cổng không phải đồ trang trí.
 
@@ -394,7 +394,7 @@ apps/web/
   src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · locator.ts · quotes.tsx · stars.ts · styles.css
   src/components/
               BirthForm · TuViChartView · BaziView · CalcTrace · WarningList · MethodPage · StarReference · ErrorBoundary
-  test/       form.test.ts (14 test) · locator.test.ts (4 test)
+  test/       form.test.ts (14 test) · locator.test.ts (4 test) · reading.test.ts (7 test)
   public/     favicon.svg · og.svg · og.png · robots.txt · sitemap.xml
 .github/workflows/ci.yml
 docs/         mock giao diện (mock-cach-tinh.html)
@@ -412,7 +412,7 @@ packages/bazi-engine/
   test/       30 test (gồm đối chứng lunar-javascript)
   examples/   demo.ts
 corpus/       văn bản gốc đã làm sạch + lock hash + segments
-content/      sources.json (sổ nguồn) · quotes.jsonl (424 câu) · stars.json · star-in-palace.json · hua.json · palaces.json
+content/      sources.json (sổ nguồn) · quotes.jsonl (427 câu) · stars.json · star-in-palace.json · hua.json · palaces.json
               brightness.json · dahan.json · day-masters.json · ten-gods.json
               palace-rules.json · reading-rules.json · glossary.json (bảng tra thuật ngữ)
 scripts/      fetch-corpus · verify-quotes · verify-content · seed-quotes · run-tests · gen-solar-terms · gen-lunar-months · gen-provinces
@@ -423,7 +423,7 @@ docs/         mock giao diện
 
 ## Triển khai
 
-Đích: `tracuuhuyenhoc.vercel.app` — client-side hoàn toàn, không DB, không API.
+Đích: `tracuuhuyenhoc.vercel.app` — client-side hoàn toàn, không DB, không API. **Đã live.**
 
 Đã có sẵn:
 
@@ -433,16 +433,14 @@ docs/         mock giao diện
 - SEO: canonical, OG/Twitter, `robots.txt`, `sitemap.xml`, `favicon.svg`, `og.png` 1200×630.
 - `.github/workflows/ci.yml`: Node 24, `npm ci` → `npm run check` → `npm run build` trên mọi push/PR.
 
-Các bước còn lại (cần tài khoản GitHub/Vercel):
+Quy trình hiện tại:
 
 ```bash
-git init && git add -A && git commit -m "tracuuhuyenhoc: lõi lịch, engine Tử Vi/Bát Tự, web minh bạch"
-git remote add origin git@github.com:<user>/tracuuhuyenhoc.git
-git push -u origin main
-# Vercel: import repo, framework Vite, output dist/web
+npm run check && npm run build   # cổng kiểm + build local
+git push origin main             # Vercel tự build bản mới
 ```
 
-Sau khi deploy: kiểm header bằng `curl -I`, mở `/og.png`, chạy `npm run check` trong CI.
+Vercel nối với repo GitHub `nothinginluv/tracuuhuyenhoc` (framework Vite, output `dist/web`). Sau khi deploy: kiểm header bằng `curl -I`, mở `/og.png`, đối chiếu hash asset trên trang live với `dist/web/assets/`.
 
 ## Tiếp theo
 
@@ -453,8 +451,7 @@ Còn thiếu — cần cắt thêm câu từ corpus trước khi viết, không 
 1. **Sao theo từng cung**: đã có **14 chính tinh + 11 phụ tinh × 11 cung** cắt từ 卷二 (`star-in-palace.json`); 13 phụ tinh còn lại (Thiên Mã, Địa Không, Địa Kiếp, Thiên Hình, Thiên Diêu, Hồng Loan, Thiên Hỷ, Tam Thai, Bát Toạ, Ân Quang, Thiên Quý, Thai Phụ, Phong Cáo) sách không có mục theo cung.
 2. **Cách cục** (格局): bảng nhận diện + câu luận riêng cho từng cách.
 3. **Tiểu hạn**: cách an chưa kiểm chứng trong kho đã pin; hiện chỉ có đại hạn và lưu niên.
-4. **Bát Tự**: vượng suy, dụng thần, hình xung hợp hại, định nghĩa riêng cho 劫財 và tách 偏財/正財.
+4. **Bát Tự**: vượng suy, dụng thần, hình xung hợp hại — kho đã pin chỉ có đoạn lẻ, chưa đủ quy tắc kiểm được nên chưa dựng.
 5. Độ sáng: 17 sao chưa có bảng, vài ô nguồn không chép.
-6. Code-split bundle (hiện ~569 KB minified / ~173 KB gzip; tách bảng lịch và engine).
+6. Bundle: đã tách theo route (Tinh diệu, Bát Tự, Phương pháp, Cách tính, khối luận giải); còn tối ưu tiếp — entry 273 kB / 86 kB gzip, toàn bộ JS ~823 kB / ~251 kB gzip.
 7. E2E Playwright cho luồng nhập → kết quả → chia sẻ URL → khối luận giải trong tab.
-8. `git init` → commit → push GitHub → nối Vercel (xem mục Triển khai).
