@@ -11,7 +11,6 @@ import { Hero } from './components/Hero.tsx';
 import { formatDate, formatTime, lunarShort, yearName } from './format.ts';
 import { ReadingModeToggle } from './glossary.tsx';
 import { copyUrl, shareUrl } from './share.ts';
-import { useTheme } from './design-system/ThemeProvider';
 
 // Hai trang chỉ đọc tài liệu được tách khỏi gói chính: người tra cứu không phải
 // tải toàn bộ nội dung Tinh diệu / Phương pháp mới xem được lá số.
@@ -121,9 +120,6 @@ export function App() {
   const [tuviVariant, setTuviVariant] = useState<'cn' | 'vn'>('cn');
   const [busy, setBusy] = useState(false);
   const [announce, setAnnounce] = useState('');
-  const { resolvedTheme, toggleTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
-  const themeLabel = isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối';
   const resultsRef = useRef<HTMLElement>(null);
   const shouldFocus = useRef(false);
 
@@ -233,19 +229,6 @@ export function App() {
               Phương pháp
             </button>
           </nav>
-          <button
-            aria-pressed={isDark}
-            aria-label={themeLabel}
-            className="theme-toggle"
-            onClick={toggleTheme}
-            title={themeLabel}
-          >
-            {isDark ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79"/></svg>
-            )}
-          </button>
         </div>
       </header>
 
