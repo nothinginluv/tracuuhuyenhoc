@@ -7,7 +7,8 @@
  *
  * Mỗi mục trong sách là một dòng/đoạn cho một chính tinh: "Tử Vi ở cung Phu Thê
  * thì…". Script cắt đúng đoạn đó (không gõ tay chữ Hán), gắn với id sao của
- * engine và id cung theo đúng thứ tự `PALACE_NAMES` (Mệnh = 0).
+ * engine và id cung theo đúng thứ tự `PALACE_NAMES` (Mệnh = 0). Phụ tinh có mục
+ * riêng (11 sao, xem `AUX`) cắt cùng cách; sao còn lại ghi vào `auxMissing`.
  *
  * Không cắt mục 一 命宫: cung Mệnh đã dùng câu định nghĩa sao ở 卷一 (諸星問答論).
  *
@@ -15,6 +16,7 @@
  * Idempotent: khoá theo nguyên văn.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
+import { STAR_DEFS } from '../packages/tuvi-engine/src/constants.ts';
 
 const ZW = 'corpus/ziwei-quanshu.txt';
 const QUOTES = 'content/quotes.jsonl';
@@ -52,9 +54,49 @@ const STARS = [
 ];
 
 /**
+ * Phụ tinh có mục riêng theo cung trong 卷二 (10 sao; Thiên Khôi/Thiên Việt chỉ
+ * có ở mục Phu Thê). Các phụ tinh còn lại của engine không có mục theo cung —
+ * ghi vào `auxMissing` để cổng kiểm biết là cố ý.
+ */
+const AUX = [
+  ['wenchang', '文昌'],
+  ['wenqu', '文曲'],
+  ['zuofu', '左辅'],
+  ['youbi', '右弼'],
+  ['lucun', '禄存'],
+  ['qingyang', '擎羊'],
+  ['tuoluo', '陀罗'],
+  ['huoxing', '火星'],
+  ['lingxing', '铃星'],
+  ['tiankui', '天魁'],
+  ['tianyue', '天钺'],
+];
+
+/** Toàn bộ phụ tinh engine an được — dùng để đánh dấu `auxMissing`. */
+const AUX_ALL = Object.keys(STAR_DEFS).filter((id) => STAR_DEFS[id].group === 'aux');
+const auxVi = (id) => STAR_DEFS[id]?.vi ?? id;
+
+/**
+ * Đầu dòng phụ tinh. Thứ tự quan trọng: mục gộp ("文昌文曲", "羊陀"…) phải
+ * đứng trước mục đơn, nếu không "文昌" sẽ nuốt mất "文昌文曲". "羊玲"/"羊铃"
+ * là cách sách viết tắt của Kình Dương + Linh Tinh (lỗi chép), giữ nguyên
+ * nguyên văn nhưng ánh xạ đúng hai sao.
+ */
+const AUX_HEADS = [
+  { ids: ['wenchang', 'wenqu'], zh: '文昌文曲' },
+  { ids: ['zuofu', 'youbi'], zh: '左辅右弼' },
+  { ids: ['huoxing', 'lingxing'], zh: '火星铃星' },
+  { ids: ['tiankui', 'tianyue'], zh: '天魁天钺' },
+  { ids: ['qingyang', 'tuoluo'], zh: '羊陀' },
+  { ids: ['qingyang', 'lingxing'], zh: '羊玲' },
+  { ids: ['qingyang', 'lingxing'], zh: '羊铃' },
+  ...AUX.map(([id, zh]) => ({ ids: [id], zh })),
+];
+
+/**
  * Các dòng mở đầu bằng tên sao khác (phụ tinh, sao lưu niên…) hoặc tiêu đề thơ:
- * gặp là kết thúc đoạn của chính tinh đang đọc. Phụ tinh chưa đưa vào bản này
- * (xem README) nên chỉ dùng làm mốc cắt.
+ * gặp là kết thúc đoạn của chính tinh đang đọc. Phụ tinh được cắt riêng ở
+ * `AUX_HEADS` phía trên; danh sách này chỉ còn là mốc cắt.
  */
 const OTHER_HEADS = [
   '文昌', '文曲', '左辅', '右弼', '禄存', '擎羊', '陀罗', '火星', '铃星',
@@ -409,6 +451,207 @@ const VI = {
   },
 };
 
+/** Bản dịch sát nghĩa cho phụ tinh, khoá theo đầu dòng trong sách. */
+const VI_AUX = {
+  // ── 1. Huynh Đệ ────────────────────────────────────────────
+  xiong: {
+    '文昌文曲':
+      'Văn Xương, Văn Khúc: cung nào cũng có ba anh chị em; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh thì miếu vượng không khắc, hãm cung thì cô đơn; thêm Không Kiếp thì không có ai.',
+    '左辅':
+      'Tả Phụ: ba người; cùng Thiên Đồng, Xương Khúc: bốn năm người; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh: hai người; có Không Kiếp: thiếu lực, không hoà.',
+    '右弼':
+      'Hữu Bật: ba người; cùng Thiên Phủ, Thiên Tướng, Tử Vi, Xương Khúc: bốn năm người; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh: hai người; có Không Kiếp: thiếu lực, không hoà thuận.',
+    '禄存': 'Lộc Tồn: anh chị em tương trợ, sinh nhau; gặp sát tinh thì khắc hại, chuốc oán.',
+    '羊玲':
+      'Kình Dương, Linh Tinh: khắc hại; nhập miếu một người; thêm nhiều cát tinh thì hai ba người; hãm địa không có ai.',
+    '火星':
+      'Hoả Tinh nhập miếu gặp cát tinh: một hai người; thêm Liêm Trinh, Thất Sát, Phá Quân, Linh Tinh: cô khắc.',
+    '铃星':
+      'Linh Tinh nhập miếu: anh chị em sinh nhau; thêm Kình Dương, Đà La, Hoả Tinh, Không Kiếp: không có ai.',
+  },
+
+  // ── 2. Phu Thê ─────────────────────────────────────────────
+  the: {
+    '文昌':
+      'Văn Xương: vợ trẻ, giúp được, thông minh; cùng Thiên Cơ, Thái Âm: người phối ngẫu đẹp; không nên hãm địa; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp thì rất kỵ.',
+    '文曲':
+      'Văn Khúc: sinh nhau, hội Thái Âm và các cát tinh thì hoà đến già; cùng Xương Khúc: nhiều vợ lẽ; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp, Kỵ: có khắc.',
+    '禄存':
+      'Lộc Tồn: sinh nhau, không khắc; vợ nên trẻ, ngang tuổi, cưới muộn; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp, gặp sao chặn đường và Không Vong: cô đơn.',
+    '左辅右弼':
+      'Tả Phụ, Hữu Bật: hoà đến già; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp, cùng Tham Lang, Liêm Trinh: nên lấy người lớn tuổi, tính cương cường.',
+    '羊陀':
+      'Kình Dương, Đà La nhập miếu thêm cát tinh: cưới muộn thì khỏi hình hoặc hoà lâu; hãm địa khắc sớm; thêm Thái Dương, Thái Âm, Cự Môn, Thiên Cơ, Hoả Tinh, Linh Tinh, Vũ Khúc, Thất Sát: chia lìa.',
+    '火星铃星': 'Hoả Tinh, Linh Tinh nhập miếu thêm cát tinh: không hình; hãm địa: hình khắc.',
+    '天魁天钺':
+      'Thiên Khôi, Thiên Việt: phần nhiều vợ chồng đẹp; đóng ở cung vợ ắt được của vợ; cùng cát tinh: vợ chồng quý đẹp.',
+  },
+
+  // ── 3. Tử Nữ ───────────────────────────────────────────────
+  tu: {
+    '左辅':
+      'Tả Phụ đứng một mình: trai ba gái một; gặp Tử Vi, Thiên Phủ và các cát tinh: có con quý; gặp Phá Quân, Thất Sát, Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: chỉ hai người, có cũng không nên người.',
+    '右弼':
+      'Hữu Bật: ba người; thêm cát tinh: có con quý; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: giảm một nửa.',
+    '文昌':
+      'Văn Xương: ba người; thêm cát tinh càng nhiều; có Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: chỉ được một con.',
+    '文曲':
+      'Văn Khúc miếu vượng: bốn người; hãm địa: hai ba người; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh: con ít.',
+    '禄存':
+      'Lộc Tồn chủ cô, nên có con vợ lẽ hoặc nhận con nuôi; thêm cát tinh: một người; thêm Hoả Tinh và các sát tinh: cô khắc.',
+    '羊陀':
+      'Kình Dương, Đà La hãm cung: cô đơn; thêm cát tinh miếu vượng: một người; nếu đối cung có nhiều cát tinh không sát xung cũng có ba bốn người; gặp Hao, sát, Kỵ: tuyệt tự.',
+    '火星': 'Hoả Tinh gặp cát tinh cùng cung thì không cô; hãm cung thêm sát tinh: hình thương.',
+    '铃星':
+      'Linh Tinh đứng một mình: cô đơn; thêm cát tinh nhập miếu: có thể có con vợ lẽ; xem đối cung nhiều cát: hai ba người.',
+  },
+
+  // ── 4. Tài Bạch ────────────────────────────────────────────
+  tai: {
+    '文昌':
+      'Văn Xương: giàu đầy, kho đầy; thêm cát tinh: tài khí vượng; cùng Cự Môn: giàu; hãm địa cùng Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: thành kẻ nghèo hèn.',
+    '文曲':
+      'Văn Khúc nhập miếu: giàu đầy; thêm cát tinh: được tiền của quý nhân; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: nhà kỵ, đi đông về tây, thành bại không như ý.',
+    '左辅右弼':
+      'Tả Phụ, Hữu Bật: cung nào cũng giàu đầy; hội cát tinh: được tiền của quý nhân; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp, Hao, Kỵ: thành bại, không tụ.',
+    '禄存':
+      'Lộc Tồn: giàu đầy, kho chất vàng ngọc; thêm cát tinh: không phải nhọc mà tiền tự tăng; Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp, Hao, Kỵ: trước không sau có.',
+    '擎羊':
+      'Kình Dương ở cung Thìn, Tuất, Sửu, Mùi: sinh tiền trong chỗ ồn ào; hãm địa: phá nghiệp tổ, không tụ, rốt cuộc không phát; chỉ kiếm tiền trong cảnh cá muối dơ bẩn.',
+    '陀罗':
+      'Đà La: sinh tiền trong chỗ ồn ào; hãm cung: vất vả cầu tiền qua ngày; thêm Không Kiếp: đi đông về tây.',
+    '火星': 'Hoả Tinh đứng một mình: phát mạnh rồi mất mạnh; hãm cung: vất vả; thêm cát tinh: tiền nhiều như ý.',
+    '铃星': 'Linh Tinh nhập miếu đứng một mình: phát mạnh; hãm địa: cô hàn, khổ sở qua ngày.',
+  },
+
+  // ── 5. Tật Ách ─────────────────────────────────────────────
+  tat: {
+    '文昌':
+      'Văn Xương đứng một mình: ít tai; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: nhiều tai; cùng các cát tinh: cả đời không tai.',
+    '文曲':
+      'Văn Khúc: ít tai; thêm cát tinh: một đời không tai; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp, đóng ở hãm cung: có tai.',
+    '左辅':
+      'Tả Phụ đứng một mình: bình hoà; thêm cát tinh: ít tai; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: thường có tai.',
+    '右弼':
+      'Hữu Bật đứng một mình: gặp tai thì có cứu; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: nhiều tai.',
+    '禄存':
+      'Lộc Tồn: thuở nhỏ nhiều tai; thêm cát tinh: ít tai; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh: tay chân ắt tàn tật; thêm Không Kiếp: bệnh ngầm kéo dài.',
+    '陀罗': 'Đà La: thuở nhỏ có tai, mài răng miệng, đầu mặt; phải có thương tích mới sống lâu.',
+    '擎羊':
+      'Kình Dương: có chứng điên đầu, hoặc tay chân yếu, đầu mặt bị thương thì sống lâu; thêm cát tinh: ít tai.',
+    '羊铃': 'Kình Dương, Linh Tinh: chủ một đời ít tai, thân thể khoẻ mạnh lanh lợi.',
+  },
+
+  // ── 6. Thiên Di ────────────────────────────────────────────
+  di: {
+    '文昌':
+      'Văn Xương: ra ngoài gặp quý nhân thì phát đạt, kẻ tiểu nhân không đủ; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: ở ngoài không yên.',
+    '文曲':
+      'Văn Khúc: ở ngoài gần quý nhân; thêm cát tinh: được tiền; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh: ít như ý.',
+    '左辅':
+      'Tả Phụ: động thì có quý nhân nâng đỡ, phát phúc; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh: kẻ dưới không đủ, hay chuốc thị phi.',
+    '右弼':
+      'Hữu Bật: ra ngoài gặp quý nhân nâng đỡ, phát đạt; không nên yên một chỗ; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: ở ngoài tranh chấp với người.',
+    '禄存':
+      'Lộc Tồn: ra ngoài áo cơm như ý; hội Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: với người phần nhiều không vừa ý.',
+    '擎羊':
+      'Kình Dương nhập miếu: ra ngoài áo cơm như ý; thêm cát tinh: phát tiền trong chỗ ồn ào; hãm địa: có thành nhưng kẻ dưới không đủ.',
+    '陀罗':
+      'Đà La hội cát tinh: ra ngoài gặp quý nhân được tiền; hãm địa thêm Kình Dương, Hoả Tinh, Linh Tinh, Không Kiếp: hay chuốc thị phi, kẻ dưới không đủ.',
+    '火星':
+      'Hoả Tinh đứng một mình: ra ngoài không yên; thêm cát tinh: phát tiền trong chỗ ồn ào; thêm Kình Dương, Đà La, Không Kiếp: chuốc thị phi, ở ngoài ít như ý.',
+    '铃星': 'Linh Tinh có cát tinh cùng cung: ra ngoài tốt; thêm Dương, Hoả, Linh, Không Kiếp: không đủ, chuốc thị phi.',
+  },
+
+  // ── 7. Giao Hữu ────────────────────────────────────────────
+  no: {
+    '文昌':
+      'Văn Xương nhập miếu đứng một mình: được lực, giúp chủ; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: tuy có nhưng phản chủ.',
+    '文曲':
+      'Văn Khúc nhập miếu: được lực; hãm cung: không phần; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: oán chủ, bỏ đi.',
+    '左辅':
+      'Tả Phụ đứng một mình, vượng: một lời trăm tiếng dạ; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp, Hao, Kỵ: phản chủ, khó có người.',
+    '右弼':
+      'Hữu Bật đứng một mình: thành hàng; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp, Hao, Kỵ: phản chủ, trộm của rồi bỏ đi.',
+    '禄存':
+      'Lộc Tồn: người ở nhiều; thêm cát tinh: giữ chủ gây nhà; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Hao, Kỵ: thiếu lực.',
+    '擎羊':
+      'Kình Dương: phản chủ, chuốc oán, không được lực; có cũng không lâu; nhập miếu cuối đời mới có thể có.',
+    '陀罗': 'Đà La: người ở thiếu lực, oán chủ; nhập miếu thêm cát tinh: có phần.',
+    '火星': 'Hoả Tinh đứng một mình: oán chủ, không được lực; thêm cát tinh nhập miếu: có thể có một hai người.',
+    '铃星':
+      'Linh Tinh đứng một mình: không được lực, giận chủ; hội cát tinh nhập miếu: giúp chủ giữ nhà; thêm Không Kiếp, Hao, Kỵ: hoàn toàn thiếu lực.',
+  },
+
+  // ── 8. Sự Nghiệp ───────────────────────────────────────────
+  quan: {
+    '文昌':
+      'Văn Xương nhập miếu cùng Thái Dương, thêm cát tinh, Khoa, Quyền, Lộc: bậc tài văn võ; cùng Thiên Phủ, Văn Khúc: phú quý vẹn đôi.',
+    '文曲':
+      'Văn Khúc miếu vượng: văn võ đều nên; hãm cung cùng Thiên Cơ, Thái Âm: chức lại có quyền quý; hội Tử Vi, Thiên Phủ, Tả Hữu: gần vua thường nắm quyền; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: bình thường.',
+    '左辅':
+      'Tả Phụ nhập miếu: bậc tài văn võ, võ nghiệp thịnh nhất, không lợi cho người văn; hội cát tinh: thân trong sạch, văn võ đều tốt; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: danh tiếng thăng giáng.',
+    '右弼':
+      'Hữu Bật nên ở võ nghiệp, không hoà với người văn; cùng Tử Vi, Thiên Phủ, Xương Khúc: của và chức đều đẹp; hãm cung: thành bại, có bị giáng; gặp Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: cũng bị giáng chức.',
+    '禄存': 'Lộc Tồn hội cát: văn võ đều tốt, của và chức đều đẹp, con cháu có tước; cung nào cũng tốt.',
+    '擎羊': 'Kình Dương nhập miếu: lợi nhất cho võ nghiệp; cùng cát tinh: quyền quý; hãm địa: bình thường, chỉ có hư danh.',
+    '陀罗': 'Đà La đứng một mình: bình thường; thêm cát tinh cũng chỉ là hư danh.',
+    '火星': 'Hoả Tinh: cuối đời công danh như ý, đầu đời thành bại; hội Tử Vi, Tham Lang thì tốt; hãm địa không đẹp.',
+    '铃星': 'Linh Tinh đứng một mình ở cung vượng: tốt; hãm địa không đẹp; thêm các cát tinh: quyền quý.',
+  },
+
+  // ── 9. Điền Trạch ──────────────────────────────────────────
+  dien: {
+    '文昌': 'Văn Xương hội các cát tinh: ruộng vườn mua rộng; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: phá nghiệp tổ.',
+    '文曲':
+      'Văn Khúc ở cung vượng: có phần, giữ được nghiệp tổ; thêm cát tinh: tự mua; cùng Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: có tiến có lui.',
+    '左辅':
+      'Tả Phụ: có nghiệp tổ; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: mất nghiệp tổ, ruộng đất ít; hội nhiều cát tinh thì nhiều.',
+    '禄存':
+      'Lộc Tồn: ruộng vườn nhiều và thịnh, tự mua; hội cát tinh: thừa hưởng nghiệp tổ, vinh thịnh; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: ruộng nhà ít.',
+    '擎羊': 'Kình Dương nhập miếu: trước phá sau thành; hãm địa thêm Không Kiếp: mất nghiệp tổ.',
+    '陀罗': 'Đà La: mất nghiệp tổ, vất vả qua ngày; thêm cát tinh: trước không sau có; thêm Không Kiếp: không có gì.',
+    '火星': 'Hoả Tinh đứng một mình: mất nghiệp tổ; hội cát tinh: trước không sau có; thêm Không Kiếp: không có gì.',
+    '铃星': 'Linh Tinh: mất nghiệp tổ; nhập miếu thêm cát tinh: tự có của; gặp Không Kiếp: không có gì.',
+  },
+
+  // ── 10. Phúc Đức ───────────────────────────────────────────
+  phuc: {
+    '文昌':
+      'Văn Xương thêm cát tinh nhập miếu: hưởng phúc vui vẻ; hãm địa gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: thân tâm đều không yên.',
+    '左辅':
+      'Tả Phụ thêm cát tinh: hưởng phúc; đứng một mình: cuối đời an nhàn; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: vất vả.',
+    '右弼':
+      'Hữu Bật: một đời phúc lộc vẹn đẹp; thêm cát tinh: cả đời ít lo; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: nhọc lòng, không an.',
+    '禄存':
+      'Lộc Tồn: phúc dày cả đời, sống yên; thêm cát tinh: có mừng có phúc; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: thân tâm không yên.',
+    '擎羊':
+      'Kình Dương nhập miếu: trong động có phúc; hãm cung: nhọc lòng thiếu sức; được cát tinh cùng cung thì giảm lo, đứng một mình thì thân tâm bất an.',
+    '陀罗': 'Đà La đứng một mình: vất vả; nhập miếu: có phúc lộc; hãm địa: chạy vạy; thêm cát tinh: cuối đời có phúc.',
+    '火星': 'Hoả Tinh: không an, nhọc sức vất vả; thêm cát tinh: cuối đời như ý.',
+    '铃星': 'Linh Tinh: khổ nhọc; thêm cát tinh: bình hoà; đứng một mình: vất vả.',
+  },
+
+  // ── 11. Phụ Mẫu ────────────────────────────────────────────
+  phu: {
+    '文昌':
+      'Văn Xương thêm cát tinh nhập miếu: không hình; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh: có hình, hoặc mất nghiệp tổ, phải nhận họ khác.',
+    '文曲':
+      'Văn Khúc đứng một mình nhập miếu: không hình; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Không Kiếp: cha mẹ đều không vẹn toàn.',
+    '左辅':
+      'Tả Phụ đứng một mình: không hình; cùng Liêm Trinh: khắc sớm; thêm Văn Xương sinh nhau: không hình; thêm Kình Dương, Đà La, Hoả Tinh, Linh Tinh: hình thương, mất nghiệp tổ, nhận họ khác.',
+    '右弼':
+      'Hữu Bật đứng một mình: không hình; thêm cát tinh: được cha mẹ che chở; gặp Kình Dương, Đà La, Hoả Tinh, Linh Tinh: lìa tổ, ở nhờ họ khác.',
+    '禄存':
+      'Lộc Tồn: không khắc; thêm Không Kiếp, Kình Dương, Đà La, Hoả Tinh, Linh Tinh: đầu đời phá của cha, hình thương, giữa đời không tự gây dựng được nhà.',
+    '擎羊': 'Kình Dương: hình khắc sớm; hội Thái Dương, Thái Âm trùng trùng: mất nghiệp tổ; thêm nhiều cát tinh: khỏi hình.',
+    '陀罗':
+      'Đà La: thuở nhỏ hình thương; hội Thái Dương, Thái Âm trùng trùng: mất nghiệp tổ, ở nhờ họ khác; thêm cát tinh: đi ở rể hoặc nhận cha mẹ lần hai.',
+    '火星': 'Hoả Tinh đứng một mình: cô khắc, phải nhận họ khác; thêm cát tinh: bình hoà.',
+    '铃星': 'Linh Tinh: hình khắc cô đơn, phải nhận họ khác, nhận cha mẹ lần hai, đi ở rể.',
+  },
+};
+
 // ── Cắt nguyên văn ───────────────────────────────────────────
 const text = readFileSync(ZW, 'utf8');
 const segments = JSON.parse(readFileSync('corpus/ziwei-quanshu.segments.json', 'utf8')).segments;
@@ -418,36 +661,57 @@ const mainHeads = STARS.map(([id, zh]) => ({ id, zh }));
 
 function extract(palace) {
   const body = text.slice(palace.start, palace.end).split(/\r?\n/);
-  const entries = new Map();
+  const main = new Map();
+  const aux = new Map();
   let current = null;
+  let currentAux = null;
   let offset = palace.start;
   for (const raw of body) {
     const at = offset;
     offset += raw.length + 1;
     const line = raw.trim();
     if (!line || line.startsWith('===')) continue;
+    // Phụ tinh trước: tên phụ tinh cũng nằm trong OTHER_HEADS (mốc cắt), và mục
+    // gộp ("文昌文曲") phải khớp trước mục đơn.
+    const auxHead = AUX_HEADS.find((h) => line.startsWith(h.zh));
+    if (auxHead) {
+      current = null;
+      const key = auxHead.ids.join('+');
+      const seen = aux.get(key);
+      if (seen) {
+        seen.text += line;
+        currentAux = seen;
+        continue;
+      }
+      currentAux = { ids: auxHead.ids, zh: auxHead.zh, text: line, at };
+      aux.set(key, currentAux);
+      continue;
+    }
     if (OTHER_HEADS.some((h) => line.startsWith(h))) {
       current = null;
+      currentAux = null;
       continue;
     }
     const head = mainHeads.find((h) => line.startsWith(h.zh));
     if (head) {
+      currentAux = null;
       // "X同…" là câu nối của mục trước (X ở cùng cung), không phải mục mới.
       if (/^同/.test(line.slice(head.zh.length)) && current) {
         current.text += line;
         continue;
       }
-      if (!entries.has(head.id)) {
+      if (!main.has(head.id)) {
         current = { id: head.id, text: line, at };
-        entries.set(head.id, current);
+        main.set(head.id, current);
         continue;
       }
       if (current) current.text += line;
       continue;
     }
     if (current) current.text += line;
+    if (currentAux) currentAux.text += line;
   }
-  return entries;
+  return { main, aux };
 }
 
 // ── Ghi câu trích ────────────────────────────────────────────
@@ -475,7 +739,7 @@ function upsert(text_zh, claim_vi, locator) {
 let added = 0;
 const palaces = [];
 for (const palace of PALACES) {
-  const entries = extract(palace);
+  const { main: entries, aux: auxEntries } = extract(palace);
   const stars = {};
   const missing = [];
   for (const [starId, zh] of STARS) {
@@ -491,6 +755,27 @@ for (const palace of PALACES) {
     if (res.added) added++;
     stars[starId] = res.id;
   }
+
+  const aux = {};
+  const heads = {};
+  // Mục riêng của từng sao trước, mục gộp ("羊陀", "文昌文曲") sau: mục gộp chỉ
+  // điền vào sao chưa có câu riêng, nên không đè mất đoạn dành riêng cho sao đó.
+  const auxHeads = [...auxEntries.values()].sort((a, b) => a.ids.length - b.ids.length);
+  for (const entry of auxHeads) {
+    const used = entry.ids.filter((id) => !(id in aux));
+    if (!used.length) continue;
+    const vi = VI_AUX[palace.key]?.[entry.zh];
+    if (!vi) throw new Error(`${palace.key}.${entry.zh}: chưa có bản dịch trong VI_AUX`);
+    if (!entry.text.startsWith(entry.zh)) {
+      throw new Error(`${palace.key}.${entry.zh}: đoạn cắt sai phụ tinh`);
+    }
+    const res = upsert(entry.text, vi, segOf(entry.at));
+    if (res.added) added++;
+    for (const id of used) aux[id] = res.id;
+    if (entry.ids.length > 1) heads[res.id] = { zh: entry.zh, vi: entry.ids.map(auxVi).join(', ') };
+  }
+  const auxMissing = AUX_ALL.filter((id) => !(id in aux));
+
   if (missing.length) {
     // Sách không chép mục cho sao này ở cung này — ghi ra để cổng kiểm biết là cố ý.
     console.log(`  ${palace.vi}: thiếu ${missing.join(', ')} (nguồn không chép)`);
@@ -502,6 +787,9 @@ for (const palace of PALACES) {
     locator: `卷二 · ${palace.section}`,
     stars,
     missing,
+    aux,
+    auxMissing,
+    ...(Object.keys(heads).length ? { heads } : {}),
   });
 }
 
@@ -511,8 +799,9 @@ writeFileSync(
     {
       version: 1,
       $comment:
-        'Chính tinh tại từng cung, sinh từ 紫微斗數全書 卷二 (các mục 二 兄弟 … 十二 父母). ' +
-        'Cung Mệnh dùng câu định nghĩa sao ở 卷一. Chạy scripts/gen-star-in-palace.mjs để dựng lại.',
+        'Chính tinh và phụ tinh tại từng cung, sinh từ 紫微斗數全書 卷二 (các mục 二 兄弟 … 十二 父母). ' +
+        'Cung Mệnh dùng câu định nghĩa sao ở 卷一; phụ tinh không có mục theo cung nằm trong auxMissing. ' +
+        'Chạy scripts/gen-star-in-palace.mjs để dựng lại.',
       source: 'ziwei-quanshu',
       palaces,
     },
@@ -524,6 +813,8 @@ writeFileSync(
 
 writeFileSync(QUOTES, quotes.map((q) => JSON.stringify(q)).join('\n') + '\n', 'utf8');
 console.log(
-  `star-in-palace.json: ${palaces.length} cung · ${palaces.reduce((n, p) => n + Object.keys(p.stars).length, 0)} câu`,
+  `star-in-palace.json: ${palaces.length} cung · ` +
+    `${palaces.reduce((n, p) => n + Object.keys(p.stars).length, 0)} câu chính tinh · ` +
+    `${palaces.reduce((n, p) => n + Object.keys(p.aux).length, 0)} câu phụ tinh`,
 );
 console.log(`câu mới: ${added} · tổng kho: ${quotes.length}`);

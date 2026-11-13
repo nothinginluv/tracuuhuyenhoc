@@ -473,6 +473,7 @@ for (const entry of palaceRuleEntries) {
 const starAtDoc = JSON.parse(readFileSync('content/star-in-palace.json', 'utf8'));
 const starAtPalaces = starAtDoc.palaces ?? [];
 const MAIN_STARS = Object.keys(STAR_DEFS).filter((id) => STAR_DEFS[id].group === 'main');
+const AUX_STARS = Object.keys(STAR_DEFS).filter((id) => STAR_DEFS[id].group === 'aux');
 const toSimp = OpenCC.Converter({ from: 'tw', to: 'cn' });
 
 if (starAtPalaces.length !== 11) {
@@ -480,6 +481,7 @@ if (starAtPalaces.length !== 11) {
 }
 const seenStarAt = new Set();
 let starAtQuotes = 0;
+let starAtAuxQuotes = 0;
 for (const entry of starAtPalaces) {
   const where = `star-in-palace.json (${entry.vi ?? '?'})`;
   if (!Number.isInteger(entry.id) || entry.id < 1 || entry.id > 11) {
@@ -539,6 +541,69 @@ for (const entry of starAtPalaces) {
       errors.push(`${where}: chính tinh "${id}" chưa có câu và không được đánh dấu thiếu`);
     }
   }
+
+  // ── Phụ tinh theo cung ──
+  const aux = entry.aux ?? {};
+  const auxMissing = entry.auxMissing ?? [];
+  const heads = entry.heads ?? {};
+  if (new Set(auxMissing).size !== auxMissing.length) {
+    errors.push(`${where}: auxMissing bị lặp`);
+  }
+  for (const id of auxMissing) {
+    if (!AUX_STARS.includes(id)) errors.push(`${where}: auxMissing "${id}" không phải phụ tinh`);
+    if (aux[id]) errors.push(`${where}: "${id}" vừa có câu vừa đánh dấu thiếu`);
+  }
+  const usersOf = new Map();
+  for (const [id, quoteId] of Object.entries(aux)) {
+    if (!AUX_STARS.includes(id)) {
+      errors.push(`${where}: "${id}" không phải phụ tinh`);
+      continue;
+    }
+    const q = quotes.get(quoteId);
+    if (!q) {
+      errors.push(`${where}: quote_id "${quoteId}" không có trong content/quotes.jsonl`);
+      continue;
+    }
+    usedQuotes.add(q.id);
+    starAtAuxQuotes++;
+    usersOf.set(q.id, [...(usersOf.get(q.id) ?? []), id]);
+    if (q.source !== 'ziwei-quanshu') {
+      errors.push(`${where} (${quoteId}): lấy từ ${q.source}, không phải ziwei-quanshu`);
+    }
+    if (q.locator !== '卷二') {
+      errors.push(`${where} (${quoteId}): locator "${q.locator}" phải là 卷二`);
+    }
+    const headZh = heads[quoteId]?.zh ?? STAR_DEFS[id].zh;
+    if (!q.text_zh.startsWith(headZh) && !q.text_zh.startsWith(toSimp(headZh))) {
+      errors.push(`${where} (${quoteId}): câu Hán không mở đầu bằng "${headZh}"`);
+    }
+    if (!q.claim_vi || q.claim_vi.trim().length < 8) {
+      errors.push(`${where} (${quoteId}): thiếu claim_vi để hiển thị tiếng Việt`);
+    }
+  }
+  for (const [quoteId, head] of Object.entries(heads)) {
+    if (!usersOf.has(quoteId)) {
+      errors.push(`${where}: heads "${quoteId}" không được phụ tinh nào dùng`);
+      continue;
+    }
+    const names = head.vi.split(',').map((s) => s.trim());
+    for (const name of names) {
+      if (!AUX_STARS.some((id) => STAR_DEFS[id].vi === name)) {
+        errors.push(`${where}: heads "${quoteId}" ghi "${name}" không phải tên phụ tinh`);
+      }
+    }
+    for (const id of usersOf.get(quoteId)) {
+      if (!names.includes(STAR_DEFS[id].vi)) {
+        errors.push(`${where}: heads "${quoteId}" thiếu tên "${STAR_DEFS[id].vi}"`);
+      }
+    }
+  }
+  const auxAccounted = new Set([...Object.keys(aux), ...auxMissing]);
+  for (const id of AUX_STARS) {
+    if (!auxAccounted.has(id)) {
+      errors.push(`${where}: phụ tinh "${id}" chưa có câu và không được đánh dấu thiếu`);
+    }
+  }
 }
 for (let id = 1; id <= 11; id++) {
   if (!seenStarAt.has(id)) errors.push(`star-in-palace.json: thiếu cung id ${id}`);
@@ -583,7 +648,7 @@ console.log(
     ` · Độ sáng: ${Object.keys(brightnessDoc.stars ?? {}).length} sao / ${brightnessCells} ô` +
     ` · Nhật chủ: ${dayEntries.length} · Thập thần: ${seenGods.size}` +
     ` · Cung luận: ${palaceRuleEntries.length}×2 · Thuật ngữ: ${Object.keys(terms).length}` +
-    ` · Sao/cung: ${starAtQuotes} câu` +
+    ` · Sao/cung: ${starAtQuotes} chính + ${starAtAuxQuotes} phụ tinh` +
     ` · câu trích dùng: ${usedQuotes.size} · khoá đối chiếu: ${tokenChecks}`,
 );
 if (warnings.length) {

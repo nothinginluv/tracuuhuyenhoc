@@ -195,34 +195,45 @@ type StarInPalaceDoc = {
     locator: string;
     stars: Record<string, string>;
     missing: string[];
+    aux: Record<string, string>;
+    auxMissing: string[];
+    /** Câu dùng chung cho một mục gộp, ví dụ mục "文昌文曲" ở Huynh Đệ. */
+    heads?: Record<string, { zh: string; vi: string }>;
   }[];
 };
 
-const STAR_IN_PALACE = starInPalaceRaw as StarInPalaceDoc;
+const STAR_IN_PALACE = starInPalaceRaw as unknown as StarInPalaceDoc;
 const STAR_IN_PALACE_BY_ID = new Map(STAR_IN_PALACE.palaces.map((p) => [p.id, p]));
 
 /**
- * Mục của một cung. `stars` đã là câu trích; `missing` là những chính tinh mà
- * sách không chép mục riêng ở cung đó — giao diện phải nói rõ "nguồn không
- * chép", không được coi là thiếu bản dịch.
+ * Mục của một cung. `stars`/`aux` đã là câu trích; `missing` là chính tinh mà
+ * sách không chép mục riêng ở cung đó, `auxMissing` là phụ tinh cùng tình
+ * trạng — giao diện phải nói rõ "nguồn không chép", không được coi là thiếu
+ * bản dịch.
  */
 export function starInPalaceData(palace: Palace): {
   quote: (starId: string) => Quote | undefined;
+  head: (starId: string) => { zh: string; vi: string } | undefined;
   missing: string[];
+  auxMissing: string[];
   locator?: string;
 } {
   const index = PALACE_NAMES.findIndex((p) => p.vi === palace.nameVi);
   const entry = STAR_IN_PALACE_BY_ID.get(index);
-  if (!entry) return { quote: () => undefined, missing: [] };
+  if (!entry) {
+    return { quote: () => undefined, head: () => undefined, missing: [], auxMissing: [] };
+  }
+  const quoteAt = (starId: string) => QUOTES[entry.stars[starId] ?? entry.aux?.[starId] ?? ''];
   return {
-    quote: (starId) => QUOTES[entry.stars[starId] ?? ''],
+    quote: quoteAt,
+    head: (starId) => {
+      const q = quoteAt(starId);
+      return q ? entry.heads?.[q.id] : undefined;
+    },
     missing: entry.missing,
+    auxMissing: entry.auxMissing ?? [],
     locator: entry.locator,
   };
-}
-
-export function starInPalaceQuote(palace: Palace, starId: string): Quote | undefined {
-  return starInPalaceData(palace).quote(starId);
 }
 
 /** Quy tắc đọc vận — tam phương, đại hạn, tiểu hạn, lưu niên. */

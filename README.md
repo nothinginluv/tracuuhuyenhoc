@@ -11,7 +11,7 @@ Tra cứu **Tử Vi Đẩu Số** và **Bát Tự / Tứ Trụ** — công cụ 
 | Hạng mục | Trạng thái |
 |---|---|
 | Corpus Tầng A (3 bộ văn bản cổ) | ✅ pin sha256 |
-| Cổng kiểm trích dẫn | ✅ 3 tầng + self-test âm · **185 câu** |
+| Cổng kiểm trích dẫn | ✅ 3 tầng + self-test âm · **424 câu** |
 | Bảng tiết khí 1899–2101 | ✅ 4.872 instant UTC |
 | Bảng tháng âm lịch 1899–2102 | ✅ 2.523 tháng, khớp chuẩn TQ 100% |
 | 63 tỉnh pre-2025 + múi giờ lịch sử | ✅ |
@@ -54,9 +54,9 @@ npm run check       # typecheck + quotes + content + selftest + test
 - **Trang Phương pháp**: chuỗi tính, bảng preset, quy tắc Tử Vi/Bát Tự, giới hạn, nguồn + trích dẫn mở được tại chỗ.
 - **Trang Tinh diệu**: 14 chính tinh + 20 phụ tinh + 4 Tứ Hoá + 12 cung, mỗi mục mở được nguyên văn và nguồn; 4 phụ tinh còn lại được nêu tên là chưa có định nghĩa trong kho Tầng A.
 - **Bìa “Cổng Thiên Môn”**: nền sao vẽ bằng canvas 2D (số sao theo diện tích, tối đa 160, DPR chặn ở 2; dừng vẽ khi ra khỏi khung nhìn hoặc tab bị ẩn; `prefers-reduced-motion` vẽ một khung tĩnh), la bàn dịch nhẹ theo cuộn. Nút **Lập lá số của bạn** cuộn tới biểu mẫu theo chiều cao thật của header dính (không bị khuất sau header trên điện thoại), **Xem cách tính** mở trang Phương pháp.
-- **Khung đọc 12 cung**: dưới lá số Tử Vi là khối “Đọc lá số theo 12 cung” — tóm tắt Mệnh/Thân/sao chủ/tứ hoá/đại hạn/lưu niên, rồi một **khung đọc** gồm danh mục 12 cung (tên cung, can chi, đại hạn, chính tinh) và nội dung của đúng cung đang chọn: câu “thuận / trắc trở”, **câu riêng của từng chính tinh tại cung này** (卷二), định nghĩa chung của sao, phụ tinh, độ sáng, tứ hoá, tam hợp/đối cung. Desktop: danh mục dọc bên trái; điện thoại: dải cuộn ngang. Dùng mẫu tab ARIA (`tablist`/`tab`/`tabpanel`), phím ←/→/↑/↓/Home/End, nút “Cung trước / Sau”. Chỉ dựng nội dung một cung — nhẹ hơn 12 khối sổ xuống cũ. Dưới lá Bát Tự là khối “Nhật chủ, thập thần và các vận”.
-- **Bảng chi tiết từng cung**: mỗi ô trong lá số là một nút thật — bấm (hoặc Enter/Space) mở bảng trượt từ cạnh phải (điện thoại: trượt từ đáy lên) với toàn bộ nội dung cung: câu “thuận / trắc trở”, **câu riêng của chính tinh tại cung**, định nghĩa chung, phụ tinh kèm độ sáng và tứ hoá, tam hợp — đối cung. Escape để đóng, Tab quay vòng trong bảng, đóng xong focus trả về đúng ô vừa bấm; nền bị khoá cuộn. Nút “Cung trước / Cung sau” đi theo đúng thứ tự 12 cung tính từ Mệnh.
-- **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/334` câu đã có bản giảng; 149 câu “sao tại cung” mới dùng bản dịch sát chữ (chế độ “Dễ hiểu” hiển thị chính bản đó, không viết lại thành lời giảng để tránh diễn giải sai); phần còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**); trên điện thoại nghĩa hiện thành thẻ ở đáy màn hình để không bị cắt ở mép.
+- **Khung đọc 12 cung**: dưới lá số Tử Vi là khối “Đọc lá số theo 12 cung” — tóm tắt Mệnh/Thân/sao chủ/tứ hoá/đại hạn/lưu niên, rồi một **khung đọc** gồm danh mục 12 cung (tên cung, can chi, đại hạn, chính tinh) và nội dung của đúng cung đang chọn: câu “thuận / trắc trở”, **câu riêng của từng chính tinh và từng phụ tinh tại cung này** (卷二), định nghĩa chung của sao, độ sáng, tứ hoá, tam hợp/đối cung. Desktop: danh mục dọc bên trái; điện thoại: dải cuộn ngang. Dùng mẫu tab ARIA (`tablist`/`tab`/`tabpanel`), phím ←/→/↑/↓/Home/End, nút “Cung trước / Sau”. Chỉ dựng nội dung một cung — nhẹ hơn 12 khối sổ xuống cũ. Dưới lá Bát Tự là khối “Nhật chủ, thập thần và các vận”.
+- **Bảng chi tiết từng cung**: mỗi ô trong lá số là một nút thật — bấm (hoặc Enter/Space) mở bảng trượt từ cạnh phải (điện thoại: trượt từ đáy lên) với toàn bộ nội dung cung: câu “thuận / trắc trở”, **câu riêng của chính tinh và phụ tinh tại cung**, định nghĩa chung, độ sáng và tứ hoá, tam hợp — đối cung. Escape để đóng, Tab quay vòng trong bảng, đóng xong focus trả về đúng ô vừa bấm; nền bị khoá cuộn. Nút “Cung trước / Cung sau” đi theo đúng thứ tự 12 cung tính từ Mệnh.
+- **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/424` câu đã có bản giảng; 246 câu “sao tại cung” (149 chính tinh + 97 phụ tinh) mới dùng bản dịch sát chữ (chế độ “Dễ hiểu” hiển thị chính bản đó, không viết lại thành lời giảng để tránh diễn giải sai); phần còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**); trên điện thoại nghĩa hiện thành thẻ ở đáy màn hình để không bị cắt ở mép.
 - **Chế độ tối**: mặc định theo `prefers-color-scheme` (chế độ `system`), nút trong header chuyển sáng/tối và lựa chọn được lưu trong `localStorage` — xem mục *Design system*. Nền mực sâu, giữ độ tương phản chữ ≥ 4.5:1.
 - **Chia sẻ lá số**: sao chép URL (có fallback), chia sẻ qua Web Share API. Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
 - **Responsive**: lá số Tử Vi co từ 716px xuống 480px (và 360px dưới 480px) — không tràn ngang trên điện thoại. Bìa kiểm ở 360/480/716/900px: không tràn ngang, nút chính cao 44px, danh sách cam kết chuyển 3 → 2 → 1 cột.
@@ -116,7 +116,7 @@ chỉ dùng font hệ thống (serif cho tiêu đề, mono cho số và nhãn, C
 
 ### Giới hạn của bản web
 
-- Chỉ **Tử Vi + Bát Tự**. Phần luận giải đọc tới mức: sao ở cung nào, độ sáng tại cung đó, câu chung của cung, **câu riêng của 14 chính tinh tại 11 cung** (卷二), đại hạn và cung lưu niên — **chưa** có mục phụ tinh theo từng cung, tổ hợp sao, cách cục, tiểu hạn, vượng suy/dụng thần, hình xung hợp hại.
+- Chỉ **Tử Vi + Bát Tự**. Phần luận giải đọc tới mức: sao ở cung nào, độ sáng tại cung đó, câu chung của cung, **câu riêng của 14 chính tinh và 11 phụ tinh tại 11 cung** (卷二; Thiên Khôi/Thiên Việt chỉ có ở cung Phu Thê), đại hạn và cung lưu niên — **chưa** có mục theo cung cho 13 phụ tinh còn lại, tổ hợp sao, cách cục, tiểu hạn, vượng suy/dụng thần, hình xung hợp hại.
 - Năm sinh **1900–nay**. Sinh trước Tết 1900 vẫn xem được Bát Tự nhưng không an được Tử Vi (năm âm < 1900).
 - Toạ độ lấy theo **tỉnh lỵ**, sai số ~4 phút mỗi độ kinh tuyến khi dùng giờ mặt trời thật.
 - Không hỗ trợ Việt kiều / nơi sinh ngoài Việt Nam trong bản này.
@@ -303,7 +303,7 @@ Các tệp nội dung, cùng một luật: mỗi câu, mỗi từ khoá đều p
 | `content/day-masters.json` | Mười thiên can — bản tính nhật chủ, 三命通會 卷02 | 10 |
 | `content/ten-gods.json` | Định nghĩa thập thần, 淵海子平; 劫財 chưa có định nghĩa riêng | 9 |
 | `content/palace-rules.json` | Luận theo cung: câu “thuận” và “trắc trở” cho từng chi (論太歲小限…十二宫中吉凶) | 12 × 2 |
-| `content/star-in-palace.json` | Chính tinh tại từng cung, cắt từ 卷二 (`二 兄弟` … `十二 父母`); cung Mệnh dùng định nghĩa 卷一, 5 mục nguồn không chép được ghi trong `missing` | 11 × 14 |
+| `content/star-in-palace.json` | Chính tinh + phụ tinh tại từng cung, cắt từ 卷二 (`二 兄弟` … `十二 父母`); cung Mệnh dùng định nghĩa 卷一, 5 mục chính tinh nguồn không chép ghi trong `missing`, 13 phụ tinh không có mục ghi trong `auxMissing` | 11 × (14 + 11) |
 | `content/reading-rules.json` | Đọc vận: tam phương tứ chính, đại hạn, hai hạn chồng nhau, Nam/Bắc Đẩu, lưu niên | 5 |
 | `content/glossary.json` | Bảng tra thuật ngữ cho người mới (**biên soạn**, không phải trích dẫn) | 48 |
 
@@ -324,10 +324,10 @@ Mỗi mục trong `stars.json` gồm:
 
 Hai lớp kiểm, chạy trong `npm run check`:
 
-1. **`quotes:verify`** — câu Hán trong `content/quotes.jsonl` phải là chuỗi con thật của corpus đã pin sha256, đúng quyển. Hiện **185/185 câu khớp chính xác**.
+1. **`quotes:verify`** — câu Hán trong `content/quotes.jsonl` phải là chuỗi con thật của corpus đã pin sha256, đúng quyển. Hiện **424/424 câu khớp chính xác**.
 2. **`content:verify`** — mọi `quote_id` phải tồn tại; và **mỗi từ khoá hiển thị** (ngũ hành, đẩu, cung chủ, vai trò) phải xuất hiện nguyên văn trong chính các câu trích của mục đó. Bỏ câu trích thì chip biến mất theo, không thể "viết thêm cho đẹp". Bảng độ sáng còn được **đọc ngược độc lập** từ câu trích gốc để bắt lỗi generator.
 
-Hiện trạng: **34 sao · 4 hoá · 12 cung · 21 bảng độ sáng / 190 ô · 149 câu “sao tại cung” (11 cung × 14 chính tinh) · 10 nhật chủ · 9 thập thần · 313 câu trích được dùng · 99 khoá đối chiếu**.
+Hiện trạng: **34 sao · 4 hoá · 12 cung · 21 bảng độ sáng / 190 ô · 149 câu chính tinh + 97 câu phụ tinh “sao tại cung” · 10 nhật chủ · 9 thập thần · 403 câu trích được dùng · 99 khoá đối chiếu**.
 
 `npm run content:selftest` chạy cùng cổng trên một fixture cố tình sai (quote không tồn tại, ngũ hành không có trong câu trích, id sao lạ) và đòi cổng phải chặn — hiện chặn đúng **16 lỗi** — để chứng minh cổng không phải đồ trang trí.
 
@@ -339,6 +339,7 @@ Trang **Tinh diệu** trên web đọc thẳng `content/*.json`, hiển thị b�
 
 - **Tử Vi**: mỗi cung → câu “thuận / trắc trở” của cả cung (`palace-rules.json`) + **câu riêng của từng chính tinh tại cung đó** (`star-in-palace.json`) + chính tinh/phụ tinh + độ sáng tại chi đó + tứ hoá + tam hợp (`chi + 4, + 8`) và đối cung (`chi + 6`) + khoảng đại hạn. Sao nào nguồn không chép độ sáng thì hiện “nguồn không chép cung này”, không tự suy ra.
 - **Sao tại cung**: `star-in-palace.json` cắt từ **卷二** các mục `二 兄弟` … `十二 父母` — mỗi chính tinh một đoạn, gắn id sao của engine với id cung theo `PALACE_NAMES`. Cung Mệnh không có mục riêng trong 卷二, nên ở đó chỉ hiện câu định nghĩa sao của 卷一 (vốn nói về người có sao ấy tại Mệnh). Năm trường hợp nguồn không chép mục (`Tài Bạch · Thất Sát`, `Tật Ách · Tham Lang/Thiên Lương`, `Điền Trạch · Thất Sát`, `Phúc Đức · Thiên Lương`) được ghi trong `missing` và giao diện nói rõ “sách không chép mục riêng”, không coi là thiếu bản dịch.
+- **Phụ tinh tại cung**: cùng các mục 卷二, sách chép riêng cho **11 phụ tinh** — Văn Xương, Văn Khúc, Tả Phụ, Hữu Bật, Lộc Tồn, Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Thiên Khôi, Thiên Việt (Khôi/Việt chỉ có ở cung Phu Thê). Mục gộp như `文昌文曲`, `羊陀`, `火星铃星`, `天魁天钺` được cắt nguyên đoạn và gắn cùng một `quote_id` cho hai sao; trường hợp sách viết `羊玲`/`羊铃` được giữ nguyên văn nhưng ánh xạ đúng Kình Dương + Linh Tinh. 13 phụ tinh còn lại không có mục theo cung: ghi trong `auxMissing`, giao diện chỉ báo khi sao ấy thật sự đóng tại cung và dùng câu định nghĩa chung của 卷一.
 - **Lưu niên**: chi của năm dương lịch → cung tương ứng; câu luận lưu niên lấy từ `reading-rules.json`.
 - **Đại hạn**: `daHanCycles(chart, gender)` — dương nam/âm nữ đi thuận từ cung Phụ Mẫu, âm nam/dương nữ đi nghịch từ Huynh Đệ; tuổi khởi bằng số ngũ hành cục; mỗi bước 10 năm. Quy tắc và câu đọc mười năm đều có trích.
 - **Bát Tự**: nhật chủ theo can ngày (10 đoạn 三命通會), thập thần xuất hiện ở can trụ và tàng can (淵海子平), đại vận kèm thập thần của can vận.
@@ -411,7 +412,7 @@ packages/bazi-engine/
   test/       30 test (gồm đối chứng lunar-javascript)
   examples/   demo.ts
 corpus/       văn bản gốc đã làm sạch + lock hash + segments
-content/      sources.json (sổ nguồn) · quotes.jsonl (185 câu) · stars.json · hua.json · palaces.json
+content/      sources.json (sổ nguồn) · quotes.jsonl (424 câu) · stars.json · star-in-palace.json · hua.json · palaces.json
               brightness.json · dahan.json · day-masters.json · ten-gods.json
               palace-rules.json · reading-rules.json · glossary.json (bảng tra thuật ngữ)
 scripts/      fetch-corpus · verify-quotes · verify-content · seed-quotes · run-tests · gen-solar-terms · gen-lunar-months · gen-provinces
@@ -449,11 +450,11 @@ Sau khi deploy: kiểm header bằng `curl -I`, mở `/og.png`, chạy `npm run 
 
 Còn thiếu — cần cắt thêm câu từ corpus trước khi viết, không đoán:
 
-1. **Sao theo từng cung**: đã có **14 chính tinh × 11 cung** cắt từ 卷二 (`star-in-palace.json`); còn **phụ tinh theo từng cung** (Văn Xương, Tả Hữu, Kình Đà, Hoả Linh, Khôi Việt, Lộc Tồn…) — sách có mục nhưng chưa cắt.
+1. **Sao theo từng cung**: đã có **14 chính tinh + 11 phụ tinh × 11 cung** cắt từ 卷二 (`star-in-palace.json`); 13 phụ tinh còn lại (Thiên Mã, Địa Không, Địa Kiếp, Thiên Hình, Thiên Diêu, Hồng Loan, Thiên Hỷ, Tam Thai, Bát Toạ, Ân Quang, Thiên Quý, Thai Phụ, Phong Cáo) sách không có mục theo cung.
 2. **Cách cục** (格局): bảng nhận diện + câu luận riêng cho từng cách.
 3. **Tiểu hạn**: cách an chưa kiểm chứng trong kho đã pin; hiện chỉ có đại hạn và lưu niên.
 4. **Bát Tự**: vượng suy, dụng thần, hình xung hợp hại, định nghĩa riêng cho 劫財 và tách 偏財/正財.
-5. Độ sáng: 13 sao chưa có bảng, vài ô nguồn không chép.
+5. Độ sáng: 17 sao chưa có bảng, vài ô nguồn không chép.
 6. Code-split bundle (hiện ~569 KB minified / ~173 KB gzip; tách bảng lịch và engine).
 7. E2E Playwright cho luồng nhập → kết quả → chia sẻ URL → khối luận giải trong tab.
 8. `git init` → commit → push GitHub → nối Vercel (xem mục Triển khai).

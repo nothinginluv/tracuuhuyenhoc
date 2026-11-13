@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "$comment": "Chính tinh tại từng cung, sinh từ 紫微斗數全書 卷二 (các mục 二 兄弟 … 十二 父母). Cung Mệnh dùng câu định nghĩa sao ở 卷一. Chạy scripts/gen-star-in-palace.mjs để dựng lại.",
+  "$comment": "Chính tinh và phụ tinh tại từng cung, sinh từ 紫微斗數全書 卷二 (các mục 二 兄弟 … 十二 父母). Cung Mệnh dùng câu định nghĩa sao ở 卷一; phụ tinh không có mục theo cung nằm trong auxMissing. Chạy scripts/gen-star-in-palace.mjs để dựng lại.",
   "source": "ziwei-quanshu",
   "palaces": [
     {
@@ -24,7 +24,45 @@
         "qisha": "q_tv_0180",
         "pojun": "q_tv_0181"
       },
-      "missing": []
+      "missing": [],
+      "aux": {
+        "zuofu": "q_tv_0318",
+        "youbi": "q_tv_0319",
+        "lucun": "q_tv_0320",
+        "huoxing": "q_tv_0322",
+        "lingxing": "q_tv_0323",
+        "wenchang": "q_tv_0317",
+        "wenqu": "q_tv_0317",
+        "qingyang": "q_tv_0321"
+      },
+      "auxMissing": [
+        "tiankui",
+        "tianyue",
+        "tuoluo",
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
+      ],
+      "heads": {
+        "q_tv_0317": {
+          "zh": "文昌文曲",
+          "vi": "Văn Xương, Văn Khúc"
+        },
+        "q_tv_0321": {
+          "zh": "羊玲",
+          "vi": "Kình Dương, Linh Tinh"
+        }
+      }
     },
     {
       "id": 2,
@@ -47,7 +85,53 @@
         "qisha": "q_tv_0194",
         "pojun": "q_tv_0195"
       },
-      "missing": []
+      "missing": [],
+      "aux": {
+        "wenchang": "q_tv_0324",
+        "wenqu": "q_tv_0325",
+        "lucun": "q_tv_0326",
+        "zuofu": "q_tv_0327",
+        "youbi": "q_tv_0327",
+        "qingyang": "q_tv_0328",
+        "tuoluo": "q_tv_0328",
+        "huoxing": "q_tv_0329",
+        "lingxing": "q_tv_0329",
+        "tiankui": "q_tv_0330",
+        "tianyue": "q_tv_0330"
+      },
+      "auxMissing": [
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
+      ],
+      "heads": {
+        "q_tv_0327": {
+          "zh": "左辅右弼",
+          "vi": "Tả Phụ, Hữu Bật"
+        },
+        "q_tv_0328": {
+          "zh": "羊陀",
+          "vi": "Kình Dương, Đà La"
+        },
+        "q_tv_0329": {
+          "zh": "火星铃星",
+          "vi": "Hoả Tinh, Linh Tinh"
+        },
+        "q_tv_0330": {
+          "zh": "天魁天钺",
+          "vi": "Thiên Khôi, Thiên Việt"
+        }
+      }
     },
     {
       "id": 3,
@@ -70,7 +154,41 @@
         "qisha": "q_tv_0208",
         "pojun": "q_tv_0209"
       },
-      "missing": []
+      "missing": [],
+      "aux": {
+        "zuofu": "q_tv_0331",
+        "youbi": "q_tv_0332",
+        "wenchang": "q_tv_0333",
+        "wenqu": "q_tv_0334",
+        "lucun": "q_tv_0335",
+        "huoxing": "q_tv_0337",
+        "lingxing": "q_tv_0338",
+        "qingyang": "q_tv_0336",
+        "tuoluo": "q_tv_0336"
+      },
+      "auxMissing": [
+        "tiankui",
+        "tianyue",
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
+      ],
+      "heads": {
+        "q_tv_0336": {
+          "zh": "羊陀",
+          "vi": "Kình Dương, Đà La"
+        }
+      }
     },
     {
       "id": 4,
@@ -94,7 +212,41 @@
       },
       "missing": [
         "qisha"
-      ]
+      ],
+      "aux": {
+        "wenchang": "q_tv_0339",
+        "wenqu": "q_tv_0340",
+        "lucun": "q_tv_0342",
+        "qingyang": "q_tv_0343",
+        "tuoluo": "q_tv_0344",
+        "huoxing": "q_tv_0345",
+        "lingxing": "q_tv_0346",
+        "zuofu": "q_tv_0341",
+        "youbi": "q_tv_0341"
+      },
+      "auxMissing": [
+        "tiankui",
+        "tianyue",
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
+      ],
+      "heads": {
+        "q_tv_0341": {
+          "zh": "左辅右弼",
+          "vi": "Tả Phụ, Hữu Bật"
+        }
+      }
     },
     {
       "id": 5,
@@ -118,7 +270,41 @@
       "missing": [
         "tanlang",
         "tianliang"
-      ]
+      ],
+      "aux": {
+        "wenchang": "q_tv_0347",
+        "wenqu": "q_tv_0348",
+        "zuofu": "q_tv_0349",
+        "youbi": "q_tv_0350",
+        "lucun": "q_tv_0351",
+        "tuoluo": "q_tv_0352",
+        "qingyang": "q_tv_0353",
+        "lingxing": "q_tv_0354"
+      },
+      "auxMissing": [
+        "tiankui",
+        "tianyue",
+        "tianma",
+        "huoxing",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
+      ],
+      "heads": {
+        "q_tv_0354": {
+          "zh": "羊铃",
+          "vi": "Kình Dương, Linh Tinh"
+        }
+      }
     },
     {
       "id": 6,
@@ -141,7 +327,35 @@
         "qisha": "q_tv_0247",
         "pojun": "q_tv_0248"
       },
-      "missing": []
+      "missing": [],
+      "aux": {
+        "wenchang": "q_tv_0355",
+        "wenqu": "q_tv_0356",
+        "zuofu": "q_tv_0357",
+        "youbi": "q_tv_0358",
+        "lucun": "q_tv_0359",
+        "qingyang": "q_tv_0360",
+        "tuoluo": "q_tv_0361",
+        "huoxing": "q_tv_0362",
+        "lingxing": "q_tv_0363"
+      },
+      "auxMissing": [
+        "tiankui",
+        "tianyue",
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
+      ]
     },
     {
       "id": 7,
@@ -164,7 +378,35 @@
         "qisha": "q_tv_0261",
         "pojun": "q_tv_0262"
       },
-      "missing": []
+      "missing": [],
+      "aux": {
+        "wenchang": "q_tv_0364",
+        "wenqu": "q_tv_0365",
+        "zuofu": "q_tv_0366",
+        "youbi": "q_tv_0367",
+        "lucun": "q_tv_0368",
+        "qingyang": "q_tv_0369",
+        "tuoluo": "q_tv_0370",
+        "huoxing": "q_tv_0371",
+        "lingxing": "q_tv_0372"
+      },
+      "auxMissing": [
+        "tiankui",
+        "tianyue",
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
+      ]
     },
     {
       "id": 8,
@@ -187,7 +429,35 @@
         "qisha": "q_tv_0275",
         "pojun": "q_tv_0276"
       },
-      "missing": []
+      "missing": [],
+      "aux": {
+        "wenchang": "q_tv_0373",
+        "wenqu": "q_tv_0374",
+        "zuofu": "q_tv_0375",
+        "youbi": "q_tv_0376",
+        "lucun": "q_tv_0377",
+        "qingyang": "q_tv_0378",
+        "tuoluo": "q_tv_0379",
+        "huoxing": "q_tv_0380",
+        "lingxing": "q_tv_0381"
+      },
+      "auxMissing": [
+        "tiankui",
+        "tianyue",
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
+      ]
     },
     {
       "id": 9,
@@ -211,6 +481,34 @@
       },
       "missing": [
         "qisha"
+      ],
+      "aux": {
+        "wenchang": "q_tv_0382",
+        "wenqu": "q_tv_0383",
+        "zuofu": "q_tv_0384",
+        "lucun": "q_tv_0385",
+        "qingyang": "q_tv_0386",
+        "tuoluo": "q_tv_0387",
+        "huoxing": "q_tv_0388",
+        "lingxing": "q_tv_0389"
+      },
+      "auxMissing": [
+        "youbi",
+        "tiankui",
+        "tianyue",
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
       ]
     },
     {
@@ -235,6 +533,34 @@
       },
       "missing": [
         "tianliang"
+      ],
+      "aux": {
+        "wenchang": "q_tv_0390",
+        "zuofu": "q_tv_0391",
+        "youbi": "q_tv_0392",
+        "lucun": "q_tv_0393",
+        "qingyang": "q_tv_0394",
+        "tuoluo": "q_tv_0395",
+        "huoxing": "q_tv_0396",
+        "lingxing": "q_tv_0397"
+      },
+      "auxMissing": [
+        "wenqu",
+        "tiankui",
+        "tianyue",
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
       ]
     },
     {
@@ -258,7 +584,35 @@
         "qisha": "q_tv_0315",
         "pojun": "q_tv_0316"
       },
-      "missing": []
+      "missing": [],
+      "aux": {
+        "wenchang": "q_tv_0398",
+        "wenqu": "q_tv_0399",
+        "zuofu": "q_tv_0400",
+        "youbi": "q_tv_0401",
+        "lucun": "q_tv_0402",
+        "qingyang": "q_tv_0403",
+        "tuoluo": "q_tv_0404",
+        "huoxing": "q_tv_0405",
+        "lingxing": "q_tv_0406"
+      },
+      "auxMissing": [
+        "tiankui",
+        "tianyue",
+        "tianma",
+        "dikong",
+        "dijie",
+        "tianxing",
+        "tianyao",
+        "hongluan",
+        "tianxi",
+        "santai",
+        "bazuo",
+        "enguang",
+        "tiangui",
+        "taifu",
+        "fenggao"
+      ]
     }
   ]
 }
