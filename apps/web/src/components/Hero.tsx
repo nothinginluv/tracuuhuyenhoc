@@ -78,7 +78,7 @@ export function Hero({ onMethod }: { onMethod: () => void }) {
           <span className="hero-accent">Sách có chép.</span>
         </h1>
         <p className="hero-lede">
-          Tử Vi và Tứ Trụ dựng từ giờ sinh, múi giờ lịch sử và tiết khí. Mỗi lời luận mở được câu
+          Tử Vi và Tứ Trụ dựng từ giờ sinh, múi giờ lịch sử và tiết khí. Mọi lời luận mở được câu
           Hán đã kiểm; chỗ sách không chép, lá số để trống chứ không viết thay.
         </p>
 

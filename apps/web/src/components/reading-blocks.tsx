@@ -1,11 +1,14 @@
 ﻿/**
  * Khối luận giải dùng chung cho tab Tử Vi và tab Bát Tự.
  *
- * Mỗi khối chỉ chứa: dữ liệu engine (cung, sao, tuổi, thần) + câu của nguồn + nút "§"
- * mở nguyên văn. Câu hiển thị phụ thuộc chế độ đọc (xem `glossary.tsx`):
+ * Mỗi khối chỉ chứa: dữ liệu engine (cung, sao, tuổi, thần) + câu của nguồn.
+ * Câu hiển thị phụ thuộc chế độ đọc (xem `glossary.tsx`):
  *   · Dễ hiểu      → `plain_vi`: lời giảng không thuật ngữ;
  *   · Sát nguyên văn → `claim_vi`: bản dịch giữ chữ của nguồn.
  * Không có câu nào do giao diện tự viết.
+ *
+ * Thay đổi: bỏ chip § ở từng câu, gom tất cả nguồn vào một khối
+ * "Nguồn của mục này" (details/summary) ở cuối mỗi cung/mục.
  */
 import { BRANCHES_VI, STAR_DEFS, type Palace } from '../../../../packages/tuvi-engine/src/index.ts';
 import { TEN_GODS, type TenGodId } from '../../../../packages/bazi-engine/src/index.ts';
@@ -21,6 +24,19 @@ import {
   type ReadingStar,
   type TuViReading,
 } from '../reading.ts';
+
+/** Thu gom các quote_id duy nhất từ một mảng, bỏ undefined/trùng. */
+function uniqueQuotes(quotes: (Quote | undefined)[]): Quote[] {
+  const seen = new Set<string>();
+  const out: Quote[] = [];
+  for (const q of quotes) {
+    if (q && !seen.has(q.id)) {
+      seen.add(q.id);
+      out.push(q);
+    }
+  }
+  return out;
+}
 
 export function HuaChip({ hua }: { hua: NonNullable<ReadingStar['hua']> }) {
   return (
@@ -87,8 +103,17 @@ function StarLine({
   const atLabel = head
     ? `Tại cung ${palace.nameVi} · câu chung cho ${head.vi}`
     : `Tại cung ${palace.nameVi}`;
+
+  // Thu gom quote_id để truyền ra ngoài (dùng trong PalaceDetail)
+  const citeIds = uniqueQuotes([
+    at,
+    quote,
+    item.brightness?.quote,
+    item.hua?.cited[0]?.quote,
+  ]).map((q) => q.id);
+
   return (
-    <li className="reading-star">
+    <li className="reading-star" data-cite-ids={citeIds.join(',')}>
       <div className="reading-star-head">
         <strong>{item.star.vi}</strong>
         <BrightnessChip item={item} />
@@ -101,12 +126,6 @@ function StarLine({
           {quote && line && (
             <ClaimBlock label={at ? 'Định nghĩa chung' : undefined} text={line} />
           )}
-          <div className="cite-row">
-            {at && <Cite id={at.id} />}
-            {quote && <Cite id={quote.id} />}
-            {item.brightness?.quote && <Cite id={item.brightness.quote.id} />}
-            {item.hua?.cited[0] && <Cite id={item.hua.cited[0].quote.id} />}
-          </div>
         </>
       ) : (
         <p className="tiny muted">
@@ -122,24 +141,19 @@ function PalaceRule({ quote, tone }: { quote?: Quote; tone: 'good' | 'bad' }) {
   const { mode } = useReadingMode();
   if (!quote) return null;
   const line = quoteLine(quote, mode);
+  const label = tone === 'good' ? 'Nét thuận' : 'Điểm cần lưu ý';
   return (
-    <div className={`palace-rule palace-rule-${tone}`}>
+    <div className={`palace-rule palace-rule-${tone}`} data-cite-id={quote.id}>
       <div className="palace-rule-head">
-        <span className="palace-rule-tag">{tone === 'good' ? 'Thuận' : 'Trắc trở'}</span>
-        <span className="tiny muted">
-          theo sách: sao nào ở cung này thì {tone === 'good' ? 'dễ thông' : 'dễ vướng'}
-        </span>
+        <span className="palace-rule-tag">{label}</span>
       </div>
       <p className="reading-claim">{line}</p>
-      <div className="cite-row">
-        <Cite id={quote.id} />
-      </div>
     </div>
   );
 }
 
 /**
- * Toàn bộ nội dung một cung: câu "thuận / trắc trở", chính tinh, phụ tinh
+ * Toàn bộ nội dung một cung: câu "nét chính / cần lưu ý", sao chính, sao phụ
  * (kèm độ sáng và tứ hoá) và tam hợp — đối cung.
  *
  * Dùng chung cho khung đọc trong trang luận giải và cho bảng trượt mở từ lá
@@ -175,6 +189,20 @@ export function PalaceDetail({
     .map((id) => (STAR_DEFS as Record<string, { vi: string } | undefined>)[id]?.vi)
     .filter((vi): vi is string => Boolean(vi));
 
+  // Thu gom tất cả quote_id của cung này để hiển thị ở cuối
+  const allCiteIds = new Set<string>();
+  if (rules?.good) allCiteIds.add(rules.good.id);
+  if (rules?.bad) allCiteIds.add(rules.bad.id);
+  for (const s of stars) {
+    const q = starQuote(s.ref);
+    if (q) allCiteIds.add(q.id);
+    const atQ = atData.quote(s.star.id);
+    if (atQ) allCiteIds.add(atQ.id);
+    if (s.brightness?.quote) allCiteIds.add(s.brightness.quote.id);
+    if (s.hua?.cited[0]?.quote) allCiteIds.add(s.hua.cited[0].quote.id);
+  }
+  const allQuotes = Array.from(allCiteIds).map((id) => QUOTES[id]).filter(Boolean) as Quote[];
+
   return (
     <>
       {rules && (
@@ -190,15 +218,15 @@ export function PalaceDetail({
         <>
           {main.length === 0 ? (
             <>
-              <H>Chính tinh</H>
+              <H>Sao chính</H>
               <p className="muted">
-                Không có chính tinh tại cung. Các sao ở tam hợp và đối cung dưới đây là phần bổ
-                trợ — nguồn không nói riêng về trường hợp vô chính tinh tại đây.
+                Không có sao chính tại cung. Các sao ở tam hợp và đối cung dưới đây là phần bổ
+                trợ — nguồn không nói riêng về trường hợp vô sao chính tại đây.
               </p>
             </>
           ) : (
             <>
-              <H>Chính tinh</H>
+              <H>Sao chính</H>
               <ul className="reading-stars">
                 {main.map((s) => (
                   <StarLine
@@ -221,7 +249,7 @@ export function PalaceDetail({
 
           {aux.length > 0 && (
             <>
-              <H>Phụ tinh</H>
+              <H>Sao phụ</H>
               <ul className="reading-stars reading-stars-aux">
                 {aux.map((s) => (
                   <StarLine
@@ -234,7 +262,7 @@ export function PalaceDetail({
                 ))}
               </ul>
               <p className="tiny muted">
-                Sách chép mục riêng theo cung cho 11 phụ tinh — Thiên Khôi, Thiên Việt chỉ có ở
+                Sách chép mục riêng theo cung cho 11 sao phụ — Thiên Khôi, Thiên Việt chỉ có ở
                 cung Phu Thê. Sao còn lại dùng câu định nghĩa chung.
               </p>
               {auxNotWritten.length > 0 && (
@@ -254,7 +282,7 @@ export function PalaceDetail({
       <ul className="reading-triads">
         {triads.map((p, i) => {
           const label = ['Tam hợp', 'Đối cung', 'Tam hợp'][i];
-          const names = p.mainStars.map((s) => s.vi).join(', ') || 'không có chính tinh';
+          const names = p.mainStars.map((s) => s.vi).join(', ') || 'không có sao chính';
           return (
             <li key={p.branch}>
               <span className="muted">{label}</span> {p.nameVi} ({BRANCHES_VI[p.branch]}) —{' '}
@@ -267,15 +295,41 @@ export function PalaceDetail({
         Ba cung hợp chiếu và cung đối được liệt kê theo cấu trúc; câu luận về cách cục cụ thể
         chưa có trong kho văn bản nên không thêm nhận định.
       </p>
+
+      {/* Khối nguồn thu gọn ở cuối cung */}
+      {allQuotes.length > 0 && (
+        <details className="reading-sources">
+          <summary>
+            <span className="cite-mark">§</span>
+            Nguồn của mục này ({allQuotes.length})
+          </summary>
+          <div className="sources-list">
+            {allQuotes.map((q) => (
+              <Cite key={q.id} id={q.id} />
+            ))}
+          </div>
+        </details>
+      )}
     </>
   );
 }
+
+// Cần import QUOTES từ quotes-data để dùng trong PalaceDetail
+import { QUOTES } from '../quotes-data.ts';
 
 export type PalaceRules = Map<number, { good?: Quote; bad?: Quote }>;
 
 export function DaHanSection({ reading }: { reading: TuViReading }) {
   const { mode } = useReadingMode();
   const { chart, dahan } = reading;
+
+  const citeIds = new Set<string>();
+  if (DAHAN_QUOTES.direction) citeIds.add(DAHAN_QUOTES.direction.id);
+  if (DAHAN_QUOTES.tenYear) citeIds.add(DAHAN_QUOTES.tenYear.id);
+  const startAgeQuote = DAHAN_QUOTES.startAge(dahan.startAge);
+  if (startAgeQuote) citeIds.add(startAgeQuote.id);
+  const allQuotes = Array.from(citeIds).map((id) => QUOTES[id]).filter(Boolean) as Quote[];
+
   return (
     <div className="mini-card reading-dahan">
       <h3>Đại hạn — mười năm một cung</h3>
@@ -292,7 +346,7 @@ export function DaHanSection({ reading }: { reading: TuViReading }) {
               <th>Tuổi</th>
               <th>Cung</th>
               <th>Chi</th>
-              <th>Chính tinh</th>
+              <th>Sao chính</th>
             </tr>
           </thead>
           <tbody>
@@ -301,9 +355,7 @@ export function DaHanSection({ reading }: { reading: TuViReading }) {
               return (
                 <tr key={s.index} className={p.isSoul ? 'is-soul' : ''}>
                   <td className="muted">{s.index}</td>
-                  <td>
-                    {s.fromAge}–{s.toAge}
-                  </td>
+                  <td>{s.fromAge}–{s.toAge}</td>
                   <td>{s.palaceVi}</td>
                   <td>{s.branchVi}</td>
                   <td>{p.mainStars.map((x) => x.vi).join(', ') || '—'}</td>
@@ -313,24 +365,30 @@ export function DaHanSection({ reading }: { reading: TuViReading }) {
           </tbody>
         </table>
       </div>
-      <div className="sources">
-        <h4>Quy tắc &amp; cách đọc mười năm</h4>
-        <div className="cite-row">
-          {DAHAN_QUOTES.direction && <Cite id={DAHAN_QUOTES.direction.id} />}
-          {DAHAN_QUOTES.startAge(dahan.startAge) && (
-            <Cite id={DAHAN_QUOTES.startAge(dahan.startAge)!.id} />
-          )}
-          {DAHAN_QUOTES.tenYear && <Cite id={DAHAN_QUOTES.tenYear.id} />}
-        </div>
-        {DAHAN_QUOTES.tenYear && (
-          <p className="reading-claim">{quoteLine(DAHAN_QUOTES.tenYear, mode)}</p>
-        )}
-        <p className="tiny muted">
-          Tuổi ghi đúng như con số trong sách (khởi từ số của{' '}
-          <GlossaryTerm term="cục">ngũ hành cục</GlossaryTerm>), không phải tuổi dương lịch. Đại
-          hạn nói về cung nào, không phải lời dự báo từng năm; lưu niên chưa có trong bản này.
-        </p>
-      </div>
+
+      {DAHAN_QUOTES.tenYear && (
+        <p className="reading-claim">{quoteLine(DAHAN_QUOTES.tenYear, mode)}</p>
+      )}
+
+      <p className="tiny muted">
+        Tuổi ghi đúng như con số trong sách (khởi từ số của{' '}
+        <GlossaryTerm term="cục">ngũ hành cục</GlossaryTerm>), không phải tuổi dương lịch. Đại
+        hạn nói về cung nào, không phải lời dự báo từng năm; lưu niên chưa có trong bản này.
+      </p>
+
+      {allQuotes.length > 0 && (
+        <details className="reading-sources">
+          <summary>
+            <span className="cite-mark">§</span>
+            Nguồn của mục này ({allQuotes.length})
+          </summary>
+          <div className="sources-list">
+            {allQuotes.map((q) => (
+              <Cite key={q.id} id={q.id} />
+            ))}
+          </div>
+        </details>
+      )}
     </div>
   );
 }
@@ -345,8 +403,9 @@ function GodItem({
   places: string[];
 }) {
   const { mode } = useReadingMode();
+  const citeId = quote?.id;
   return (
-    <li className="reading-god">
+    <li className="reading-god" data-cite-id={citeId ?? ''}>
       <div className="reading-star-head">
         <strong>{TEN_GODS[id].vi}</strong>
         <span className="tiny muted">{places.join(' · ')}</span>
@@ -355,9 +414,6 @@ function GodItem({
         <>
           {quote.short_vi && <p className="reading-claim reading-claim-short">{quote.short_vi}</p>}
           <p className="reading-claim">{quoteLine(quote, mode)}</p>
-          <div className="cite-row">
-            <Cite id={quote.id} />
-          </div>
         </>
       ) : (
         <p className="tiny muted">Kho văn bản chưa có định nghĩa riêng cho thần này.</p>
@@ -370,6 +426,14 @@ export function DayMasterBlock({ reading }: { reading: BaziReading }) {
   const { mode } = useReadingMode();
   const { chart } = reading;
   const line = quoteLine(reading.dayMasterQuote, mode);
+
+  const citeIds = new Set<string>();
+  if (reading.dayMasterQuote) citeIds.add(reading.dayMasterQuote.id);
+  for (const g of reading.gods) {
+    if (g.quote) citeIds.add(g.quote.id);
+  }
+  const allQuotes = Array.from(citeIds).map((id) => QUOTES[id]).filter(Boolean) as Quote[];
+
   return (
     <>
       <div className="mini-card reading-daymaster">
@@ -386,9 +450,6 @@ export function DayMasterBlock({ reading }: { reading: BaziReading }) {
               </p>
             )}
             <p className="reading-claim">{line}</p>
-            <div className="cite-row">
-              <Cite id={reading.dayMasterQuote.id} />
-            </div>
           </>
         )}
         <p className="tiny muted">
@@ -415,6 +476,20 @@ export function DayMasterBlock({ reading }: { reading: BaziReading }) {
             {reading.missingGods.map((id) => TEN_GODS[id].vi).join(', ')}. Các thần này vẫn hiện
             tên khi xuất hiện, nhưng không kèm câu luận.
           </p>
+        )}
+
+        {allQuotes.length > 0 && (
+          <details className="reading-sources">
+            <summary>
+              <span className="cite-mark">§</span>
+              Nguồn của mục này ({allQuotes.length})
+            </summary>
+            <div className="sources-list">
+              {allQuotes.map((q) => (
+                <Cite key={q.id} id={q.id} />
+              ))}
+            </div>
+          </details>
         )}
       </div>
     </>

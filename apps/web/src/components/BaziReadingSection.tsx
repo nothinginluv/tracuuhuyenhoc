@@ -22,7 +22,7 @@ export function BaziReadingSection({ chart }: { chart: BaziChart }) {
         <p className="eyebrow">Luận giải</p>
         <h3 id="bazi-reading-title">Nhật chủ, thập thần và các vận</h3>
         <p className="muted">
-          Đọc theo thứ tự: can ngày nói về bạn là người thế nào; các thần đi kèm nói về cách bạn
+          Đọc theo thứ tự: can ngày nói về bản tính của bạn; các thần đi kèm nói về cách bạn
           làm việc và cách tiền bạc, công việc đến; mỗi vận 10 năm đổi một lần. Từ còn lạ thì rê
           chuột hoặc bấm để xem nghĩa.
         </p>

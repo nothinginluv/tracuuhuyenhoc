@@ -4,7 +4,7 @@
  * · `GlossaryTerm` — bọc một từ chuyên môn; hover/bấm để xem nghĩa bằng tiếng Việt.
  *   Nghĩa lấy từ `content/glossary.json` (phần biên soạn, không phải trích dẫn).
  * · `useReadingMode` — "Dễ hiểu" (mặc định) hiện lời giảng không thuật ngữ;
- *   "Nguyên văn dịch" hiện bản dịch sát chữ của nguồn. Cả hai đều mở được câu Hán.
+ *   "Nguyên văn" hiện bản dịch sát chữ của nguồn. Cả hai đều mở được câu Hán.
  */
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import glossaryRaw from '../../../content/glossary.json';
@@ -64,7 +64,7 @@ export function useReadingMode(): ReadingModeValue {
   return useContext(ReadingModeContext);
 }
 
-/** Nút chuyển giữa "Dễ hiểu" và "Nguyên văn dịch". */
+/** Nút chuyển giữa "Dễ hiểu" và "Nguyên văn". */
 export function ReadingModeToggle({ label = 'Cách đọc' }: { label?: string }) {
   const { mode, setMode } = useReadingMode();
   return (
@@ -83,7 +83,7 @@ export function ReadingModeToggle({ label = 'Cách đọc' }: { label?: string }
           aria-pressed={mode === 'literal'}
           onClick={() => setMode('literal')}
         >
-          Sát nguyên văn
+          Nguyên văn
         </button>
       </div>
     </div>

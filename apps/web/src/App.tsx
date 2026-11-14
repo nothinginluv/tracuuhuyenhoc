@@ -51,8 +51,8 @@ function readInitial(): { values: FormValues; active: boolean } | null {
     : DEFAULT_FORM.preset;
   const genderRaw = p.get('gender');
   const gender: Gender = genderRaw === 'nu' ? 'nu' : 'nam';
-  const provinceRaw = p.get('province') ?? '';
-  const province = PROVINCES.some((x) => x.code === provinceRaw) ? provinceRaw : '';
+  const provinceRaw = p.get('province');
+  const province: string = provinceRaw && PROVINCES.some((x) => x.code === provinceRaw) ? provinceRaw : '';
   const ziRaw = p.get('zi');
   const ziBoundary: FormValues['ziBoundary'] =
     ziRaw === 'late' || ziRaw === 'early' ? ziRaw : '';
@@ -419,17 +419,17 @@ export function App() {
                     </p>
                   </div>
                 )
-              )}
-              {tab === 'bazi' && (
-                <BaziView
-                  chart={result.bazi}
-                  ctx={result.ctx}
-                  gender={computedWith?.gender ?? values.gender}
-                />
-              )}
-              {tab === 'calc' && (
-                <CalcTrace ctx={result.ctx} tuvi={result.tuvi} bazi={result.bazi} />
-              )}
+                )}
+                {tab === 'bazi' && (
+                  <BaziView
+                    chart={result.bazi}
+                    ctx={result.ctx}
+                    gender={computedWith?.gender ?? values.gender}
+                  />
+                )}
+                {tab === 'calc' && (
+                  <CalcTrace ctx={result.ctx} tuvi={result.tuvi} bazi={result.bazi} />
+                )}
               </Suspense>
             </section>
           )}

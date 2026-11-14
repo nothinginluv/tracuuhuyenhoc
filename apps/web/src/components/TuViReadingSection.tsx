@@ -11,14 +11,15 @@ import {
   type TuViReading,
 } from '../reading.ts';
 import { ReadingPanel } from './ReadingPanel.tsx';
+import { QUOTES, type Quote } from '../quotes-data.ts';
 
 const HUA_ORDER: Record<string, number> = { loc: 0, quyen: 1, khoa: 2, ky: 3 };
 
 type Props = { chart: TuViChart; gender: TuViGender; reading?: TuViReading };
 
 /**
- * Phần luận giải nằm ngay dưới lá số Tử Vi: tổng quan + 12 cung (kèm câu "thuận /
- * trắc trở" theo cung) + lưu niên + đại hạn.
+ * Phần luận giải nằm ngay dưới lá số Tử Vi: tổng quan + 12 cung (kèm câu "nét chính /
+ * cần lưu ý" theo cung) + lưu niên + đại hạn.
  */
 export function TuViReadingSection({ chart, gender, reading: provided }: Props) {
   const { mode } = useReadingMode();
@@ -32,15 +33,23 @@ export function TuViReadingSection({ chart, gender, reading: provided }: Props) 
   const currentYear = new Date().getFullYear();
   const liuNian = liuNianStep(currentYear);
 
+  // Thu gom quote cho phần tổng quan
+  const overviewCiteIds = new Set<string>();
+  if (READING_RULES.ptc) overviewCiteIds.add(READING_RULES.ptc.id);
+  if (DAHAN_QUOTES.direction) overviewCiteIds.add(DAHAN_QUOTES.direction.id);
+  const startAgeQuote = DAHAN_QUOTES.startAge(dahan.startAge);
+  if (startAgeQuote) overviewCiteIds.add(startAgeQuote.id);
+  const overviewQuotes = Array.from(overviewCiteIds).map((id) => QUOTES[id]).filter(Boolean) as Quote[];
+
   return (
     <div className="reading-phase" aria-labelledby="tuvi-reading-title">
       <div className="reading-phase-head">
         <p className="eyebrow">Luận giải</p>
         <h3 id="tuvi-reading-title">Đọc lá số theo 12 cung</h3>
         <p className="muted">
-          Chọn một cung trong danh mục để đọc: câu ngắn về cung, câu riêng của từng chính tinh tại
-          cung đó, định nghĩa chung của sao, phụ tinh, độ sáng và tứ hoá. Nút “§” mở đúng đoạn
-          chữ Hán trong sách; từ còn lạ thì rê chuột hoặc bấm vào để xem nghĩa.
+          Chọn một cung trong danh mục để đọc: câu ngắn về cung, câu riêng của từng sao chính tại
+          cung đó, định nghĩa chung của sao, sao phụ, độ sáng và tứ hoá. Từ còn lạ thì rê chuột hoặc
+          bấm vào để xem nghĩa.
         </p>
       </div>
 
@@ -56,7 +65,7 @@ export function TuViReadingSection({ chart, gender, reading: provided }: Props) 
               {reading.soul.stars
                 .filter((s) => s.star.group === 'main')
                 .map((s) => `${s.star.vi} (${s.brightness?.level?.vi?.toLowerCase() ?? 'nguồn không chép'})`)
-                .join(', ') || 'không có chính tinh'}
+                .join(', ') || 'không có sao chính'}
             </dd>
           </div>
           <div>
@@ -68,7 +77,7 @@ export function TuViReadingSection({ chart, gender, reading: provided }: Props) 
               {reading.body.stars
                 .filter((s) => s.star.group === 'main')
                 .map((s) => s.star.vi)
-                .join(', ') || 'không có chính tinh'}
+                .join(', ') || 'không có sao chính'}
             </dd>
           </div>
           <div>
@@ -109,29 +118,42 @@ export function TuViReadingSection({ chart, gender, reading: provided }: Props) 
             </dd>
           </div>
         </dl>
-        <div className="cite-row">
-          {READING_RULES.ptc && <Cite id={READING_RULES.ptc.id} />}
-          {DAHAN_QUOTES.direction && <Cite id={DAHAN_QUOTES.direction.id} />}
-          {DAHAN_QUOTES.startAge(dahan.startAge) && (
-            <Cite id={DAHAN_QUOTES.startAge(dahan.startAge)!.id} />
-          )}
-        </div>
+
+        {overviewQuotes.length > 0 && (
+          <details className="reading-sources">
+            <summary>
+              <span className="cite-mark">§</span>
+              Nguồn của phần này ({overviewQuotes.length})
+            </summary>
+            <div className="sources-list">
+              {overviewQuotes.map((q) => (
+                <Cite key={q.id} id={q.id} />
+              ))}
+            </div>
+          </details>
+        )}
       </div>
 
       {READING_RULES.ptc && (
         <div className="reading-tip">
           <p className="reading-claim">{quoteLine(READING_RULES.ptc, mode)}</p>
-          <div className="cite-row">
-            <Cite id={READING_RULES.ptc.id} />
-          </div>
+          <details className="reading-sources">
+            <summary>
+              <span className="cite-mark">§</span>
+              Nguồn của câu này
+            </summary>
+            <div className="sources-list">
+              <Cite id={READING_RULES.ptc.id} />
+            </div>
+          </details>
         </div>
       )}
 
       <ReadingPanel reading={reading} rules={rules} />
 
       <p className="tiny muted reading-limit">
-        Chưa có, ghi rõ để không đoán: mục phụ tinh theo từng cung và tổ hợp sao; cách cục; tiểu
-        hạn. Bản này đọc tới mức: sao nào ở cung nào, câu riêng của 14 chính tinh tại cung (卷二),
+        Chưa có, ghi rõ để không đoán: mục sao phụ theo từng cung và tổ hợp sao; cách cục; tiểu
+        hạn. Bản này đọc tới mức: sao nào ở cung nào, câu riêng của 14 sao chính tại cung (卷二),
         câu chung của cung, độ sáng tại cung đó, đại hạn và cung lưu niên.
       </p>
     </div>

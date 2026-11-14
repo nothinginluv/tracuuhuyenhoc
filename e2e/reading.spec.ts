@@ -45,9 +45,13 @@ test('nhập lá số, đọc cung, mở nguyên văn và chia sẻ URL', async 
   await expect(grouped.first()).toBeVisible();
   await expect(panel.getByText('Định nghĩa chung').first()).toBeVisible();
 
-  // Dẫn nguồn: mở "§" và đọc câu Hán đã kiểm.
-  const cite = panel.locator('details.cite').first();
-  await cite.locator('summary').click();
+  // Dẫn nguồn: mở "Nguồn của mục này" rồi bấm "§" để đọc câu Hán đã kiểm.
+  const sources = panel.locator('details.reading-sources').first();
+  // Click the summary of the reading-sources itself (not nested cite summaries)
+  await sources.locator('> summary').first().click();
+  await expect(sources.locator('details.cite').first()).toBeVisible();
+  const cite = sources.locator('details.cite').first();
+  await cite.locator('> summary').first().click();
   await expect(cite.locator('.cite-zh')).toBeVisible();
   await expect(cite.locator('.cite-zh')).not.toBeEmpty();
   await expect(cite).toContainText('Wikisource');
