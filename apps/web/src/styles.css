@@ -2288,9 +2288,12 @@ h1 {
 }
 
 @media (max-width: 480px) {
+  :root { --header-h: 100px; }
+  .site-head { height: auto; min-height: var(--header-h); }
   .site-head-inner {
+    align-content: center;
     gap: 8px;
-    padding: 0 16px;
+    padding: 6px 16px;
   }
   .site-nav {
     order: 3;
