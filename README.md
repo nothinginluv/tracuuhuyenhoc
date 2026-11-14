@@ -60,7 +60,7 @@ npm run e2e         # E2E Playwright: nhập → lá số → cung → nguyên v
 - **Khung đọc 12 cung**: dưới lá số Tử Vi là khối “Đọc lá số theo 12 cung” — tóm tắt Mệnh/Thân/sao chủ/tứ hoá/đại hạn/lưu niên, rồi một **khung đọc** gồm danh mục 12 cung (tên cung, can chi, đại hạn, chính tinh) và nội dung của đúng cung đang chọn: câu “thuận / trắc trở”, **câu riêng của từng chính tinh và từng phụ tinh tại cung này** (卷二), định nghĩa chung của sao, độ sáng, tứ hoá, tam hợp/đối cung. Desktop: danh mục dọc bên trái; điện thoại: dải cuộn ngang. Dùng mẫu tab ARIA (`tablist`/`tab`/`tabpanel`), phím ←/→/↑/↓/Home/End, nút “Cung trước / Sau”. Chỉ dựng nội dung một cung — nhẹ hơn 12 khối sổ xuống cũ. Dưới lá Bát Tự là khối “Nhật chủ, thập thần và các vận”.
 - **Bảng chi tiết từng cung**: mỗi ô trong lá số là một nút thật — bấm (hoặc Enter/Space) mở bảng trượt từ cạnh phải (điện thoại: trượt từ đáy lên) với toàn bộ nội dung cung: câu “thuận / trắc trở”, **câu riêng của chính tinh và phụ tinh tại cung**, định nghĩa chung, độ sáng và tứ hoá, tam hợp — đối cung. Escape để đóng, Tab quay vòng trong bảng, đóng xong focus trả về đúng ô vừa bấm; nền bị khoá cuộn. Nút “Cung trước / Cung sau” đi theo đúng thứ tự 12 cung tính từ Mệnh.
 - **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/427` câu đã có bản giảng; 246 câu “sao tại cung” (149 chính tinh + 97 phụ tinh) mới dùng bản dịch sát chữ (chế độ “Dễ hiểu” hiển thị chính bản đó, không viết lại thành lời giảng để tránh diễn giải sai); phần còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**); trên điện thoại nghĩa hiện thành thẻ ở đáy màn hình để không bị cắt ở mép.
-- **Chế độ tối**: mặc định theo `prefers-color-scheme` (chế độ `system`), nút trong header chuyển sáng/tối và lựa chọn được lưu trong `localStorage` — xem mục *Design system*. Nền mực sâu, giữ độ tương phản chữ ≥ 4.5:1.
+- **Giao diện “Vũ Trụ Tử Vi”**: **chỉ chế độ sáng** — mực tàu, giấy dó, son ấn, vàng cổ, ngọc bích. Không còn nút đổi nền, không đọc `prefers-color-scheme`; `color-scheme: light` và `meta[theme-color]` cố định. Breakpoints 360 / 480 / 716 / 900 / 1140px; header mực tàu dính trên cùng, dưới 480px nav xuống hàng riêng để không tràn ngang. Chữ giữ tương phản ≥ 4.5:1 trên nền giấy.
 - **Chia sẻ lá số**: sao chép URL (có fallback), chia sẻ qua Web Share API. Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
 - **Responsive**: lá số Tử Vi co từ 716px xuống 480px (và 360px dưới 480px) — không tràn ngang trên điện thoại. Bìa kiểm ở 360/480/716/900px: không tràn ngang, nút chính cao 44px, danh sách cam kết chuyển 3 → 2 → 1 cột.
 - **Giảm chuyển động**: tôn trọng `prefers-reduced-motion` (tắt la bàn xoay, parallax, nền sao động, nhún nút, cảm ứng).
@@ -77,7 +77,7 @@ apps/web/
   design-preview.html   thư viện component (chỉ chạy ở dev, không vào gói build)
   src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · locator.ts · quotes.tsx · stars.ts · reading.ts · share.ts · styles.css
   src/design-system/
-              tokens.ts (thang đo + biến CSS ánh xạ sang JS) · ThemeProvider.tsx (light/dark/system)
+              tokens.ts (thang đo + biến CSS ánh xạ sang JS)
               ui.css (style component base) · preview.css (chỉ dùng cho thư viện)
   src/components/ui/
               BaseComponents.tsx — Button · Card · Input · Textarea · Select · Checkbox · Radio · Switch
@@ -95,21 +95,20 @@ apps/web/
 
 ### Design system
 
-Nền tảng cho bản giao diện mới, đặt ở `src/design-system` + `src/components/ui`:
+Nền tảng cho giao diện “Vũ Trụ Tử Vi”, đặt ở `src/design-system` + `src/components/ui`:
 
-- **Một nguồn màu duy nhất**: `styles.css` giữ biến CSS (`--ink`, `--paper`, `--cinnabar`, `--gold`…),
-  `[data-theme="dark"]` lật lại giá trị. `tokens.ts` chỉ *ánh xạ* các biến đó sang JS (cho canvas/SVG)
-  và giữ thang khoảng cách 4px, cỡ chữ, breakpoints 360/480/716/900/1140 — **không khai báo lại mã màu**
-  để tránh lệch giữa CSS và JS.
-- **`ThemeProvider`**: `light | dark | system`, lưu `localStorage`, theo dõi `prefers-color-scheme` khi ở
-  chế độ `system`, cập nhật `meta[theme-color]`. `main.tsx` đặt `data-theme` trước khi React render
-  để không nháy màu.
+- **Một nguồn màu duy nhất**: `styles.css` giữ biến CSS (`--ink`, `--paper`, `--cinnabar`, `--gold`…).
+  Chỉ một bảng màu sáng — không có `[data-theme]`, không có bảng tối. `tokens.ts` chỉ *ánh xạ* các biến đó
+  sang JS (cho canvas/SVG) và giữ thang khoảng cách 4px, cỡ chữ, breakpoints 360/480/716/900/1140 —
+  **không khai báo lại mã màu** để tránh lệch giữa CSS và JS.
+- **Không có ThemeProvider**: `main.tsx` render thẳng `App` trong `ErrorBoundary` + `ReadingModeProvider`;
+  không đặt `data-theme`, không lưu lựa chọn nền trong `localStorage`, không theo dõi `prefers-color-scheme`.
 - **Component base** dùng class `ds-*` thuần (không Tailwind): `Button` (6 biến thể × 4 cỡ, có loading),
   `Card` + header/title/description/footer, `Input`/`Textarea`/`Select` (nhãn, gợi ý, lỗi, icon),
   `Checkbox`/`Radio`/`Switch`. Mọi id sinh bằng `useId`; lỗi form đi kèm `aria-invalid` +
   `aria-describedby`; vòng focus dùng `--gold`; mọi chuyển động tắt theo `prefers-reduced-motion`.
-- **Thư viện xem trước**: mở `/design-preview.html` khi chạy `npm run dev` để duyệt mọi biến thể ở cả
-  hai chế độ. Trang này không nằm trong `dist/web` (Vite chỉ build `index.html`).
+- **Thư viện xem trước**: mở `/design-preview.html` khi chạy `npm run dev` để duyệt mọi biến thể
+  trong chế độ sáng duy nhất. Trang này không nằm trong `dist/web` (Vite chỉ build `index.html`).
 
 
 Giao diện theo hướng huyền học Trung Hoa: nền giấy dó, dải mực tàu, son ấn, vàng cổ, ngọc bích.

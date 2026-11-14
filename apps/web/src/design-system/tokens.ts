@@ -35,22 +35,12 @@ export const cssVar = {
 
 /** Bảng màu thô (chỉ để vẽ canvas/SVG cần giá trị thật). */
 export const palette = {
-  light: {
-    ink: '#241d16',
-    paper: '#f5efe3',
-    paper2: '#fbf7ee',
-    cinnabar: '#9c2f22',
-    gold: '#a07b3c',
-    jade: '#3d6a56',
-  },
-  dark: {
-    ink: '#e8dcc8',
-    paper: '#1a140e',
-    paper2: '#1e1811',
-    cinnabar: '#b04a38',
-    gold: '#c9a868',
-    jade: '#5d8a73',
-  },
+  ink: '#241d16',
+  paper: '#faf6ed',
+  paper2: '#f5efe3',
+  cinnabar: '#9c2f22',
+  gold: '#a07b3c',
+  jade: '#3d6a56',
 } as const;
 
 /** Thang 4px — dùng cho padding/margin/gap. */

@@ -2,13 +2,12 @@
  * Thư viện xem trước design system — chỉ chạy khi mở /design-preview.html
  * trong chế độ dev. Không nằm trong gói production (Vite chỉ build index.html).
  *
- * Mục đích: duyệt bằng mắt mọi biến thể component ở cả hai chế độ sáng/tối
- * trước khi đem vào PalaceCard, ReadingPanel, BirthForm…
+ * Mục đích: duyệt bằng mắt mọi biến thể component trước khi đem vào
+ * PalaceCard, ReadingPanel, BirthForm…
  */
 
 import { StrictMode, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ThemeProvider, useTheme } from './design-system/ThemeProvider.tsx';
 import {
   Button,
   Card,
@@ -37,7 +36,6 @@ const Section = ({ title, note, children }: { title: string; note?: string; chil
 );
 
 function Preview() {
-  const { resolvedTheme, toggleTheme } = useTheme();
   const [picked, setPicked] = useState('tuvi');
   const [agree, setAgree] = useState(true);
   const [compact, setCompact] = useState(false);
@@ -50,12 +48,9 @@ function Preview() {
           <h1 className="pv-title">Thư viện component</h1>
           <p className="pv-sub">
             Mực tàu · giấy dó · son ấn · vàng cổ · ngọc bích. Chỉ dùng biến CSS trong{' '}
-            <code>styles.css</code>, tự đổi theo chế độ sáng/tối.
+            <code>styles.css</code>, một chế độ sáng duy nhất.
           </p>
         </div>
-        <Button variant="outline" onClick={toggleTheme}>
-          {resolvedTheme === 'dark' ? 'Nền sáng' : 'Nền tối'}
-        </Button>
       </header>
 
       <Section title="Button" note="6 biến thể · 4 cỡ · trạng thái loading và disabled.">
@@ -173,8 +168,6 @@ if (!el) throw new Error('Không tìm thấy #root');
 
 createRoot(el).render(
   <StrictMode>
-    <ThemeProvider>
-      <Preview />
-    </ThemeProvider>
+    <Preview />
   </StrictMode>,
 );
