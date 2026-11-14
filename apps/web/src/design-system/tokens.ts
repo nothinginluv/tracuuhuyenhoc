@@ -1,5 +1,5 @@
 /**
- * Design tokens — "Vũ Trụ Tử Vi".
+ * Design tokens — "Sổ Thiên Văn".
  *
  * Nguồn sự thật duy nhất cho màu sắc / khoảng cách là `styles.css` (biến CSS).
  * File này chỉ ánh xạ những biến đó sang JS để dùng trong code (canvas, SVG,
@@ -35,12 +35,12 @@ export const cssVar = {
 
 /** Bảng màu thô (chỉ để vẽ canvas/SVG cần giá trị thật). */
 export const palette = {
-  ink: '#241d16',
-  paper: '#faf6ed',
-  paper2: '#f5efe3',
-  cinnabar: '#9c2f22',
-  gold: '#a07b3c',
-  jade: '#3d6a56',
+  ink: '#1c1610',
+  paper: '#f3ecdc',
+  paper2: '#fbf6ea',
+  cinnabar: '#9d2f20',
+  gold: '#a3823f',
+  jade: '#3e6450',
 } as const;
 
 /** Thang 4px — dùng cho padding/margin/gap. */

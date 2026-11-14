@@ -136,7 +136,7 @@ export function StarReference({ onBack }: { onBack: () => void }) {
     <main className="method stars-page">
       <div className="method-head">
         <div className="eyebrow">Tầng B · Tinh diệu</div>
-        <h1>Định nghĩa sao, nguyên văn.</h1>
+        <h1>Bảng sao, nguyên văn.</h1>
         <p className="sub">
           {main.length} chính tinh, {aux.length} phụ tinh, 4 hoá và 12 cung — mỗi mục cắt từ{' '}
           <strong>Tử Vi Đẩu Số Toàn Thư</strong>. Ngũ hành, đẩu, cung chủ, vai trò đều là từ khoá

@@ -37,10 +37,13 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
     <form className="card form" onSubmit={submit}>
       <div className="form-head">
         <div>
-          <p className="eyebrow">Bước 1 · Dữ liệu gốc</p>
+          <p className="eyebrow">Phiếu nhập · 01</p>
           <h2>Ngày giờ sinh</h2>
         </div>
         <p className="form-note">Dương lịch · giờ tại nơi sinh</p>
+        <p className="form-marginal">
+          Múi giờ lịch sử chọn theo tỉnh và năm sinh. Đổi quy ước ở dưới, lá số đổi theo.
+        </p>
       </div>
 
       <div className="form-grid">
@@ -206,10 +209,10 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
           onClick={() => setAdvanced((v) => !v)}
           aria-expanded={advanced}
         >
-          {advanced ? '− Ẩn quy ước tính' : '+ Tuỳ chỉnh quy ước tính'}
+          {advanced ? '− Thu quy ước an sao' : '+ Mở quy ước an sao'}
         </button>
         <button type="submit" className="btn-primary" disabled={busy}>
-          {busy ? 'Đang tính…' : 'Lập lá số'}
+          {busy ? 'Đang an…' : 'An lá số'}
         </button>
       </div>
 

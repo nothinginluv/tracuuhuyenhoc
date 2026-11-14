@@ -56,13 +56,13 @@ npm run e2e         # E2E Playwright: nhập → lá số → cung → nguyên v
 - **Hai lá Tử Vi**: khi lịch TQ (+8) và lịch VN (+7) cho hai ngày âm khác nhau, thanh chọn cho phép xem lá chính (TQ) và lá đối chiếu (VN) — đây thường là lý do app Việt và app TQ ra khác.
 - **Trang Phương pháp**: chuỗi tính, bảng preset, quy tắc Tử Vi/Bát Tự, giới hạn, nguồn + trích dẫn mở được tại chỗ.
 - **Trang Tinh diệu**: 14 chính tinh + 20 phụ tinh + 4 Tứ Hoá + 12 cung, mỗi mục mở được nguyên văn và nguồn; 4 phụ tinh còn lại được nêu tên là chưa có định nghĩa trong kho Tầng A.
-- **Bìa “Cổng Thiên Môn”**: nền sao vẽ bằng canvas 2D (số sao theo diện tích, tối đa 160, DPR chặn ở 2; dừng vẽ khi ra khỏi khung nhìn hoặc tab bị ẩn; `prefers-reduced-motion` vẽ một khung tĩnh), la bàn dịch nhẹ theo cuộn. Nút **Lập lá số của bạn** cuộn tới biểu mẫu theo chiều cao thật của header dính (không bị khuất sau header trên điện thoại), **Xem cách tính** mở trang Phương pháp.
+- **Bìa “Sổ Thiên Văn”**: masthead ấn bản + đầu đề **“Trời không nói. Sách có chép.”**, nền sao vẽ bằng canvas 2D (số sao theo diện tích, tối đa 160, DPR chặn ở 2; dừng vẽ khi ra khỏi khung nhìn hoặc tab bị ẩn; `prefers-reduced-motion` vẽ một khung tĩnh), la bàn dịch nhẹ theo cuộn. Ba dòng ghi Lịch pháp · Quy ước · Nguyên văn như sổ tay. Nút **An một lá số** cuộn tới biểu mẫu theo chiều cao thật của header dính (không bị khuất sau header trên điện thoại), **Xem cách an sao** mở trang Phương pháp.
 - **Khung đọc 12 cung**: dưới lá số Tử Vi là khối “Đọc lá số theo 12 cung” — tóm tắt Mệnh/Thân/sao chủ/tứ hoá/đại hạn/lưu niên, rồi một **khung đọc** gồm danh mục 12 cung (tên cung, can chi, đại hạn, chính tinh) và nội dung của đúng cung đang chọn: câu “thuận / trắc trở”, **câu riêng của từng chính tinh và từng phụ tinh tại cung này** (卷二), định nghĩa chung của sao, độ sáng, tứ hoá, tam hợp/đối cung. Desktop: danh mục dọc bên trái; điện thoại: dải cuộn ngang. Dùng mẫu tab ARIA (`tablist`/`tab`/`tabpanel`), phím ←/→/↑/↓/Home/End, nút “Cung trước / Sau”. Chỉ dựng nội dung một cung — nhẹ hơn 12 khối sổ xuống cũ. Dưới lá Bát Tự là khối “Nhật chủ, thập thần và các vận”.
 - **Bảng chi tiết từng cung**: mỗi ô trong lá số là một nút thật — bấm (hoặc Enter/Space) mở bảng trượt từ cạnh phải (điện thoại: trượt từ đáy lên) với toàn bộ nội dung cung: câu “thuận / trắc trở”, **câu riêng của chính tinh và phụ tinh tại cung**, định nghĩa chung, độ sáng và tứ hoá, tam hợp — đối cung. Escape để đóng, Tab quay vòng trong bảng, đóng xong focus trả về đúng ô vừa bấm; nền bị khoá cuộn. Nút “Cung trước / Cung sau” đi theo đúng thứ tự 12 cung tính từ Mệnh.
 - **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/427` câu đã có bản giảng; 246 câu “sao tại cung” (149 chính tinh + 97 phụ tinh) mới dùng bản dịch sát chữ (chế độ “Dễ hiểu” hiển thị chính bản đó, không viết lại thành lời giảng để tránh diễn giải sai); phần còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**); trên điện thoại nghĩa hiện thành thẻ ở đáy màn hình để không bị cắt ở mép.
-- **Giao diện “Vũ Trụ Tử Vi”**: **chỉ chế độ sáng** — mực tàu, giấy dó, son ấn, vàng cổ, ngọc bích. Không còn nút đổi nền, không đọc `prefers-color-scheme`; `color-scheme: light` và `meta[theme-color]` cố định. Breakpoints 360 / 480 / 716 / 900 / 1140px; header mực tàu dính trên cùng, dưới 480px nav xuống hàng riêng để không tràn ngang. Chữ giữ tương phản ≥ 4.5:1 trên nền giấy.
+- **Giao diện “Sổ Thiên Văn”**: **chỉ chế độ sáng** — một ấn bản in: mực tàu, giấy dó, son ấn, vàng cổ, ngọc bích; không bóng đổ, không bo tròn, đường kẻ mảnh, nhãn mono, chữ serif. Không còn nút đổi nền, không đọc `prefers-color-scheme`; `color-scheme: light` và `meta[theme-color]` cố định. Breakpoints 360 / 480 / 716 / 900 / 1140px; header mực tàu dính trên cùng, dưới 480px nav xuống hàng riêng để không tràn ngang. Chữ giữ tương phản ≥ 4.5:1 trên nền giấy.
 - **Chia sẻ lá số**: sao chép URL (có fallback), chia sẻ qua Web Share API. Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
-- **Responsive**: lá số Tử Vi co từ 716px xuống 480px (và 360px dưới 480px) — không tràn ngang trên điện thoại. Bìa kiểm ở 360/480/716/900px: không tràn ngang, nút chính cao 44px, danh sách cam kết chuyển 3 → 2 → 1 cột.
+- **Responsive**: lá số Tử Vi giữ bề rộng tối thiểu 440px (480px dưới 480px) và cuộn ngang có nhắc “vuốt ngang” thay vì bóp chữ — không tràn trang trên điện thoại. Bìa kiểm ở 360/480/716/900px: không tràn ngang, nút chính cao 44px, danh sách cam kết chuyển 3 → 1 cột.
 - **Giảm chuyển động**: tôn trọng `prefers-reduced-motion` (tắt la bàn xoay, parallax, nền sao động, nhún nút, cảm ứng).
 - **Mỗi câu có nút “§”** mở đúng đoạn chữ Hán, kèm câu tóm và bản sát chữ; chỗ nguồn không chép ghi rõ “nguồn không chép”, chỗ sách chưa có ghi rõ “chưa có, để không đoán”.
 - **Nhập liệu có test**: `parseForm` tách riêng khỏi component, 14 test cho biên ngày/giờ, năm 1900, tương lai và Quảng Trị.
@@ -95,7 +95,7 @@ apps/web/
 
 ### Design system
 
-Nền tảng cho giao diện “Vũ Trụ Tử Vi”, đặt ở `src/design-system` + `src/components/ui`:
+Nền tảng cho giao diện “Sổ Thiên Văn”, đặt ở `src/design-system` + `src/components/ui`:
 
 - **Một nguồn màu duy nhất**: `styles.css` giữ biến CSS (`--ink`, `--paper`, `--cinnabar`, `--gold`…).
   Chỉ một bảng màu sáng — không có `[data-theme]`, không có bảng tối. `tokens.ts` chỉ *ánh xạ* các biến đó
@@ -107,6 +107,7 @@ Nền tảng cho giao diện “Vũ Trụ Tử Vi”, đặt ở `src/design-sys
   `Card` + header/title/description/footer, `Input`/`Textarea`/`Select` (nhãn, gợi ý, lỗi, icon),
   `Checkbox`/`Radio`/`Switch`. Mọi id sinh bằng `useId`; lỗi form đi kèm `aria-invalid` +
   `aria-describedby`; vòng focus dùng `--gold`; mọi chuyển động tắt theo `prefers-reduced-motion`.
+  Bộ này chỉ nạp ở trang xem trước — giao diện chính viết thẳng class nghiệp vụ trong `styles.css`.
 - **Thư viện xem trước**: mở `/design-preview.html` khi chạy `npm run dev` để duyệt mọi biến thể
   trong chế độ sáng duy nhất. Trang này không nằm trong `dist/web` (Vite chỉ build `index.html`).
 

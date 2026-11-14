@@ -4,7 +4,6 @@ import { App } from './App.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { ReadingModeProvider } from './glossary.tsx';
 import './styles.css';
-import './design-system/ui.css';
 
 /* Chỉ chế độ sáng — không đọc `prefers-color-scheme`, không đặt `data-theme`. */
 

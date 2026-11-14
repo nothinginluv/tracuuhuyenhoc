@@ -7,8 +7,8 @@ export function MethodPage({ onBack }: Props) {
   return (
     <article className="method">
       <header className="method-head">
-        <div className="eyebrow">Phương pháp &amp; nguồn</div>
-        <h1>Minh bạch từng bước tính</h1>
+        <div className="eyebrow">Phụ lục · Phương pháp</div>
+        <h1>Sổ ghi phép dựng</h1>
         <p className="sub">
           Trang này không luận giải vận mệnh. Nó trả lời một câu hỏi hẹp hơn: <em>con số này
           được tính ra như thế nào, theo quy ước nào, và khác ứng dụng khác ở đâu?</em>

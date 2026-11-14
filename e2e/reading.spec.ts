@@ -15,7 +15,7 @@ test('nhập lá số, đọc cung, mở nguyên văn và chia sẻ URL', async 
   await page.locator('#birth-year').fill('1985');
   await page.locator('#birth-hour').fill('11');
   await page.locator('#birth-minute').fill('0');
-  await page.getByRole('button', { name: 'LẬP LÁ SỐ' }).click();
+  await page.getByRole('button', { name: 'AN LÁ SỐ' }).click();
 
   const results = page.getByRole('region', { name: 'Kết quả lá số' });
   await expect(results).toBeVisible();

@@ -44,7 +44,7 @@ function Preview() {
     <main className="pv">
       <header className="pv-head">
         <div>
-          <p className="pv-eyebrow">Design system · Vũ Trụ Tử Vi</p>
+          <p className="pv-eyebrow">Design system · Sổ Thiên Văn</p>
           <h1 className="pv-title">Thư viện component</h1>
           <p className="pv-sub">
             Mực tàu · giấy dó · son ấn · vàng cổ · ngọc bích. Chỉ dùng biến CSS trong{' '}

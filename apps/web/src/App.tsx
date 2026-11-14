@@ -157,7 +157,7 @@ export function App() {
       setTuviVariant('cn');
       setTab('tuvi');
       syncUrl(v);
-      setAnnounce('Đã lập lá số. Kết quả gồm Tử Vi, Bát Tự và cách tính chi tiết.');
+      setAnnounce('Đã an lá số. Kết quả gồm Tử Vi, Bát Tự và cách tính chi tiết.');
       if (focus) shouldFocus.current = true;
     } catch (err) {
       setResult(null);
@@ -215,7 +215,7 @@ export function App() {
             <SealMark className="brand-mark" size={42} />
             <span className="brand-text">
               Tra Cứu Huyền Học
-              <small>Tử Vi · Bát Tự · minh bạch</small>
+              <small>Tử Vi · Bát Tự · Nguyên văn</small>
             </span>
           </button>
           <nav className="site-nav">
@@ -265,10 +265,10 @@ export function App() {
           />
 
           {busy && (
-            <div className="loading-overlay" aria-label="Đang tính toán lá số" aria-live="polite">
+            <div className="loading-overlay" aria-label="Đang an lá số" aria-live="polite">
               <div className="loading-spinner" aria-hidden="true"></div>
               <span className="tiny muted" style={{ marginTop: '12px', display: 'block' }}>
-                Đang tính toán lá số…
+                Đang an lá số…
               </span>
             </div>
           )}
@@ -282,6 +282,10 @@ export function App() {
               aria-label="Kết quả lá số"
             >
               <div className="result-head">
+                <div className="result-title">
+                  <p className="kicker">Kết quả · Tử Vi · Tứ trụ</p>
+                  <h2>Bản mệnh</h2>
+                </div>
                 <div className="result-summary">
                   <span className="chip">
                     {formatTime(result.ctx.civilWall.hour, result.ctx.civilWall.minute)} ·{' '}
@@ -433,25 +437,25 @@ export function App() {
           {!result && !error && (
             <section className="intro-grid">
               <div className="intro-card">
-                <h2>Vì sao lá số có thể khác ứng dụng khác?</h2>
+                <h2>Cùng một ngày sinh, vì sao hai lá số khác nhau?</h2>
                 <p>
                   Vì mỗi ứng dụng chọn một quy ước: giờ Bắc Kinh hay giờ nơi sinh, Tý sớm hay Tý
-                  muộn, tháng nhuận chia đôi hay giữ nguyên, năm đổi tại Tết hay Lập Xuân. Ở đây bạn
-                  thấy và đổi được từng lựa chọn.
+                  muộn, tháng nhuận chia đôi hay giữ nguyên, năm đổi tại Tết hay Lập Xuân. Ở đây
+                  từng lựa chọn hiện ra và đổi được.
                 </p>
                 <button className="link-btn" onClick={() => setPage('method')}>
-                  Đọc phương pháp →
+                  Xem cách dựng lá số →
                 </button>
               </div>
               <div className="intro-card">
-                <h2>Chỉ tính, không đoán</h2>
+                <h2>Sách chép đến đâu, luận đến đó.</h2>
                 <p>
-                  Phiên bản này an sao, lập tứ trụ, tính tàng can, thập thần và đại vận. Luận giải
-                  nằm ngay trong tab Tử Vi và Bát Tự — ghép nguyên văn đã kiểm với lá số, không có
-                  câu nào do giao diện tự viết.
+                  Bản này an sao, lập tứ trụ, tính tàng can, thập thần và đại vận. Luận giải nằm
+                  ngay trong tab Tử Vi và Bát Tự — ghép nguyên văn đã kiểm với lá số, không có câu
+                  nào do giao diện tự viết.
                 </p>
                 <button className="link-btn" onClick={() => setPage('method')}>
-                  Xem nguồn &amp; giới hạn →
+                  Nguồn và giới hạn →
                 </button>
               </div>
             </section>
@@ -461,11 +465,11 @@ export function App() {
             <SealMark className="foot-seal" size={34} />
             <div className="foot-text">
               <p>
-                Kết quả là phép tính theo quy ước đã công bố, không phải lời khuyên về y tế, tài
-                chính hay pháp lý.
+                Bản dựng theo quy ước đã công bố — không phải lời khuyên y tế, tài chính hay pháp
+                lý.
               </p>
               <p className="tinier">
-                Lõi lịch và phần an sao có bộ kiểm thử đối chứng độc lập · trích dẫn qua cổng kiểm
+                Lõi lịch và phép an sao có bộ kiểm đối chứng độc lập · trích dẫn qua cổng kiểm
                 SHA-256 · <code>npm run check</code>
               </p>
             </div>
