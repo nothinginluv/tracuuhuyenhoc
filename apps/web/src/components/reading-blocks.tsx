@@ -1,351 +1,78 @@
 ﻿/**
  * Khối luận giải dùng chung cho tab Tử Vi và tab Bát Tự.
  *
- * Mỗi khối chỉ chứa: dữ liệu engine (cung, sao, tuổi, thần) + câu của nguồn.
- * Câu hiển thị phụ thuộc chế độ đọc (xem `glossary.tsx`):
- *   · Dễ hiểu      → `plain_vi`: lời giảng không thuật ngữ;
- *   · Sát nguyên văn → `claim_vi`: bản dịch giữ chữ của nguồn.
- * Không có câu nào do giao diện tự viết.
+ * Nguyên tắc: giao diện **không tự viết câu luận nào**. Mỗi câu hiện ra là một
+ * đoạn nguyên văn của câu đã kiểm trong `content/quotes.jsonl`; chỗ sách im
+ * lặng thì ghi rõ là im lặng.
  *
- * Thay đổi: bỏ chip § ở từng câu, gom tất cả nguồn vào một khối
- * "Nguồn của mục này" (details/summary) ở cuối mỗi cung/mục.
+ * Bản gọn: mỗi cung chỉ còn sao chính và câu của sao ấy tại cung. Sao phụ, độ
+ * sáng, tứ hoá, tam hợp và khối nguồn không hiện ở đây.
  */
-import { BRANCHES_VI, STAR_DEFS, type Palace } from '../../../../packages/tuvi-engine/src/index.ts';
-import { TEN_GODS, type TenGodId } from '../../../../packages/bazi-engine/src/index.ts';
-import { Cite } from '../quotes.tsx';
+import { TEN_GODS } from '../../../../packages/bazi-engine/src/index.ts';
 import type { Quote } from '../quotes-data.ts';
-import { GlossaryTerm, quoteLine, useReadingMode } from '../glossary.tsx';
+import { quoteLine } from '../glossary.tsx';
 import {
-  DAHAN_QUOTES,
-  starInPalaceData,
-  starQuote,
+  starPalaceLine,
   type BaziReading,
   type PalaceReading,
-  type ReadingStar,
   type TuViReading,
 } from '../reading.ts';
 
-/** Thu gom các quote_id duy nhất từ một mảng, bỏ undefined/trùng. */
-function uniqueQuotes(quotes: (Quote | undefined)[]): Quote[] {
-  const seen = new Set<string>();
-  const out: Quote[] = [];
-  for (const q of quotes) {
-    if (q && !seen.has(q.id)) {
-      seen.add(q.id);
-      out.push(q);
-    }
-  }
-  return out;
-}
-
-export function HuaChip({ hua }: { hua: NonNullable<ReadingStar['hua']> }) {
-  return (
-    <span className={`hua hua-${hua.id}`} title={`${hua.def.zh} — ${hua.def.vi}`}>
-      {hua.def.vi.replace('Hoá ', '')}
-    </span>
-  );
-}
-
-export function BrightnessChip({ item }: { item: ReadingStar }) {
-  const b = item.brightness;
-  if (!b) return <span className="chip chip-thieu">chưa có bảng độ sáng</span>;
-  if (b.level) {
-    return (
-      <span className={`chip chip-${b.level.tone}`}>
-        <GlossaryTerm term={b.level.vi}>{b.level.vi}</GlossaryTerm>
-      </span>
-    );
-  }
-  if (b.noFall) {
-    return (
-      <span className="chip chip-sang" title="Nguồn ghi cả bảng không có cung hãm: sao này không xuống mức yếu nhất ở đâu cả.">
-        Không hãm
-      </span>
-    );
-  }
-  return <span className="chip chip-thieu">nguồn không chép cung này</span>;
-}
-
-/** Một câu luận kèm nhãn nhỏ phía trên (nguồn nào, ở đâu). */
-function ClaimBlock({ label, text, at }: { label?: string; text: string; at?: boolean }) {
-  return (
-    <p className={at ? 'reading-claim reading-claim-at' : 'reading-claim'}>
-      {label && <span className="reading-claim-label">{label}</span>}
-      {text}
-    </p>
-  );
-}
-
 /**
- * Một sao trong một cung.
- *
- * Thứ tự đọc: câu **theo cung** (卷二: "Tử Vi ở cung Phu Thê thì…") trước, rồi
- * câu **định nghĩa chung** của sao (卷一). Cung Mệnh không có câu theo cung —
- * câu định nghĩa chung của 卷一 vốn nói về người có sao ấy tại Mệnh, nên chỉ
- * hiện một câu và không dán nhãn "định nghĩa chung".
+ * Nội dung một cung: tên cung, can chi, đại hạn, rồi từng sao chính kèm câu
+ * của sách cho sao ấy tại cung này.
  */
-function StarLine({
-  item,
-  palace,
-  at,
-  head,
-}: {
-  item: ReadingStar;
-  palace: Palace;
-  at?: Quote;
-  head?: { zh: string; vi: string };
-}) {
-  const { mode } = useReadingMode();
-  const quote = starQuote(item.ref);
-  const line = quoteLine(quote, mode);
-  const atLine = quoteLine(at, mode);
-  const short = mode === 'plain' ? undefined : quote?.short_vi;
-  const atLabel = head
-    ? `Tại cung ${palace.nameVi} · câu chung cho ${head.vi}`
-    : `Tại cung ${palace.nameVi}`;
-
-  // Thu gom quote_id để truyền ra ngoài (dùng trong PalaceDetail)
-  const citeIds = uniqueQuotes([
-    at,
-    quote,
-    item.brightness?.quote,
-    item.hua?.cited[0]?.quote,
-  ]).map((q) => q.id);
+export function PalaceReadingView({ reading }: { reading: PalaceReading }) {
+  const main = reading.stars.filter((s) => s.star.group === 'main');
 
   return (
-    <li className="reading-star" data-cite-ids={citeIds.join(',')}>
-      <div className="reading-star-head">
-        <strong>{item.star.vi}</strong>
-        <BrightnessChip item={item} />
-        {item.hua && <HuaChip hua={item.hua} />}
-      </div>
-      {at || quote ? (
-        <>
-          {!at && short && <p className="reading-claim reading-claim-short">{short}</p>}
-          {at && atLine && <ClaimBlock label={atLabel} text={atLine} at />}
-          {quote && line && (
-            <ClaimBlock label={at ? 'Định nghĩa chung' : undefined} text={line} />
-          )}
-        </>
-      ) : (
-        <p className="tiny muted">
-          Kho văn bản chưa có câu định nghĩa cho sao này — không suy diễn thay.
+    <div className="palace-read">
+      {main.length === 0 ? (
+        <p className="muted">
+          Cung này không có sao chính. Sách luận theo sao, nên mục này không có câu riêng.
         </p>
+      ) : (
+        <ul className="palace-lines">
+          {main.map((item) => {
+            const line = starPalaceLine(item, reading);
+            return (
+              <li key={item.star.id}>
+                <span className="star-name">{item.star.vi}</span>
+                {line ? (
+                  <span>{line}</span>
+                ) : (
+                  <span className="muted">Sách chưa chép câu cho sao này tại cung này.</span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
       )}
-    </li>
-  );
-}
-
-/** Câu "ở cung này thì thuận/trắc trở" lấy từ kho quy tắc theo cung. */
-function PalaceRule({ quote, tone }: { quote?: Quote; tone: 'good' | 'bad' }) {
-  const { mode } = useReadingMode();
-  if (!quote) return null;
-  const line = quoteLine(quote, mode);
-  const label = tone === 'good' ? 'Nét thuận' : 'Điểm cần lưu ý';
-  return (
-    <div className={`palace-rule palace-rule-${tone}`} data-cite-id={quote.id}>
-      <div className="palace-rule-head">
-        <span className="palace-rule-tag">{label}</span>
-      </div>
-      <p className="reading-claim">{line}</p>
     </div>
   );
 }
 
-/**
- * Toàn bộ nội dung một cung: câu "nét chính / cần lưu ý", sao chính, sao phụ
- * (kèm độ sáng và tứ hoá) và tam hợp — đối cung.
- *
- * Dùng chung cho khung đọc trong trang luận giải và cho bảng trượt mở từ lá
- * số, để hai chỗ không bao giờ lệch nội dung. `headingLevel` chỉ đổi cấp tiêu
- * đề con cho khớp cấp của khung chứa (khung đọc đã có tiêu đề cung riêng).
- */
-export function PalaceDetail({
-  reading,
-  rules,
-  headingLevel = 4,
-}: {
-  reading: PalaceReading;
-  rules?: { good?: Quote; bad?: Quote };
-  headingLevel?: 4 | 5;
-}) {
-  const { stars, triads } = reading;
-  const H = headingLevel === 5 ? 'h5' : 'h4';
-  const main = stars.filter((s) => s.star.group === 'main');
-  const aux = stars.filter((s) => s.star.group === 'aux');
-  const atData = starInPalaceData(reading.palace);
-  // Sách có mục riêng cho 14 chính tinh và 11 phụ tinh ở từng cung trừ cung
-  // Mệnh; vài mục nguồn không chép (xem `missing`/`auxMissing` trong
-  // content/star-in-palace.json). Chỉ báo khi sao ấy thật sự đóng tại cung này
-  // — nếu không thì là nhiễu.
-  const mainIds = new Set<string>(main.map((s) => s.star.id));
-  const notWritten = atData.missing
-    .filter((id) => mainIds.has(id))
-    .map((id) => (STAR_DEFS as Record<string, { vi: string } | undefined>)[id]?.vi)
-    .filter((vi): vi is string => Boolean(vi));
-  const auxIds = new Set<string>(aux.map((s) => s.star.id));
-  const auxNotWritten = atData.auxMissing
-    .filter((id) => auxIds.has(id))
-    .map((id) => (STAR_DEFS as Record<string, { vi: string } | undefined>)[id]?.vi)
-    .filter((vi): vi is string => Boolean(vi));
-
-  // Thu gom tất cả quote_id của cung này để hiển thị ở cuối
-  const allCiteIds = new Set<string>();
-  if (rules?.good) allCiteIds.add(rules.good.id);
-  if (rules?.bad) allCiteIds.add(rules.bad.id);
-  for (const s of stars) {
-    const q = starQuote(s.ref);
-    if (q) allCiteIds.add(q.id);
-    const atQ = atData.quote(s.star.id);
-    if (atQ) allCiteIds.add(atQ.id);
-    if (s.brightness?.quote) allCiteIds.add(s.brightness.quote.id);
-    if (s.hua?.cited[0]?.quote) allCiteIds.add(s.hua.cited[0].quote.id);
-  }
-  const allQuotes = Array.from(allCiteIds).map((id) => QUOTES[id]).filter(Boolean) as Quote[];
-
-  return (
-    <>
-      {rules && (
-        <div className="palace-rules">
-          <PalaceRule quote={rules.good} tone="good" />
-          <PalaceRule quote={rules.bad} tone="bad" />
-        </div>
-      )}
-
-      {stars.length === 0 ? (
-        <p className="muted">Cung này không có sao nào trong 38 sao engine an được.</p>
-      ) : (
-        <>
-          {main.length === 0 ? (
-            <>
-              <H>Sao chính</H>
-              <p className="muted">
-                Không có sao chính tại cung. Các sao ở tam hợp và đối cung dưới đây là phần bổ
-                trợ — nguồn không nói riêng về trường hợp vô sao chính tại đây.
-              </p>
-            </>
-          ) : (
-            <>
-              <H>Sao chính</H>
-              <ul className="reading-stars">
-                {main.map((s) => (
-                  <StarLine
-                    key={s.star.id}
-                    item={s}
-                    palace={reading.palace}
-                    at={atData.quote(s.star.id)}
-                    head={atData.head(s.star.id)}
-                  />
-                ))}
-              </ul>
-              {notWritten.length > 0 && (
-                <p className="tiny muted">
-                  Sách không chép mục riêng cho {notWritten.join(', ')} tại cung{' '}
-                  {reading.palace.nameVi} — câu hiện có là định nghĩa chung của sao.
-                </p>
-              )}
-            </>
-          )}
-
-          {aux.length > 0 && (
-            <>
-              <H>Sao phụ</H>
-              <ul className="reading-stars reading-stars-aux">
-                {aux.map((s) => (
-                  <StarLine
-                    key={s.star.id}
-                    item={s}
-                    palace={reading.palace}
-                    at={atData.quote(s.star.id)}
-                    head={atData.head(s.star.id)}
-                  />
-                ))}
-              </ul>
-              <p className="tiny muted">
-                Sách chép mục riêng theo cung cho 11 sao phụ — Thiên Khôi, Thiên Việt chỉ có ở
-                cung Phu Thê. Sao còn lại dùng câu định nghĩa chung.
-              </p>
-              {auxNotWritten.length > 0 && (
-                <p className="tiny muted">
-                  Sách không chép mục riêng cho {auxNotWritten.join(', ')} tại cung{' '}
-                  {reading.palace.nameVi} — câu hiện có là định nghĩa chung của sao.
-                </p>
-              )}
-            </>
-          )}
-        </>
-      )}
-
-      <H>
-        <GlossaryTerm term="tam phương tứ chính">Tam hợp · đối cung</GlossaryTerm>
-      </H>
-      <ul className="reading-triads">
-        {triads.map((p, i) => {
-          const label = ['Tam hợp', 'Đối cung', 'Tam hợp'][i];
-          const names = p.mainStars.map((s) => s.vi).join(', ') || 'không có sao chính';
-          return (
-            <li key={p.branch}>
-              <span className="muted">{label}</span> {p.nameVi} ({BRANCHES_VI[p.branch]}) —{' '}
-              {names}
-            </li>
-          );
-        })}
-      </ul>
-      <p className="tiny muted">
-        Ba cung hợp chiếu và cung đối được liệt kê theo cấu trúc; câu luận về cách cục cụ thể
-        chưa có trong kho văn bản nên không thêm nhận định.
-      </p>
-
-      {/* Khối nguồn thu gọn ở cuối cung */}
-      {allQuotes.length > 0 && (
-        <details className="reading-sources">
-          <summary>
-            <span className="cite-mark">§</span>
-            Nguồn của mục này ({allQuotes.length})
-          </summary>
-          <div className="sources-list">
-            {allQuotes.map((q) => (
-              <Cite key={q.id} id={q.id} />
-            ))}
-          </div>
-        </details>
-      )}
-    </>
-  );
-}
-
-// Cần import QUOTES từ quotes-data để dùng trong PalaceDetail
-import { QUOTES } from '../quotes-data.ts';
-
-export type PalaceRules = Map<number, { good?: Quote; bad?: Quote }>;
-
+/** Đại hạn: mỗi cung mười năm, kèm cung ứng với năm nay. */
 export function DaHanSection({ reading }: { reading: TuViReading }) {
-  const { mode } = useReadingMode();
   const { chart, dahan } = reading;
-
-  const citeIds = new Set<string>();
-  if (DAHAN_QUOTES.direction) citeIds.add(DAHAN_QUOTES.direction.id);
-  if (DAHAN_QUOTES.tenYear) citeIds.add(DAHAN_QUOTES.tenYear.id);
-  const startAgeQuote = DAHAN_QUOTES.startAge(dahan.startAge);
-  if (startAgeQuote) citeIds.add(startAgeQuote.id);
-  const allQuotes = Array.from(citeIds).map((id) => QUOTES[id]).filter(Boolean) as Quote[];
+  const year = new Date().getFullYear();
+  const branch = (((year - 4) % 12) + 12) % 12;
+  const nowPalace = chart.palaces[branch]!;
 
   return (
-    <div className="mini-card reading-dahan">
-      <h3>Đại hạn — mười năm một cung</h3>
+    <section className="dahan" aria-labelledby="dahan-title">
+      <h3 id="dahan-title">Đại hạn</h3>
       <p className="muted">
-        Chiều {dahan.direction === 'thuan' ? 'thuận' : 'nghịch'} · khởi từ cung{' '}
-        {chart.palaces[dahan.startBranch]!.nameVi} · tuổi khởi {dahan.startAge}. Mỗi hạn 10 năm,
-        đủ 12 cung.
+        Mười năm một cung, đi {dahan.direction === 'thuan' ? 'thuận' : 'nghịch'} từ cung{' '}
+        {chart.palaces[dahan.startBranch]!.nameVi}, tuổi khởi {dahan.startAge}. Năm {year} ứng
+        cung {nowPalace.nameVi}.
       </p>
-      <div className="luck-scroll">
-        <table className="luck-table reading-dahan-table">
+      <div className="table-scroll">
+        <table className="table-plain">
           <thead>
             <tr>
-              <th>Hạn</th>
               <th>Tuổi</th>
               <th>Cung</th>
-              <th>Chi</th>
               <th>Sao chính</th>
             </tr>
           </thead>
@@ -354,10 +81,11 @@ export function DaHanSection({ reading }: { reading: TuViReading }) {
               const p = chart.palaces[s.branch]!;
               return (
                 <tr key={s.index} className={p.isSoul ? 'is-soul' : ''}>
-                  <td className="muted">{s.index}</td>
                   <td>{s.fromAge}–{s.toAge}</td>
-                  <td>{s.palaceVi}</td>
-                  <td>{s.branchVi}</td>
+                  <td>
+                    {s.palaceVi}
+                    {p.isBody ? ' · Thân' : ''}
+                  </td>
                   <td>{p.mainStars.map((x) => x.vi).join(', ') || '—'}</td>
                 </tr>
               );
@@ -365,133 +93,50 @@ export function DaHanSection({ reading }: { reading: TuViReading }) {
           </tbody>
         </table>
       </div>
-
-      {DAHAN_QUOTES.tenYear && (
-        <p className="reading-claim">{quoteLine(DAHAN_QUOTES.tenYear, mode)}</p>
-      )}
-
-      <p className="tiny muted">
-        Tuổi ghi đúng như con số trong sách (khởi từ số của{' '}
-        <GlossaryTerm term="cục">ngũ hành cục</GlossaryTerm>), không phải tuổi dương lịch. Đại
-        hạn nói về cung nào, không phải lời dự báo từng năm; lưu niên chưa có trong bản này.
-      </p>
-
-      {allQuotes.length > 0 && (
-        <details className="reading-sources">
-          <summary>
-            <span className="cite-mark">§</span>
-            Nguồn của mục này ({allQuotes.length})
-          </summary>
-          <div className="sources-list">
-            {allQuotes.map((q) => (
-              <Cite key={q.id} id={q.id} />
-            ))}
-          </div>
-        </details>
-      )}
-    </div>
+    </section>
   );
 }
 
-function GodItem({
-  id,
-  quote,
-  places,
-}: {
-  id: TenGodId;
-  quote?: Quote;
-  places: string[];
-}) {
-  const { mode } = useReadingMode();
-  const citeId = quote?.id;
+function GodLine({ quote, name }: { quote?: Quote; name: string }) {
+  const line = quoteLine(quote);
   return (
-    <li className="reading-god" data-cite-id={citeId ?? ''}>
-      <div className="reading-star-head">
-        <strong>{TEN_GODS[id].vi}</strong>
-        <span className="tiny muted">{places.join(' · ')}</span>
-      </div>
-      {quote ? (
-        <>
-          {quote.short_vi && <p className="reading-claim reading-claim-short">{quote.short_vi}</p>}
-          <p className="reading-claim">{quoteLine(quote, mode)}</p>
-        </>
-      ) : (
-        <p className="tiny muted">Kho văn bản chưa có định nghĩa riêng cho thần này.</p>
-      )}
+    <li>
+      <strong>{name}</strong>
+      {line ? <span> — {line}</span> : <span className="muted"> — sách chưa có câu riêng.</span>}
     </li>
   );
 }
 
+/**
+ * Nhật chủ và thập thần. Chỉ hiện những thần có mặt ngay trên bốn can; thần
+ * chỉ nằm trong tàng can không đưa vào đây để mục đọc không dài.
+ */
 export function DayMasterBlock({ reading }: { reading: BaziReading }) {
-  const { mode } = useReadingMode();
   const { chart } = reading;
-  const line = quoteLine(reading.dayMasterQuote, mode);
-
-  const citeIds = new Set<string>();
-  if (reading.dayMasterQuote) citeIds.add(reading.dayMasterQuote.id);
-  for (const g of reading.gods) {
-    if (g.quote) citeIds.add(g.quote.id);
-  }
-  const allQuotes = Array.from(citeIds).map((id) => QUOTES[id]).filter(Boolean) as Quote[];
+  const line = quoteLine(reading.dayMasterQuote);
+  const visible = reading.gods.filter((g) => g.places.some((p) => !p.includes('tàng')));
 
   return (
-    <>
-      <div className="mini-card reading-daymaster">
-        <h3>Bản tính nhật chủ</h3>
-        <p className="reading-daymaster-char">
-          {chart.dayMaster.vi} · {chart.dayMaster.elementVi} ·{' '}
-          {chart.dayMaster.yinYang === 'duong' ? 'Dương' : 'Âm'}
-        </p>
-        {reading.dayMasterQuote && (
-          <>
-            {reading.dayMasterQuote.short_vi && mode === 'plain' && (
-              <p className="reading-claim reading-claim-short">
-                {reading.dayMasterQuote.short_vi}
-              </p>
-            )}
-            <p className="reading-claim">{line}</p>
-          </>
-        )}
-        <p className="tiny muted">
-          Đây là mô tả bản tính của can ngày, không phải lời phán về tính cách hay số phận.
-        </p>
-      </div>
+    <section className="bazi-read" aria-labelledby="bazi-read-title">
+      <h3 id="bazi-read-title">
+        Nhật chủ {chart.dayMaster.vi} · {chart.dayMaster.elementVi}
+      </h3>
+      {line ? (
+        <p className="reading-line">{line}</p>
+      ) : (
+        <p className="muted">Sách chưa chép câu cho can ngày này.</p>
+      )}
 
-      <div className="mini-card">
-        <h3>
-          <GlossaryTerm term="thập thần">Thập thần</GlossaryTerm> trong lá số
-        </h3>
-        {reading.gods.length === 0 ? (
-          <p className="muted">Không có thập thần nào ngoài nhật chủ.</p>
-        ) : (
-          <ul className="reading-stars reading-gods">
-            {reading.gods.map((g) => (
-              <GodItem key={g.id} id={g.id} quote={g.quote} places={g.places} />
-            ))}
-          </ul>
-        )}
-        {reading.missingGods.length > 0 && (
-          <p className="tiny muted">
-            Kho văn bản chưa có định nghĩa riêng cho:{' '}
-            {reading.missingGods.map((id) => TEN_GODS[id].vi).join(', ')}. Các thần này vẫn hiện
-            tên khi xuất hiện, nhưng không kèm câu luận.
-          </p>
-        )}
-
-        {allQuotes.length > 0 && (
-          <details className="reading-sources">
-            <summary>
-              <span className="cite-mark">§</span>
-              Nguồn của mục này ({allQuotes.length})
-            </summary>
-            <div className="sources-list">
-              {allQuotes.map((q) => (
-                <Cite key={q.id} id={q.id} />
-              ))}
-            </div>
-          </details>
-        )}
-      </div>
-    </>
+      <h4>Thập thần trên bốn can</h4>
+      {visible.length === 0 ? (
+        <p className="muted">Không có thần nào ngoài nhật chủ.</p>
+      ) : (
+        <ul className="god-lines">
+          {visible.map((g) => (
+            <GodLine key={g.id} name={TEN_GODS[g.id].vi} quote={g.quote} />
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

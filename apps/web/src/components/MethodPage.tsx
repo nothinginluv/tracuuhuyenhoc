@@ -7,11 +7,10 @@ export function MethodPage({ onBack }: Props) {
   return (
     <article className="method">
       <header className="method-head">
-        <div className="eyebrow">Phụ lục · Phương pháp</div>
-        <h1>Sổ ghi phép dựng</h1>
+        <h1>Nguồn &amp; phương pháp</h1>
         <p className="sub">
-          Trang này không luận giải vận mệnh. Nó trả lời một câu hỏi hẹp hơn: <em>con số này
-          được tính ra như thế nào, theo quy ước nào, và khác ứng dụng khác ở đâu?</em>
+          Cách dựng lá số, những quy ước có thể đổi, và nguồn văn bản của từng câu luận. Trang
+          này không luận giải vận mệnh.
         </p>
         <button className="link-btn" onClick={onBack}>
           ← Về trang tra cứu
@@ -167,9 +166,10 @@ export function MethodPage({ onBack }: Props) {
         <h2>5. Giới hạn đã biết</h2>
         <ul>
           <li>
-            Luận giải đọc tới mức: sao ở cung nào, độ sáng tại cung đó, câu “thuận / trắc trở” của
-            cả cung, đại hạn và cung lưu niên; chưa luận ảnh hưởng từng sao tại từng cung, tổ hợp
-            sao, cách cục, tiểu hạn, vượng suy hay hình xung hợp hại — không đưa lời khuyên.
+            Phần đọc chỉ hiện câu của sách cho <strong>sao chính tại từng cung</strong>, và
+            lược bỏ những mệnh đề nói về sao không có trong lá số. Sao phụ, độ sáng, tứ hoá và
+            tổ hợp sao không hiện ở bản gọn này; chưa có cách cục, tiểu hạn, vượng suy hay hình
+            xung hợp hại — và không đưa lời khuyên.
           </li>
           <li>Chưa hỗ trợ người sinh ngoài Việt Nam hoặc không rõ tỉnh (chỉ tính được khi chọn quy ước Bắc Kinh).</li>
           <li>Chưa có trường hợp không rõ giờ sinh; hãy nhập giờ ước lượng và đọc cảnh báo.</li>

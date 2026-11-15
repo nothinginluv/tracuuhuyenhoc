@@ -1,161 +1,28 @@
-import { useMemo } from 'react';
-import { STAR_DEFS, type TuViChart, type TuViGender } from '../../../../packages/tuvi-engine/src/index.ts';
-import { Cite } from '../quotes.tsx';
-import { GlossaryTerm, quoteLine, useReadingMode } from '../glossary.tsx';
-import {
-  DAHAN_QUOTES,
-  READING_RULES,
-  buildTuViReading,
-  liuNianStep,
-  palaceRules,
-  type TuViReading,
-} from '../reading.ts';
-import { ReadingPanel } from './ReadingPanel.tsx';
-import { QUOTES, type Quote } from '../quotes-data.ts';
-
-const HUA_ORDER: Record<string, number> = { loc: 0, quyen: 1, khoa: 2, ky: 3 };
-
-type Props = { chart: TuViChart; gender: TuViGender; reading?: TuViReading };
-
 /**
- * Phần luận giải nằm ngay dưới lá số Tử Vi: tổng quan + 12 cung (kèm câu "nét chính /
- * cần lưu ý" theo cung) + lưu niên + đại hạn.
+ * Phần đọc lá số: 12 cung (khung tab) và đại hạn.
+ *
+ * Trang lá số giữ cung đang chọn để bấm một ô trên lá số cũng mở đúng cung ở
+ * khung đọc này.
  */
-export function TuViReadingSection({ chart, gender, reading: provided }: Props) {
-  const { mode } = useReadingMode();
-  const reading = useMemo(
-    () => provided ?? buildTuViReading(chart, gender),
-    [provided, chart, gender],
-  );
-  const { dahan } = reading;
-  const rules = useMemo(() => palaceRules(), []);
+import type { TuViReading } from '../reading.ts';
+import { ReadingPanel } from './ReadingPanel.tsx';
+import { DaHanSection } from './reading-blocks.tsx';
 
-  const currentYear = new Date().getFullYear();
-  const liuNian = liuNianStep(currentYear);
+type Props = {
+  reading: TuViReading;
+  active: number;
+  onPick: (branch: number) => void;
+};
 
-  // Thu gom quote cho phần tổng quan
-  const overviewCiteIds = new Set<string>();
-  if (READING_RULES.ptc) overviewCiteIds.add(READING_RULES.ptc.id);
-  if (DAHAN_QUOTES.direction) overviewCiteIds.add(DAHAN_QUOTES.direction.id);
-  const startAgeQuote = DAHAN_QUOTES.startAge(dahan.startAge);
-  if (startAgeQuote) overviewCiteIds.add(startAgeQuote.id);
-  const overviewQuotes = Array.from(overviewCiteIds).map((id) => QUOTES[id]).filter(Boolean) as Quote[];
-
+export function TuViReadingSection({ reading, active, onPick }: Props) {
   return (
-    <div className="reading-phase" aria-labelledby="tuvi-reading-title">
-      <div className="reading-phase-head">
-        <p className="eyebrow">Luận giải</p>
-        <h3 id="tuvi-reading-title">Đọc lá số theo 12 cung</h3>
-        <p className="muted">
-          Chọn một cung trong danh mục để đọc: câu ngắn về cung, câu riêng của từng sao chính tại
-          cung đó, định nghĩa chung của sao, sao phụ, độ sáng và tứ hoá. Từ còn lạ thì rê chuột hoặc
-          bấm vào để xem nghĩa.
-        </p>
-      </div>
+    <section className="reading" id="doc-12-cung" aria-labelledby="doc-title">
+      <h3 id="doc-title">Đọc 12 cung</h3>
+      <p className="muted">Chọn một cung để đọc câu của sách cho sao chính tại cung đó.</p>
 
-      <div className="mini-card reading-overview">
-        <h3>Tóm tắt trong một màn</h3>
-        <dl className="kv">
-          <div>
-            <dt>
-              <GlossaryTerm term="mệnh">Mệnh</GlossaryTerm>
-            </dt>
-            <dd>
-              cung {reading.soul.palace.branchVi} · sao chính:{' '}
-              {reading.soul.stars
-                .filter((s) => s.star.group === 'main')
-                .map((s) => `${s.star.vi} (${s.brightness?.level?.vi?.toLowerCase() ?? 'nguồn không chép'})`)
-                .join(', ') || 'không có sao chính'}
-            </dd>
-          </div>
-          <div>
-            <dt>
-              <GlossaryTerm term="thân">Thân</GlossaryTerm>
-            </dt>
-            <dd>
-              cung {reading.body.palace.branchVi} · sao chính:{' '}
-              {reading.body.stars
-                .filter((s) => s.star.group === 'main')
-                .map((s) => s.star.vi)
-                .join(', ') || 'không có sao chính'}
-            </dd>
-          </div>
-          <div>
-            <dt>Sao chủ</dt>
-            <dd>
-              Mệnh {STAR_DEFS[chart.soulStar].vi} · Thân {STAR_DEFS[chart.bodyStar].vi}
-            </dd>
-          </div>
-          <div>
-            <dt>
-              <GlossaryTerm term="tứ hoá">Tứ Hoá</GlossaryTerm> năm {chart.year.vi}
-            </dt>
-            <dd>
-              {[...chart.mutagens]
-                .sort((a, b) => (HUA_ORDER[a.hua] ?? 9) - (HUA_ORDER[b.hua] ?? 9))
-                .map((m) => `${m.vi} ${STAR_DEFS[m.star].vi}`)
-                .join(' · ')}
-            </dd>
-          </div>
-          <div>
-            <dt>
-              <GlossaryTerm term="đại hạn">Đại hạn</GlossaryTerm>
-            </dt>
-            <dd>
-              {dahan.direction === 'thuan' ? 'Đi thuận' : 'Đi nghịch'} từ cung{' '}
-              {chart.palaces[dahan.startBranch]!.nameVi} · tuổi khởi {dahan.startAge} · mỗi hạn
-              10 năm
-            </dd>
-          </div>
-          <div>
-            <dt>
-              <GlossaryTerm term="lưu niên">Lưu niên</GlossaryTerm> {currentYear}
-            </dt>
-            <dd>
-              năm {liuNian.branchVi} → cung {chart.palaces[liuNian.branch]!.nameVi}
-              {chart.palaces[liuNian.branch]!.isSoul &&
-                ' (đúng cung Mệnh — theo sách ảnh hưởng rõ nhất)'}
-            </dd>
-          </div>
-        </dl>
+      <ReadingPanel reading={reading} active={active} onPick={onPick} />
 
-        {overviewQuotes.length > 0 && (
-          <details className="reading-sources">
-            <summary>
-              <span className="cite-mark">§</span>
-              Nguồn của phần này ({overviewQuotes.length})
-            </summary>
-            <div className="sources-list">
-              {overviewQuotes.map((q) => (
-                <Cite key={q.id} id={q.id} />
-              ))}
-            </div>
-          </details>
-        )}
-      </div>
-
-      {READING_RULES.ptc && (
-        <div className="reading-tip">
-          <p className="reading-claim">{quoteLine(READING_RULES.ptc, mode)}</p>
-          <details className="reading-sources">
-            <summary>
-              <span className="cite-mark">§</span>
-              Nguồn của câu này
-            </summary>
-            <div className="sources-list">
-              <Cite id={READING_RULES.ptc.id} />
-            </div>
-          </details>
-        </div>
-      )}
-
-      <ReadingPanel reading={reading} rules={rules} />
-
-      <p className="tiny muted reading-limit">
-        Chưa có, ghi rõ để không đoán: mục sao phụ theo từng cung và tổ hợp sao; cách cục; tiểu
-        hạn. Bản này đọc tới mức: sao nào ở cung nào, câu riêng của 14 sao chính tại cung (卷二),
-        câu chung của cung, độ sáng tại cung đó, đại hạn và cung lưu niên.
-      </p>
-    </div>
+      <DaHanSection reading={reading} />
+    </section>
   );
 }

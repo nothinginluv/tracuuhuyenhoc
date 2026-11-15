@@ -1,129 +1,101 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+/**
+ * Lá số Tử Vi: 12 ô cung quanh một ô giữa, rồi phần đọc 12 cung bên dưới.
+ *
+ * Bấm một ô cung sẽ mở đúng cung ấy ở khung đọc (và cuộn tới đó). Ô cung chỉ
+ * ghi tên cung, can chi và tên sao chính — đủ để nhìn lá số, không thêm chú
+ * thích kỹ thuật.
+ */
+import { useMemo, useState } from 'react';
 import {
   BRANCHES_VI,
   STAR_DEFS,
   STEMS_VI,
-  type Palace,
   type TuViChart,
   type TuViGender,
 } from '../../../../packages/tuvi-engine/src/index.ts';
 import { hourBranchName, hourRange } from '../format.ts';
-import { buildTuViReading, palaceRules } from '../reading.ts';
-import { PalaceCard, PalacePanel } from './PalaceCard.tsx';
-import { PalaceDetail } from './reading-blocks.tsx';
+import { buildTuViReading } from '../reading.ts';
 import { TuViReadingSection } from './TuViReadingSection.tsx';
 
-const HUA_SHORT: Record<string, string> = {
-  loc: 'Lộc',
-  quyen: 'Quyền',
-  khoa: 'Khoa',
-  ky: 'Kỵ',
+/** Vị trí 12 cung theo lối lá số cổ: Tỵ ở góc trên trái, đi ngược chiều kim đồng hồ. */
+const POSITION: Record<number, { row: number; col: number }> = {
+  5: { row: 1, col: 1 },
+  6: { row: 1, col: 2 },
+  7: { row: 1, col: 3 },
+  8: { row: 1, col: 4 },
+  4: { row: 2, col: 1 },
+  9: { row: 2, col: 4 },
+  3: { row: 3, col: 1 },
+  10: { row: 3, col: 4 },
+  2: { row: 4, col: 1 },
+  1: { row: 4, col: 2 },
+  0: { row: 4, col: 3 },
+  11: { row: 4, col: 4 },
 };
 
-const HUA_ORDER: Record<string, number> = { loc: 0, quyen: 1, khoa: 2, ky: 3 };
+type Props = { chart: TuViChart; gender: TuViGender };
 
-const LEAP_LABEL: Record<TuViChart['options']['leapMonthRule'], string> = {
-  split: 'Nhuận: chia đôi',
-  'as-month': 'Nhuận: giữ tháng',
-  'as-next': 'Nhuận: dồn tháng sau',
-};
+export function TuViChartView({ chart, gender }: Props) {
+  const reading = useMemo(() => buildTuViReading(chart, gender), [chart, gender]);
+  const [picked, setPicked] = useState<number>(chart.soul.branch);
 
-type Props = { chart: TuViChart; calendarLabel?: string; gender: TuViGender };
-
-export function TuViChartView({ chart, calendarLabel = 'Âm lịch TQ', gender }: Props) {
-  const byBranch = new Map(chart.palaces.map((p) => [p.branch, p]));
-  const soulPalace = chart.palaces.find((p) => p.isSoul);
-  const bodyPalace = chart.palaces.find((p) => p.isBody);
-  const cycle = ((chart.birth.lunarYear - 4) % 60 + 60) % 60;
+  const cycle = (((chart.birth.lunarYear - 4) % 60) + 60) % 60;
   const yearVi = `${STEMS_VI[cycle % 10]} ${BRANCHES_VI[cycle % 12]}`;
 
-  // Luận giải tính một lần, dùng cho cả bảng trượt lẫn khối đọc bên dưới.
-  const reading = useMemo(() => buildTuViReading(chart, gender), [chart, gender]);
-  const rules = useMemo(() => palaceRules(), []);
-
-  const [openBranch, setOpenBranch] = useState<number | null>(null);
-  const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [showHint, setShowHint] = useState(false);
-
-  // Chỉ nhắc "vuốt ngang" khi lá số thật sự rộng hơn khung nhìn.
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const measure = () => setShowHint(el.scrollWidth > el.clientWidth + 1);
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(el);
-    window.addEventListener('resize', measure);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', measure);
-    };
-  }, [chart]);
-
-  // 12 cung đi nghịch từ cung Mệnh — đúng thứ tự tên cung trong lá số.
-  const ordered = useMemo<Palace[]>(() => {
-    const soulBranch = chart.soul.branch;
-    return Array.from({ length: 12 }, (_, i) => chart.palaces[(soulBranch - i + 12) % 12]!);
-  }, [chart]);
-
-  const openIndex = openBranch === null ? -1 : ordered.findIndex((p) => p.branch === openBranch);
-  const openReading = openBranch === null ? null : reading.palaces[openBranch];
-  const openPalace = openBranch === null ? null : byBranch.get(openBranch);
-
-  const step = (delta: number) => {
-    if (openIndex < 0) return;
-    const next = ordered[(openIndex + delta + 12) % 12];
-    if (next) setOpenBranch(next.branch);
-  };
-
-  const cell = (branch: number) => {
-    const p = byBranch.get(branch);
-    if (!p) return null;
-    return (
-      <PalaceCard
-        key={branch}
-        palace={p}
-        expanded={openBranch === branch}
-        onOpen={(trigger) => {
-          triggerRef.current = trigger;
-          setOpenBranch(branch);
-        }}
-      />
-    );
+  const pick = (branch: number) => {
+    setPicked(branch);
+    document.getElementById('doc-12-cung')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
     <section className="tuvi">
       <div className="chart-head">
-        <div>
-          <h2>Lá số Tử Vi Đẩu Số</h2>
-          <p className="muted">
-            ngày {chart.birth.lunarDay} tháng {chart.birth.lunarMonth}
-            {chart.birth.lunarLeap ? ' nhuận' : ''} năm {yearVi} · giờ{' '}
-            {hourBranchName(chart.birth.hourBranch)} ({hourRange(chart.birth.hourBranch)})
-          </p>
-        </div>
-        <div className="chart-badges">
-          <span className="chip chip-key">{chart.bureau.vi}</span>
-          <span className="chip">{chart.year.vi}</span>
-          {chart.birth.lunarLeap && <span className="chip">{LEAP_LABEL[chart.options.leapMonthRule]}</span>}
-        </div>
+        <h2>Lá số Tử Vi</h2>
+        <p className="muted">
+          ngày {chart.birth.lunarDay} tháng {chart.birth.lunarMonth}
+          {chart.birth.lunarLeap ? ' nhuận' : ''} năm {yearVi} · giờ{' '}
+          {hourBranchName(chart.birth.hourBranch)} ({hourRange(chart.birth.hourBranch)})
+        </p>
       </div>
 
-      {showHint && (
-        <p className="scroll-hint" aria-hidden="true">
-          Vuốt ngang để xem đủ 12 cung
-        </p>
-      )}
-      <div className="tuvi-scroll" ref={scrollRef}>
-        <div className="tuvi-grid" role="group" aria-label="Mười hai cung trong lá số">
-          {Array.from({ length: 12 }, (_, b) => cell(b))}
-          <div className="tuvi-center">
-            <div className="center-title">Tử Vi</div>
-            <dl className="center-dl">
+      <div className="chart-scroll">
+        <div className="chart-grid" role="group" aria-label="Mười hai cung trong lá số">
+          {chart.palaces.map((p) => {
+            const pos = POSITION[p.branch]!;
+            const selected = p.branch === picked;
+            return (
+              <button
+                key={p.branch}
+                type="button"
+                onClick={() => pick(p.branch)}
+                aria-pressed={selected}
+                className={`chart-cell${p.isSoul ? ' is-soul' : ''}${selected ? ' is-picked' : ''}`}
+                style={{ gridRow: pos.row, gridColumn: pos.col }}
+              >
+                <span className="cell-head">
+                  <span className="cell-name">{p.nameVi}</span>
+                  <span className="cell-ganzhi">
+                    {p.stemVi} {p.branchVi}
+                  </span>
+                </span>
+                <span className="cell-stars">
+                  {p.mainStars.map((s) => s.vi).join(' · ') || '—'}
+                </span>
+                {(p.isSoul || p.isBody) && (
+                  <span className="cell-tags">
+                    {p.isSoul && <span className="tag">Mệnh</span>}
+                    {p.isBody && <span className="tag">Thân</span>}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+
+          <div className="chart-center" style={{ gridRow: '2 / 4', gridColumn: '2 / 4' }}>
+            <p className="chart-center-title">Tử Vi</p>
+            <dl>
               <div>
-                <dt>{calendarLabel}</dt>
+                <dt>Âm lịch</dt>
                 <dd>
                   {chart.birth.lunarDay}/{chart.birth.lunarMonth}
                   {chart.birth.lunarLeap ? ' nhuận' : ''} · {yearVi}
@@ -143,84 +115,12 @@ export function TuViChartView({ chart, calendarLabel = 'Âm lịch TQ', gender }
                 <dt>Mệnh chủ</dt>
                 <dd>{STAR_DEFS[chart.soulStar].vi}</dd>
               </div>
-              <div>
-                <dt>Thân chủ</dt>
-                <dd>{STAR_DEFS[chart.bodyStar].vi}</dd>
-              </div>
-              <div>
-                <dt>Mệnh / Thân</dt>
-                <dd>
-                  {soulPalace ? `${soulPalace.stemVi} ${soulPalace.branchVi}` : '—'} /{' '}
-                  {bodyPalace ? bodyPalace.branchVi : '—'}
-                </dd>
-              </div>
             </dl>
           </div>
         </div>
       </div>
 
-      <div className="tuvi-below">
-        <div className="mini-card">
-          <h3>Tứ Hoá năm {chart.year.vi}</h3>
-          <ul className="hua-list">
-            {[...chart.mutagens]
-              .sort((a, b) => (HUA_ORDER[a.hua] ?? 9) - (HUA_ORDER[b.hua] ?? 9))
-              .map((m) => (
-                <li key={m.star}>
-                  <span className={`hua hua-${m.hua}`}>{m.vi}</span>
-                  <span>{STAR_DEFS[m.star].vi}</span>
-                  <span className="muted">cung {BRANCHES_VI[m.branch]}</span>
-                </li>
-              ))}
-          </ul>
-          <p className="tiny muted">
-            Bảng Tứ Hoá Nam phái. Các phái khác có thể gán khác — xem mục “Phương pháp”.
-          </p>
-        </div>
-
-        <div className="mini-card">
-          <h3>Ghi chú an sao</h3>
-          {chart.notes.length === 0 ? (
-            <p className="muted">Không có quy tắc đặc biệt nào được áp dụng.</p>
-          ) : (
-            <ul className="notes">
-              {chart.notes.map((n) => (
-                <li key={n}>{n}</li>
-              ))}
-            </ul>
-          )}
-          <p className="tiny muted">
-            Tháng nhuận:{' '}
-            {chart.birth.leapRuleApplied
-              ? `đã đổi tháng an sao sang ${chart.birth.monthUsed}.`
-              : chart.birth.lunarLeap
-                ? `giữ tháng ${chart.birth.monthUsed}.`
-                : 'không áp dụng.'}
-          </p>
-        </div>
-      </div>
-
-      <TuViReadingSection chart={chart} gender={gender} reading={reading} />
-
-      <PalacePanel
-        open={openReading !== null}
-        title={openPalace ? `Cung ${openPalace.nameVi}` : ''}
-        subtitle={
-          openPalace && openReading
-            ? `${openPalace.stemVi} ${openPalace.branchVi} · đại hạn ${openReading.dahan.fromAge}–${openReading.dahan.toAge}`
-            : undefined
-        }
-        onClose={() => setOpenBranch(null)}
-        onPrev={openIndex > 0 ? () => step(-1) : undefined}
-        onNext={openIndex >= 0 && openIndex < 11 ? () => step(1) : undefined}
-        returnFocus={triggerRef.current}
-      >
-        {openReading && (
-          <div className="reading-palace-body palace-panel-detail">
-            <PalaceDetail reading={openReading} rules={rules.get(openReading.palace.branch)} />
-          </div>
-        )}
-      </PalacePanel>
+      <TuViReadingSection reading={reading} active={picked} onPick={setPicked} />
     </section>
   );
 }

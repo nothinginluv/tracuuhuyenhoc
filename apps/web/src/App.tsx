@@ -5,20 +5,12 @@ import type { Gender } from '../../../packages/bazi-engine/src/index.ts';
 import type { ComputeResult } from './engine.ts';
 import { BirthForm } from './components/BirthForm.tsx';
 import { DEFAULT_FORM, PRESET_INFO, parseForm, type FormValues } from './form.ts';
-import { WarningList } from './components/WarningList.tsx';
-import { SealMark } from './components/Ornaments.tsx';
-import { Hero } from './components/Hero.tsx';
 import { formatDate, formatTime, lunarShort, yearName } from './format.ts';
-import { ReadingModeToggle } from './glossary.tsx';
-import { copyUrl, shareUrl } from './share.ts';
+import { copyUrl } from './share.ts';
 
-// Hai trang chỉ đọc tài liệu được tách khỏi gói chính: người tra cứu không phải
-// tải toàn bộ nội dung Tinh diệu / Phương pháp mới xem được lá số.
-const MethodPage = lazy(() =>
-  import('./components/MethodPage.tsx').then((m) => ({ default: m.MethodPage })),
-);
-const StarReference = lazy(() =>
-  import('./components/StarReference.tsx').then((m) => ({ default: m.StarReference })),
+// Ba tab kết quả tách khỏi gói chính: lần đầu mở chỉ tải biểu mẫu.
+const TuViChartView = lazy(() =>
+  import('./components/TuViChartView.tsx').then((m) => ({ default: m.TuViChartView })),
 );
 const BaziView = lazy(() =>
   import('./components/BaziView.tsx').then((m) => ({ default: m.BaziView })),
@@ -26,12 +18,12 @@ const BaziView = lazy(() =>
 const CalcTrace = lazy(() =>
   import('./components/CalcTrace.tsx').then((m) => ({ default: m.CalcTrace })),
 );
-const TuViChartView = lazy(() =>
-  import('./components/TuViChartView.tsx').then((m) => ({ default: m.TuViChartView })),
+const MethodPage = lazy(() =>
+  import('./components/MethodPage.tsx').then((m) => ({ default: m.MethodPage })),
 );
 
 type Tab = 'tuvi' | 'bazi' | 'calc';
-type Page = 'lookup' | 'stars' | 'method';
+type Page = 'lookup' | 'method';
 
 const PRESET_KEYS = Object.keys(PRESET_INFO) as PresetName[];
 
@@ -52,7 +44,8 @@ function readInitial(): { values: FormValues; active: boolean } | null {
   const genderRaw = p.get('gender');
   const gender: Gender = genderRaw === 'nu' ? 'nu' : 'nam';
   const provinceRaw = p.get('province');
-  const province: string = provinceRaw && PROVINCES.some((x) => x.code === provinceRaw) ? provinceRaw : '';
+  const province: string =
+    provinceRaw && PROVINCES.some((x) => x.code === provinceRaw) ? provinceRaw : '';
   const ziRaw = p.get('zi');
   const ziBoundary: FormValues['ziBoundary'] =
     ziRaw === 'late' || ziRaw === 'early' ? ziRaw : '';
@@ -104,10 +97,13 @@ function syncUrl(values: FormValues): void {
 type ComputedWith = {
   gender: Gender;
   preset: PresetName;
-  ziBoundary: FormValues['ziBoundary'];
-  hourStemRule: FormValues['hourStemRule'];
-  leapMonthRule: FormValues['leapMonthRule'];
 };
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: 'tuvi', label: 'Tử Vi' },
+  { id: 'bazi', label: 'Bát Tự' },
+  { id: 'calc', label: 'Cách tính' },
+];
 
 export function App() {
   const initial = useMemo(readInitial, []);
@@ -117,20 +113,19 @@ export function App() {
   const [computedWith, setComputedWith] = useState<ComputedWith | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>('tuvi');
-  const [tuviVariant, setTuviVariant] = useState<'cn' | 'vn'>('cn');
   const [busy, setBusy] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [announce, setAnnounce] = useState('');
   const resultsRef = useRef<HTMLElement>(null);
   const shouldFocus = useRef(false);
 
-  const computeFor = async (v: FormValues, focus: boolean) => {
+  const computeFor = async (v: FormValues) => {
     setBusy(true);
     setError(null);
     const parsed = parseForm(v);
     if (parsed.error) {
       setError(parsed.error);
       setResult(null);
-      setAnnounce('');
       setBusy(false);
       return;
     }
@@ -147,21 +142,14 @@ export function App() {
         tuvi: { leapMonthRule: v.leapMonthRule },
       });
       setResult(res);
-      setComputedWith({
-        gender: v.gender,
-        preset: v.preset,
-        ziBoundary: v.ziBoundary,
-        hourStemRule: v.hourStemRule,
-        leapMonthRule: v.leapMonthRule,
-      });
-      setTuviVariant('cn');
+      setComputedWith({ gender: v.gender, preset: v.preset });
       setTab('tuvi');
+      setEditing(false);
       syncUrl(v);
-      setAnnounce('Đã an lá số. Kết quả gồm Tử Vi, Bát Tự và cách tính chi tiết.');
-      if (focus) shouldFocus.current = true;
+      setAnnounce('Đã an lá số.');
+      shouldFocus.current = true;
     } catch (err) {
       setResult(null);
-      setAnnounce('');
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setBusy(false);
@@ -170,12 +158,11 @@ export function App() {
 
   // Tự tính lại khi mở một URL có chia sẻ lá số.
   useEffect(() => {
-    if (initial?.active) void computeFor(initial.values, false);
+    if (initial?.active) void computeFor(initial.values);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Sau khi kết quả được gắn vào DOM, đưa focus tới vùng kết quả
-  // để trình đọc màn hình đọc tiếp từ đầu lá số.
+  // Kết quả vào DOM thì đưa focus tới vùng kết quả để trình đọc màn hình đọc tiếp.
   useEffect(() => {
     if (!result || !shouldFocus.current) return;
     shouldFocus.current = false;
@@ -185,298 +172,143 @@ export function App() {
     el.focus({ preventScroll: true });
   }, [result]);
 
-  const submit = () => void computeFor(values, true);
-
-  const flashAnnounce = (message: string) => {
-    setAnnounce(message);
-    window.setTimeout(() => setAnnounce(''), 2500);
-  };
+  const submit = () => void computeFor(values);
 
   const shareCopy = async () => {
     const outcome = await copyUrl(window.location.href);
-    flashAnnounce(outcome.message);
+    setAnnounce(outcome.message);
+    window.setTimeout(() => setAnnounce(''), 2500);
   };
 
-  const shareWeb = async () => {
-    const outcome = await shareUrl(window.location.href);
-    if (outcome) flashAnnounce(outcome.message);
-  };
-
-  const go = (next: Page) => {
-    setPage(next);
+  const openMethod = () => {
+    setPage('method');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const showForm = page === 'lookup' && (!result || editing);
+  const showResult = page === 'lookup' && Boolean(result) && !editing;
 
   return (
     <div className="app">
       <header className="site-head">
-        <div className="site-head-inner">
-          <button className="brand" onClick={() => go('lookup')}>
-            <SealMark className="brand-mark" size={42} />
-            <span className="brand-text">
-              Tra Cứu Huyền Học
-              <small>Tử Vi · Bát Tự · Nguyên văn</small>
-            </span>
-          </button>
-          <nav className="site-nav">
-            <button aria-pressed={page === 'lookup'} onClick={() => go('lookup')}>
-              Tra cứu
-            </button>
-            <button aria-pressed={page === 'stars'} onClick={() => go('stars')}>
-              Tinh diệu
-            </button>
-            <button aria-pressed={page === 'method'} onClick={() => go('method')}>
-              Phương pháp
-            </button>
-          </nav>
-        </div>
+        <button className="brand" onClick={() => setPage('lookup')}>
+          Tra Cứu Huyền Học
+        </button>
       </header>
 
       <p className="sr-only" role="status" aria-live="polite">
         {announce}
       </p>
 
-      {page === 'method' || page === 'stars' ? (
-        <Suspense
-          fallback={
-            <p className="page-loading" role="status">
-              Đang tải…
-            </p>
-          }
-        >
-          {page === 'method' ? (
-            <MethodPage onBack={() => go('lookup')} />
-          ) : (
-            <StarReference onBack={() => go('lookup')} />
-          )}
-        </Suspense>
-      ) : (
-        <>
-          <Hero onMethod={() => go('method')} />
-
-          <main className="lookup" id="bieu-mau">
-
+      <main className="lookup">
+        {showForm && (
           <BirthForm
             values={values}
             onChange={(patch) => setValues((v) => ({ ...v, ...patch }))}
             onSubmit={submit}
+            onCancel={result ? () => setEditing(false) : undefined}
             error={error}
             busy={busy}
           />
+        )}
 
-          {busy && (
-            <div className="loading-overlay" aria-label="Đang an lá số" aria-live="polite">
-              <div className="loading-spinner" aria-hidden="true"></div>
-              <span className="tiny muted" style={{ marginTop: '12px', display: 'block' }}>
-                Đang an lá số…
-              </span>
-            </div>
-          )}
+        {busy && (
+          <div className="loading-overlay" role="status" aria-live="polite">
+            <div className="loading-spinner" aria-hidden="true" />
+            <span>Đang an lá số…</span>
+          </div>
+        )}
 
-          {result && (
-            <section
-              id="ket-qua"
-              className="result"
-              ref={resultsRef}
-              tabIndex={-1}
-              aria-label="Kết quả lá số"
-            >
-              <div className="result-head">
-                <div className="result-title">
-                  <p className="kicker">Kết quả · Tử Vi · Tứ trụ</p>
-                  <h2>Bản mệnh</h2>
-                </div>
-                <div className="result-summary">
-                  <span className="chip">
-                    {formatTime(result.ctx.civilWall.hour, result.ctx.civilWall.minute)} ·{' '}
-                    {formatDate(
-                      result.ctx.civilWall.year,
-                      result.ctx.civilWall.month,
-                      result.ctx.civilWall.day,
-                    )}
-                  </span>
-                  <span className="chip chip-key">
-                    Âm lịch TQ {lunarShort(result.ctx.lunar.cn)} · {yearName(result.ctx.lunar.cn)}
-                  </span>
-                  <span className="chip">
-                    Tứ trụ {result.ctx.pillars.year.vi} {result.ctx.pillars.month.vi}{' '}
-                    {result.ctx.pillars.day.vi} {result.ctx.pillars.hour.vi}
-                  </span>
-                  <span className="chip">{PRESET_INFO[computedWith?.preset ?? values.preset].label}</span>
-                  {computedWith?.ziBoundary && (
-                    <span className="chip">
-                      Tý {computedWith.ziBoundary === 'early' ? 'sớm (23:00)' : 'muộn (00:00)'}
-                    </span>
-                  )}
-                  {computedWith?.hourStemRule && (
-                    <span className="chip">
-                      Can giờ {computedWith.hourStemRule === 'next-day' ? 'ngày kế' : 'ngày hiện tại'}
-                    </span>
-                  )}
-                </div>
-                <div className="result-head-right">
-                  <div className="share-group">
-                    <button
-                      className="share-btn"
-                      onClick={shareCopy}
-                      title="Sao chép URL lá số"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M1 12h4M21 12h-4M21 12l-1.45-1.32a2 2 0 0 1-2.3-.96l-2.9-2.68A2 2 0 0 0 13.12 3H3a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v0M17 13l3 3"/></svg>
-                    </button>
-                    <button
-                      className="share-btn"
-                      onClick={shareWeb}
-                      title="Chia sẻ lá số"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/></svg>
-                    </button>
-                    <ReadingModeToggle />
-                  </div>
-                  <div className="tabs" role="tablist" aria-label="Nội dung lá số">
-                  <button
-                    role="tab"
-                    aria-selected={tab === 'tuvi'}
-                    className={tab === 'tuvi' ? 'active' : ''}
-                    onClick={() => setTab('tuvi')}
-                  >
-                    Tử Vi
-                  </button>
-                  <button
-                    role="tab"
-                    aria-selected={tab === 'bazi'}
-                    className={tab === 'bazi' ? 'active' : ''}
-                    onClick={() => setTab('bazi')}
-                  >
-                    Bát Tự
-                  </button>
-                  <button
-                    role="tab"
-                    aria-selected={tab === 'calc'}
-                    className={tab === 'calc' ? 'active' : ''}
-                    onClick={() => setTab('calc')}
-                  >
-                    Cách tính
-                  </button>
-                </div>
-                </div>
+        {showResult && result && (
+          <section
+            id="ket-qua"
+            className="result"
+            ref={resultsRef}
+            tabIndex={-1}
+            aria-label="Kết quả lá số"
+          >
+            <header className="result-head">
+              <div>
+                <h1>Lá số của bạn</h1>
+                <p className="result-meta">
+                  {computedWith?.gender === 'nu' ? 'Nữ' : 'Nam'} ·{' '}
+                  {formatTime(result.ctx.civilWall.hour, result.ctx.civilWall.minute)}{' '}
+                  {formatDate(
+                    result.ctx.civilWall.year,
+                    result.ctx.civilWall.month,
+                    result.ctx.civilWall.day,
+                  )}{' '}
+                  · Âm lịch {lunarShort(result.ctx.lunar.cn)} {yearName(result.ctx.lunar.cn)}
+                </p>
               </div>
+              <div className="result-actions">
+                <button type="button" className="link-btn" onClick={shareCopy}>
+                  Chép liên kết
+                </button>
+                <button type="button" className="link-btn" onClick={() => setEditing(true)}>
+                  Đổi ngày sinh
+                </button>
+              </div>
+            </header>
 
-              <WarningList ctx={result.ctx} />
+            <div className="tabs" role="tablist" aria-label="Nội dung lá số">
+              {TABS.map((t) => (
+                <button
+                  key={t.id}
+                  id={`tab-${t.id}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === t.id}
+                  aria-controls={`panel-${t.id}`}
+                  onClick={() => setTab(t.id)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
 
-              <Suspense
-                fallback={
-                  <p className="page-loading" role="status">
-                    Đang tải…
-                  </p>
-                }
-              >
-                {tab === 'tuvi' && (
-                  result.tuvi ? (
-                  <>
-                    {result.ctx.lunar.diverges && result.tuviVn && (
-                      <div className="variant-bar">
-                        <div>
-                          <strong>Hai lịch cho hai ngày âm khác nhau.</strong>{' '}
-                          <span>
-                            Lá số chính an theo lịch Trung Quốc (UTC+8). Bản đối chiếu an theo lịch
-                            Việt Nam (UTC+7) — thường là lý do ứng dụng Việt và ứng dụng Trung Quốc
-                            ra khác.
-                          </span>
-                        </div>
-                        <div className="segmented" role="group" aria-label="Chọn lịch an sao">
-                          <button
-                            type="button"
-                            aria-pressed={tuviVariant === 'cn'}
-                            onClick={() => setTuviVariant('cn')}
-                          >
-                            Lịch TQ (chính)
-                          </button>
-                          <button
-                            type="button"
-                            aria-pressed={tuviVariant === 'vn'}
-                            onClick={() => setTuviVariant('vn')}
-                          >
-                            Lịch VN (đối chiếu)
-                          </button>
-                        </div>
-                      </div>
-                    )}
+            <div
+              className="tab-view"
+              role="tabpanel"
+              id={`panel-${tab}`}
+              aria-labelledby={`tab-${tab}`}
+            >
+              <Suspense fallback={<p className="page-loading">Đang mở…</p>}>
+                {tab === 'tuvi' &&
+                  (result.tuvi ? (
                     <TuViChartView
-                      chart={
-                        tuviVariant === 'vn' && result.tuviVn ? result.tuviVn : result.tuvi
-                      }
-                      calendarLabel={tuviVariant === 'vn' ? 'Âm lịch VN' : 'Âm lịch TQ'}
+                      chart={result.tuvi}
                       gender={computedWith?.gender ?? values.gender}
                     />
-                  </>
-                ) : (
-                  <div className="empty">
-                    <h2>Không dựng được lá số Tử Vi</h2>
-                    <p>{result.tuviError}</p>
-                    <p className="muted">
-                      Bát Tự vẫn xem được bình thường. Tử Vi cần năm âm lịch từ 1900 trở đi; sinh
-                      trước Tết 1900 sẽ không có lá số.
-                    </p>
-                  </div>
-                )
-                )}
-                {tab === 'bazi' && (
-                  <BaziView
-                    chart={result.bazi}
-                    ctx={result.ctx}
-                    gender={computedWith?.gender ?? values.gender}
-                  />
-                )}
+                  ) : (
+                    <div className="empty">
+                      <h2>Không dựng được lá số Tử Vi</h2>
+                      <p>{result.tuviError}</p>
+                      <p className="muted">Bát Tự vẫn xem được bình thường.</p>
+                    </div>
+                  ))}
+                {tab === 'bazi' && <BaziView chart={result.bazi} />}
                 {tab === 'calc' && (
                   <CalcTrace ctx={result.ctx} tuvi={result.tuvi} bazi={result.bazi} />
                 )}
               </Suspense>
-            </section>
-          )}
-
-          {!result && !error && (
-            <section className="intro-grid">
-              <div className="intro-card">
-                <h2>Cùng một ngày sinh, vì sao hai lá số khác nhau?</h2>
-                <p>
-                  Vì mỗi ứng dụng chọn một quy ước: giờ Bắc Kinh hay giờ nơi sinh, Tý sớm hay Tý
-                  muộn, tháng nhuận chia đôi hay giữ nguyên, năm đổi tại Tết hay Lập Xuân. Ở đây
-                  từng lựa chọn hiện ra và đổi được.
-                </p>
-                <button className="link-btn" onClick={() => setPage('method')}>
-                  Xem cách dựng lá số →
-                </button>
-              </div>
-              <div className="intro-card">
-                <h2>Sách chép đến đâu, luận đến đó.</h2>
-                <p>
-                  Bản này an sao, lập tứ trụ, tính tàng can, thập thần và đại vận. Luận giải nằm
-                  ngay trong tab Tử Vi và Bát Tự — ghép nguyên văn đã kiểm với lá số, không có câu
-                  nào do giao diện tự viết.
-                </p>
-                <button className="link-btn" onClick={() => setPage('method')}>
-                  Nguồn và giới hạn →
-                </button>
-              </div>
-            </section>
-          )}
-
-          <footer className="site-foot">
-            <SealMark className="foot-seal" size={34} />
-            <div className="foot-text">
-              <p>
-                Bản dựng theo quy ước đã công bố — không phải lời khuyên y tế, tài chính hay pháp
-                lý.
-              </p>
-              <p className="tinier">
-                Lõi lịch và phép an sao có bộ kiểm đối chứng độc lập · trích dẫn qua cổng kiểm
-                SHA-256 · <code>npm run check</code>
-              </p>
             </div>
-          </footer>
-        </main>
-        </>
-      )}
+          </section>
+        )}
+
+        {page === 'method' && (
+          <Suspense fallback={<p className="page-loading">Đang mở…</p>}>
+            <MethodPage onBack={() => setPage('lookup')} />
+          </Suspense>
+        )}
+      </main>
+
+      <footer className="site-foot">
+        <span>Không phải lời khuyên y tế, tài chính hay pháp lý.</span>
+        <button type="button" className="link-btn" onClick={openMethod}>
+          Nguồn &amp; phương pháp
+        </button>
+      </footer>
     </div>
   );
 }

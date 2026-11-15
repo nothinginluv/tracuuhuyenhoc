@@ -7,14 +7,12 @@
  * là kết quả của engine, không phải nhận định vận mệnh.
  */
 import brightnessRaw from '../../../content/brightness.json';
-import dahanRaw from '../../../content/dahan.json';
-import palaceRulesRaw from '../../../content/palace-rules.json';
-import readingRulesRaw from '../../../content/reading-rules.json';
 import starInPalaceRaw from '../../../content/star-in-palace.json';
 import dayMastersRaw from '../../../content/day-masters.json';
 import tenGodsRaw from '../../../content/ten-gods.json';
 import {
   PALACE_NAMES,
+  STAR_DEFS,
   daHanCycles,
   type DaHan,
   type DaHanStep,
@@ -66,26 +64,6 @@ export function brightnessOf(starId: string, branch: number): Brightness | null 
     noFall: entry.no_fall,
   };
 }
-
-// ── Đại hạn ──────────────────────────────────────────────────
-type DahanDoc = {
-  direction_quote: string;
-  ten_year_quote: string;
-  fortune_quote: string;
-  structure_quote: string;
-  start_age: Record<string, string>;
-};
-
-const DAHAN = dahanRaw as DahanDoc;
-
-export const DAHAN_QUOTES = {
-  direction: QUOTES[DAHAN.direction_quote],
-  tenYear: QUOTES[DAHAN.ten_year_quote],
-  fortune: QUOTES[DAHAN.fortune_quote],
-  /** Câu luận theo cung — lấy từ `reading-rules.json` (cùng một nguồn). */
-  structure: QUOTES[(readingRulesRaw as ReadingRulesDoc).rules.ptc?.quote_id ?? ''],
-  startAge: (n: number) => QUOTES[DAHAN.start_age[String(n)]],
-};
 
 // ── Tử Vi ────────────────────────────────────────────────────
 export type ReadingStar = {
@@ -161,28 +139,6 @@ export function starQuote(ref: StarRef | undefined): Quote | undefined {
 }
 
 /**
- * Câu "ở cung này thì thuận / trắc trở": lấy từ 論太歲小限星辰庙陷遇十二宫中吉凶.
- * Trả về map theo chi của cung.
- */
-export type PalaceRulePair = { good?: Quote; bad?: Quote };
-
-let palaceRuleCache: Map<number, PalaceRulePair> | null = null;
-
-export function palaceRules(): Map<number, PalaceRulePair> {
-  if (palaceRuleCache) return palaceRuleCache;
-  const doc = palaceRulesRaw as {
-    entries: { branch: number; good_quote: string; bad_quote: string }[];
-  };
-  palaceRuleCache = new Map(
-    doc.entries.map((e) => [
-      e.branch,
-      { good: QUOTES[e.good_quote], bad: QUOTES[e.bad_quote] },
-    ]),
-  );
-  return palaceRuleCache;
-}
-
-/**
  * Câu "sao này ở cung này thì sao" — lấy từ các mục theo cung ở 卷二
  * (二 兄弟 … 十二 父母). Cung Mệnh không có trong bảng: ở đó dùng câu định
  * nghĩa sao của 卷一, vốn đã nói về người có sao ấy tại Mệnh.
@@ -236,33 +192,180 @@ export function starInPalaceData(palace: Palace): {
   };
 }
 
-/** Quy tắc đọc vận — tam phương, đại hạn, tiểu hạn, lưu niên. */
-type ReadingRulesDoc = {
-  steps: number[];
-  rules: Record<string, { quote_id: string; locator: string }>;
-};
-
-const RULES_DOC = readingRulesRaw as ReadingRulesDoc;
-
-export const READING_RULES = {
-  ptc: QUOTES[RULES_DOC.rules.ptc?.quote_id ?? ''],
-  dahanTenYears: QUOTES[RULES_DOC.rules['dahan-ten-years']?.quote_id ?? ''],
-  twoCycles: QUOTES[RULES_DOC.rules['dahan-two-cycles']?.quote_id ?? ''],
-  namBac: QUOTES[RULES_DOC.rules['dahan-nam-bac']?.quote_id ?? ''],
-  liuNian: QUOTES[RULES_DOC.rules.liunian?.quote_id ?? ''],
-  /** Bước tam hợp / đối cung theo chi. */
-  steps: RULES_DOC.steps ?? [4, 6, 8],
-};
-
-const BRANCH_VI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
-
+// ── Câu gọn cho một cung ─────────────────────────────────────
 /**
- * Chi của một năm dương lịch — dùng cho cung lưu niên.
- * Công thức là phép đếm lịch, không phải luận đoán.
+ * Câu của sách theo cung viết theo lối "…; cùng X: …; hãm địa: …". Đọc nguyên
+ * cả câu thì nặng, mà phần lớn mệnh đề lại nói về sao không có trong cung.
+ *
+ * Hàm dưới đây **chỉ bỏ mệnh đề**, không viết lại chữ nào: mỗi mệnh đề còn lại
+ * là một đoạn nguyên văn của câu đã kiểm. Mệnh đề bị bỏ khi:
+ *   · nhắc tới sao không đóng trong cung, hoặc nhóm sao mà cung không đủ;
+ *   · gắn với mức sáng (miếu/vượng/hãm…) khác mức sáng thật của sao;
+ *   · gắn với một chi khác chi của cung đang đọc — vd "ở Thân", "(Ngọ)";
+ *   · đặt điều kiện chung (cát tinh, sát tinh, Tuần, Triệt…) mà không nêu sao cụ thể;
+ *   · là ghi chú biên tập của bản dịch ("Sách thêm một câu…"), không phải lời sách.
+ *
+ * Câu được lấy theo **tiền tố**: gặp mệnh đề đầu tiên không áp dụng được thì
+ * dừng, không nhảy qua nó. Nhờ vậy một mệnh đề không bao giờ mất điều kiện
+ * đứng trước nó — vd "hãm địa: nhiều tai; đàn bà chủ tàn tật" mà bỏ vế đầu thì
+ * vế sau thành câu nói chung, sai nghĩa.
  */
-export function liuNianStep(year: number): { branch: number; branchVi: string } {
-  const branch = (((year - 4) % 12) + 12) % 12;
-  return { branch, branchVi: BRANCH_VI[branch]! };
+const GROUP_ALIASES: { label: string; ids: string[] }[] = [
+  { label: 'Tả Hữu', ids: ['zuofu', 'youbi'] },
+  { label: 'Xương Khúc', ids: ['wenchang', 'wenqu'] },
+  { label: 'Không Kiếp', ids: ['dikong', 'dijie'] },
+  { label: 'Kình Đà', ids: ['qingyang', 'tuoluo'] },
+  { label: 'Hoả Linh', ids: ['huoxing', 'lingxing'] },
+  { label: 'Khôi Việt', ids: ['tiankui', 'tianyue'] },
+];
+
+const BRIGHT_START: { key: string; ok: (level: string) => boolean }[] = [
+  // Nguồn dùng "miếu vượng" như một cụm; cả hai đều là trạng thái sáng.
+  { key: 'miếu vượng', ok: (l) => l === 'Miếu' || l === 'Vượng' },
+  { key: 'miếu', ok: (l) => l === 'Miếu' || l === 'Vượng' },
+  { key: 'vượng', ok: (l) => l === 'Miếu' || l === 'Vượng' },
+  { key: 'hãm địa', ok: (l) => l === 'Hãm' },
+  { key: 'hãm cung', ok: (l) => l === 'Hãm' },
+  { key: 'hãm', ok: (l) => l === 'Hãm' },
+  { key: 'bình hoà', ok: (l) => l === 'Bình' },
+  { key: 'bình', ok: (l) => l === 'Bình' },
+  { key: 'đắc địa', ok: (l) => l !== 'Hãm' },
+  { key: 'lạc hãm', ok: (l) => l === 'Hãm' },
+];
+
+const GENERIC_CONDITIONS = ['cát tinh', 'sát tinh', 'tuần', 'triệt', 'sao hao', 'hao tinh'];
+
+const META_STARTS = ['sách thêm', 'sách chép', 'sách ghi', 'bản dịch', 'nguồn:'];
+
+const BRANCH_NAMES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
+
+/** Các chi được nêu như một điều kiện vị trí trong mệnh đề. */
+function branchMentions(body: string): string[] {
+  const found: string[] = [];
+  for (const b of BRANCH_NAMES) {
+    const patterns = [
+      new RegExp(`[([{]\\s*${b}\\s*[)\\]}]`),
+      new RegExp(`(?:^|[\\s(])(?:ở|cư|tại|đóng(?:\\s+ở|\\s+tại)?|vào)\\s+(?:cung\\s+)?${b}(?=[\\s,;:.!?)]|$)`),
+    ];
+    if (patterns.some((re) => re.test(body))) found.push(b);
+  }
+  return found;
+}
+
+/** Mức sáng mà mệnh đề đòi hỏi, nếu có (xét phần đầu mệnh đề). */
+function leadingBrightness(body: string): { ok: (level: string) => boolean } | null {
+  const head = body.slice(0, 48).toLowerCase();
+  for (const b of BRIGHT_START) {
+    const re = new RegExp(`(?:^|[\\s:,(])${b.key}(?=[\\s:,.!?)]|$)`);
+    if (re.test(head)) return b;
+  }
+  return null;
+}
+
+function mentionedStarIds(body: string): string[] {
+  const ids: string[] = [];
+  for (const [id, def] of Object.entries(STAR_DEFS)) {
+    if ((def as { vi: string }).vi && body.includes((def as { vi: string }).vi)) ids.push(id);
+  }
+  for (const group of GROUP_ALIASES) {
+    if (body.includes(group.label)) ids.push(...group.ids);
+  }
+  return ids;
+}
+
+const HUA_WORDS: { key: string; id: string }[] = [
+  { key: 'hoá lộc', id: 'loc' },
+  { key: 'hóa lộc', id: 'loc' },
+  { key: 'hoá quyền', id: 'quyen' },
+  { key: 'hóa quyền', id: 'quyen' },
+  { key: 'hoá khoa', id: 'khoa' },
+  { key: 'hóa khoa', id: 'khoa' },
+  { key: 'hoá kỵ', id: 'ky' },
+  { key: 'hóa kỵ', id: 'ky' },
+];
+
+/** Bỏ các mệnh đề không áp dụng được cho cung đang đọc. */
+export function compactQuote(
+  text: string,
+  present: Set<string>,
+  brightnessVi: string | null,
+  huaIds: Set<string>,
+  branchVi: string | null,
+): string {
+  const segments: { body: string; sep: string }[] = [];
+  const re = /([;.])\s+/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    segments.push({ body: text.slice(last, m.index), sep: m[1]! });
+    last = m.index + m[0].length;
+  }
+  segments.push({ body: text.slice(last), sep: '' });
+
+  let out = '';
+  let prevSep = '';
+  for (const seg of segments) {
+    // Ghi chú biên tập trong ngoặc ("bản chép …") là chú thích của người dịch,
+    // không phải lời sách — bỏ phần ngoặc, giữ nguyên phần còn lại.
+    const body = seg.body.replace(/\s*\((?:bản chép|nguyên chép)[^)]*\)/gi, '').trim();
+    if (!body) continue;
+    const lower = body.toLowerCase();
+
+    if (META_STARTS.some((p) => lower.startsWith(p))) break;
+
+    // Câu vừa nêu mức sáng vừa nêu mức tối là cặp điều kiện đối nhau, không
+    // tách được thành một câu đúng — dừng ở đây.
+    if (/hãm/.test(lower) && /(miếu|vượng)/.test(lower)) break;
+
+    const bright = leadingBrightness(body);
+    if (bright && !bright.ok(brightnessVi ?? '')) break;
+
+    const branches = branchMentions(body);
+    if (branches.length > 0 && !branches.includes(branchVi ?? '')) break;
+
+    const mentioned = mentionedStarIds(body);
+    if (mentioned.length > 0) {
+      // "thêm A, B, C" là điều kiện đủ cả nhóm; "A hoặc B" mới là một trong hai.
+      const anyStar = lower.includes('hoặc') || /\bhay\b/.test(lower);
+      const ok = anyStar
+        ? mentioned.some((id) => present.has(id))
+        : mentioned.every((id) => present.has(id));
+      if (!ok) break;
+    }
+    if (mentioned.length === 0 && GENERIC_CONDITIONS.some((g) => lower.includes(g))) break;
+
+    const huaMentioned = HUA_WORDS.filter((h) => lower.includes(h.key));
+    if (huaMentioned.length > 0 && !huaMentioned.some((h) => huaIds.has(h.id))) break;
+
+    if (out) out += prevSep === '.' ? '. ' : '; ';
+    out += body;
+    prevSep = seg.sep;
+  }
+
+  if (out && !/[.!?]$/.test(out)) out += '.';
+  return out;
+}
+
+/** Câu ngắn nhất còn trung thành với nguồn cho một sao trong một cung. */
+export function starPalaceLine(item: ReadingStar, reading: PalaceReading): string | undefined {
+  const at = starInPalaceData(reading.palace).quote(item.star.id);
+  if (at) {
+    const present = new Set(reading.stars.map((s) => s.star.id));
+    const hua = new Set<string>();
+    for (const s of reading.stars) {
+      if (s.hua) hua.add(s.hua.id);
+    }
+    const compact = compactQuote(
+      at.claim_vi,
+      present,
+      item.brightness?.level?.vi ?? null,
+      hua,
+      reading.palace.branchVi,
+    );
+    if (compact) return compact;
+  }
+  const def = starQuote(item.ref);
+  return def ? (def.plain_vi ?? def.claim_vi) : undefined;
 }
 
 // ── Bát Tự ───────────────────────────────────────────────────

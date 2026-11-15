@@ -1,46 +1,40 @@
 /**
- * Khung đọc 12 cung: danh mục bên trái, nội dung một cung bên phải.
+ * Khung đọc 12 cung: danh mục 12 cung + nội dung cung đang chọn.
  *
- * Trước đây mỗi cung là một khối sổ xuống — mở cung nào là cả trang dài thêm
- * và cả 12 khối nội dung vẫn nằm trong DOM. Khung này chỉ dựng nội dung của
- * cung đang chọn:
- *   · desktop (≥900px): danh mục dọc 12 cung + nội dung;
- *   · hẹp hơn: danh mục thành dải cuộn ngang, nội dung nằm dưới.
- *
- * Dùng đúng mẫu tab của WAI-ARIA: `tablist` → `tab` → `tabpanel`, roving
- * tabindex, phím ←/→/↑/↓/Home/End. Nội dung lấy từ `PalaceDetail` — cùng một
- * nguồn với bảng trượt trên lá số nên hai chỗ không thể lệch.
+ * Mẫu tab của WAI-ARIA: `tablist` → `tab` → `tabpanel`, roving tabindex, phím
+ * ←/→/↑/↓/Home/End. `active` do trang lá số giữ, để bấm một ô trên lá số cũng
+ * mở đúng cung ở đây.
  */
 
-import { useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useId, useMemo, useRef, type KeyboardEvent } from 'react';
 import type { TuViReading } from '../reading.ts';
-import { PalaceDetail, type PalaceRules } from './reading-blocks.tsx';
+import { PalaceReadingView } from './reading-blocks.tsx';
 
-type Props = { reading: TuViReading; rules?: PalaceRules };
+type Props = {
+  reading: TuViReading;
+  active: number;
+  onPick: (branch: number) => void;
+};
 
-export function ReadingPanel({ reading, rules }: Props) {
+export function ReadingPanel({ reading, active, onPick }: Props) {
   const uid = useId();
   const tabId = (branch: number) => `${uid}-tab-${branch}`;
   const panelId = `${uid}-panel`;
 
-  // Thứ tự tên cung đi nghịch từ cung Mệnh — giống bảng trượt.
+  // Thứ tự tên cung đi nghịch từ cung Mệnh.
   const ordered = useMemo(() => {
     const soulBranch = reading.soul.palace.branch;
     return Array.from({ length: 12 }, (_, i) => reading.palaces[(soulBranch - i + 12) % 12]!);
   }, [reading]);
 
-  const soulBranch = reading.soul.palace.branch;
-  const [picked, setPicked] = useState<number | null>(null);
-  const active = picked !== null && reading.palaces[picked] ? picked : soulBranch;
   const index = ordered.findIndex((p) => p.palace.branch === active);
   const current = ordered[index] ?? ordered[0]!;
 
   const tabsRef = useRef<Array<HTMLButtonElement | null>>([]);
-  const indexRef = useRef<HTMLDivElement>(null);
 
   const focusTab = (i: number) => {
     const target = (i + 12) % 12;
-    setPicked(ordered[target]!.palace.branch);
+    onPick(ordered[target]!.palace.branch);
     tabsRef.current[target]?.focus();
   };
 
@@ -71,31 +65,15 @@ export function ReadingPanel({ reading, rules }: Props) {
 
   const step = (delta: number) => {
     const next = ordered[(index + delta + 12) % 12];
-    if (!next) return;
-    setPicked(next.palace.branch);
-
-    // Giữ ô vừa chọn trong tầm mắt của danh mục, nhưng chỉ cuộn danh mục —
-    // không kéo cả trang (người dùng đang đọc ở dưới).
-    const strip = indexRef.current;
-    const tab = tabsRef.current[(index + delta + 12) % 12];
-    if (!strip || !tab) return;
-    const tabRect = tab.getBoundingClientRect();
-    const stripRect = strip.getBoundingClientRect();
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    strip.scrollTo({
-      left: strip.scrollLeft + tabRect.left - stripRect.left - (stripRect.width - tabRect.width) / 2,
-      top: strip.scrollTop + tabRect.top - stripRect.top - (stripRect.height - tabRect.height) / 2,
-      behavior: reduceMotion ? 'auto' : 'smooth',
-    });
+    if (next) onPick(next.palace.branch);
   };
 
   return (
     <div className="reading-panel">
       <div
-        className="reading-panel-index"
+        className="reading-index"
         role="tablist"
         aria-label="Mười hai cung trong lá số"
-        ref={indexRef}
         onKeyDown={onKeyDown}
       >
         {ordered.map((p, i) => {
@@ -117,52 +95,48 @@ export function ReadingPanel({ reading, rules }: Props) {
               aria-controls={panelId}
               tabIndex={selected ? 0 : -1}
               className="reading-tab"
-              onClick={() => setPicked(p.palace.branch)}
+              onClick={() => onPick(p.palace.branch)}
             >
               <span className="reading-tab-name">
                 {p.palace.nameVi}
-                {p.palace.isBody && <span className="tag tag-body">Thân</span>}
+                {p.palace.isBody && <span className="tag">Thân</span>}
               </span>
-              <span className="reading-tab-meta">
-                {p.palace.stemVi} {p.palace.branchVi} · hạn {p.dahan.fromAge}–{p.dahan.toAge}
-              </span>
-              <span className="reading-tab-stars">{mainNames || 'không có chính tinh'}</span>
+              <span className="reading-tab-stars">{mainNames || 'không có sao chính'}</span>
             </button>
           );
         })}
       </div>
 
       <div
-        className="reading-panel-view"
+        className="reading-view"
         role="tabpanel"
         id={panelId}
-        aria-labelledby={tabId(active)}
+        aria-labelledby={tabId(current.palace.branch)}
         tabIndex={0}
       >
-        <header className="reading-panel-head">
-          <p className="eyebrow">Cung {index + 1} / 12</p>
+        <header className="reading-view-head">
           <h4>
             {current.palace.nameVi}
-            {current.palace.isBody && <span className="tag tag-body">Thân</span>}
+            {current.palace.isBody && <span className="tag">Thân</span>}
           </h4>
-          <p className="reading-panel-meta">
+          <p className="muted">
             {current.palace.stemVi} {current.palace.branchVi} · đại hạn{' '}
             {current.dahan.fromAge}–{current.dahan.toAge}
           </p>
         </header>
 
-        <PalaceDetail reading={current} rules={rules?.get(current.palace.branch)} headingLevel={5} />
+        <PalaceReadingView reading={current} />
 
-        <footer className="reading-panel-foot">
-          <button
-            type="button"
-            className="rp-nav"
-            onClick={() => step(-1)}
-            disabled={index === 0}
-          >
+        <footer className="reading-view-foot">
+          <button type="button" className="nav-btn" onClick={() => step(-1)} disabled={index === 0}>
             ← Cung trước
           </button>
-          <button type="button" className="rp-nav" onClick={() => step(1)} disabled={index === 11}>
+          <button
+            type="button"
+            className="nav-btn"
+            onClick={() => step(1)}
+            disabled={index === 11}
+          >
             Cung sau →
           </button>
         </footer>

@@ -49,22 +49,20 @@ npm run e2e         # E2E Playwright: nhập → lá số → cung → nguyên v
 
 `apps/web` là giao diện duy nhất — **không tự tính gì**, mọi con số đều đi qua `engine.ts` → ba gói lõi.
 
-- **Form**: ngày/tháng/năm dạng `dd/mm/yyyy` (không phụ thuộc định dạng locale của trình duyệt), giờ 24h, 63 tỉnh pre-2025, giới tính.
+- **Trang đầu chỉ có biểu mẫu**: ngày/tháng/năm (`dd/mm/yyyy`, không phụ thuộc locale), giờ 24h, 63 tỉnh pre-2025, giới tính. Không bìa, không thẻ giới thiệu, không cảnh báo kỹ thuật.
 - **Quảng Trị 1960–1975**: hiện thêm ô chọn huyện, vì hai bờ vĩ tuyến 17 khác múi giờ (+7 vs +8).
-- **Tuỳ chỉnh quy ước**: preset, ranh giới Tý (sớm/muộn), can giờ 23:00–23:59, quy tắc tháng nhuận — tất cả ghi vào URL để chia sẻ đúng lá số đang xem.
-- **Kết quả**: chip tóm tắt (giờ, âm lịch TQ, tứ trụ, preset), danh sách cảnh báo, ba tab **Tử Vi · Bát Tự · Cách tính**. Phần luận giải nằm ngay trong tab Tử Vi và tab Bát Tự, không phải chuyển tab.
-- **Hai lá Tử Vi**: khi lịch TQ (+8) và lịch VN (+7) cho hai ngày âm khác nhau, thanh chọn cho phép xem lá chính (TQ) và lá đối chiếu (VN) — đây thường là lý do app Việt và app TQ ra khác.
-- **Trang Phương pháp**: chuỗi tính, bảng preset, quy tắc Tử Vi/Bát Tự, giới hạn, nguồn + trích dẫn mở được tại chỗ.
-- **Trang Tinh diệu**: 14 chính tinh + 20 phụ tinh + 4 Tứ Hoá + 12 cung, mỗi mục mở được nguyên văn và nguồn; 4 phụ tinh còn lại được nêu tên là chưa có định nghĩa trong kho Tầng A.
-- **Bìa “Sổ Thiên Văn”**: masthead ấn bản + đầu đề **“Trời không nói. Sách có chép.”**, nền sao vẽ bằng canvas 2D (số sao theo diện tích, tối đa 160, DPR chặn ở 2; dừng vẽ khi ra khỏi khung nhìn hoặc tab bị ẩn; `prefers-reduced-motion` vẽ một khung tĩnh), la bàn dịch nhẹ theo cuộn. Ba dòng ghi Lịch pháp · Quy ước · Nguyên văn như sổ tay. Nút **An một lá số** cuộn tới biểu mẫu theo chiều cao thật của header dính (không bị khuất sau header trên điện thoại), **Xem cách an sao** mở trang Phương pháp.
-- **Khung đọc 12 cung**: dưới lá số Tử Vi là khối “Đọc lá số theo 12 cung” — tóm tắt Mệnh/Thân/sao chủ/tứ hoá/đại hạn/lưu niên, rồi một **khung đọc** gồm danh mục 12 cung (tên cung, can chi, đại hạn, chính tinh) và nội dung của đúng cung đang chọn: câu “thuận / trắc trở”, **câu riêng của từng chính tinh và từng phụ tinh tại cung này** (卷二), định nghĩa chung của sao, độ sáng, tứ hoá, tam hợp/đối cung. Desktop: danh mục dọc bên trái; điện thoại: dải cuộn ngang. Dùng mẫu tab ARIA (`tablist`/`tab`/`tabpanel`), phím ←/→/↑/↓/Home/End, nút “Cung trước / Sau”. Chỉ dựng nội dung một cung — nhẹ hơn 12 khối sổ xuống cũ. Dưới lá Bát Tự là khối “Nhật chủ, thập thần và các vận”.
-- **Bảng chi tiết từng cung**: mỗi ô trong lá số là một nút thật — bấm (hoặc Enter/Space) mở bảng trượt từ cạnh phải (điện thoại: trượt từ đáy lên) với toàn bộ nội dung cung: câu “thuận / trắc trở”, **câu riêng của chính tinh và phụ tinh tại cung**, định nghĩa chung, độ sáng và tứ hoá, tam hợp — đối cung. Escape để đóng, Tab quay vòng trong bảng, đóng xong focus trả về đúng ô vừa bấm; nền bị khoá cuộn. Nút “Cung trước / Cung sau” đi theo đúng thứ tự 12 cung tính từ Mệnh.
-- **Ngôn ngữ cho người Việt**: mỗi câu có ba bản cùng một nguồn — *sát nguyên văn* (bản dịch giữ chữ của sách), *một dòng* và *lời giảng không thuật ngữ*. `164/427` câu đã có bản giảng; 246 câu “sao tại cung” (149 chính tinh + 97 phụ tinh) mới dùng bản dịch sát chữ (chế độ “Dễ hiểu” hiển thị chính bản đó, không viết lại thành lời giảng để tránh diễn giải sai); phần còn lại là bảng độ sáng (dữ liệu, không cần giải). Nút **Cách đọc** có ở cả trang kết quả lẫn trang Tinh diệu, chuyển giữa “Dễ hiểu” (mặc định) và “Sát nguyên văn”, lựa chọn được nhớ lại. Thuật ngữ còn lạ (miếu, vượng, tam hợp, cục, thập thần…) được gạch dưới: rê chuột hoặc bấm để xem nghĩa từ `content/glossary.json` (**48 mục**); trên điện thoại nghĩa hiện thành thẻ ở đáy màn hình để không bị cắt ở mép.
-- **Giao diện “Sổ Thiên Văn”**: **chỉ chế độ sáng** — một ấn bản in: mực tàu, giấy dó, son ấn, vàng cổ, ngọc bích; không bóng đổ, không bo tròn, đường kẻ mảnh, nhãn mono, chữ serif. Không còn nút đổi nền, không đọc `prefers-color-scheme`; `color-scheme: light` và `meta[theme-color]` cố định. Breakpoints 360 / 480 / 716 / 900 / 1140px; header mực tàu dính trên cùng, dưới 480px nav xuống hàng riêng để không tràn ngang. Chữ giữ tương phản ≥ 4.5:1 trên nền giấy.
-- **Chia sẻ lá số**: sao chép URL (có fallback), chia sẻ qua Web Share API. Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
-- **Responsive**: lá số Tử Vi giữ bề rộng tối thiểu 440px (480px dưới 480px) và cuộn ngang có nhắc “vuốt ngang” thay vì bóp chữ — không tràn trang trên điện thoại. Bìa kiểm ở 360/480/716/900px: không tràn ngang, nút chính cao 44px, danh sách cam kết chuyển 3 → 1 cột.
-- **Giảm chuyển động**: tôn trọng `prefers-reduced-motion` (tắt la bàn xoay, parallax, nền sao động, nhún nút, cảm ứng).
-- **Mỗi câu có nút “§”** mở đúng đoạn chữ Hán, kèm câu tóm và bản sát chữ; chỗ nguồn không chép ghi rõ “nguồn không chép”, chỗ sách chưa có ghi rõ “chưa có, để không đoán”.
+- **Tuỳ chỉnh quy ước** (ẩn sau một nút): preset, ranh giới Tý, can giờ 23:00–23:59, quy tắc tháng nhuận — tất cả ghi vào URL để chia sẻ đúng lá số đang xem.
+- **Sau khi tính, biểu mẫu ẩn**; nút **Đổi ngày sinh** mở lại, **Huỷ** trả về kết quả cũ. Ba tab: **Tử Vi · Bát Tự · Cách tính**.
+- **Lá số Tử Vi**: 12 ô cung quanh một ô giữa (âm lịch, giờ sinh, ngũ hành cục, mệnh chủ). Ô cung chỉ ghi tên cung, can chi và sao chính; bấm một ô là mở đúng cung ấy ở khung đọc bên dưới.
+- **Khung đọc 12 cung**: danh mục 12 cung + nội dung cung đang chọn. Mỗi cung chỉ hiện **sao chính** và **câu của sách cho sao ấy tại cung đó**; câu dài được lược bỏ những mệnh đề nói về sao không có trong lá số (chỉ bỏ mệnh đề, không viết lại chữ nào). Sao phụ, độ sáng, tứ hoá, tam hợp và khối nguồn không hiện ở đây. Cung không có sao chính ghi rõ “Cung này không có sao chính”. Mẫu tab ARIA, phím ←/→/↑/↓/Home/End.
+- **Đại hạn**: bảng mười năm một cung, đánh dấu cung Mệnh/Thân và cung ứng với năm hiện tại.
+- **Bát Tự**: bốn trụ (can, chi, thập thần), nhật chủ kèm câu của sách, thập thần **trên bốn can** và bảng đại vận. Tàng can, bảng đếm ngũ hành và ghi chú kỹ thuật nằm trong tab Cách tính.
+- **Trang Nguồn & phương pháp** (chỉ mở từ chân trang): chuỗi tính, bảng preset, quy tắc Tử Vi/Bát Tự, giới hạn, nguồn — và là chỗ duy nhất hiện các khối trích dẫn “§” mở ra nguyên văn chữ Hán. Trang đọc lá số không hiện khối nguồn.
+- **Ngôn ngữ cho người Việt**: câu hiển thị ưu tiên bản giảng không thuật ngữ (`plain_vi`), chỉ khi kho chưa có mới dùng bản dịch sát chữ (`claim_vi`). Chỗ sách im lặng hoặc chưa chép thì ghi rõ, không đoán. Thuật ngữ còn lạ được gạch dưới để xem nghĩa từ `content/glossary.json`.
+- **Giao diện gọn**: **chỉ chế độ sáng** — nền giấy, một màu nhấn son, đường kẻ mảnh, chữ serif cho tiêu đề. Không bóng đổ, không gradient, không hoạ tiết trang trí. Breakpoints 480 / 716 / 900px.
+- **Chia sẻ lá số**: sao chép URL (có fallback). Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
+- **Responsive**: lá số Tử Vi giữ bề rộng tối thiểu 660px và cuộn ngang trong khung riêng thay vì bóp chữ; dưới 716px danh mục 12 cung chuyển thành dải cuộn ngang.
+- **Giảm chuyển động**: tôn trọng `prefers-reduced-motion` (tắt cuộn mượt và vòng xoay tải).
 - **Nhập liệu có test**: `parseForm` tách riêng khỏi component, 14 test cho biên ngày/giờ, năm 1900, tương lai và Quảng Trị.
 - **A11y**: `role="status" aria-live="polite"` thông báo khi lập lá số; focus chuyển tới `#ket-qua` sau khi kết quả vào DOM.
 - **ErrorBoundary**: lỗi render hiện thông báo + nút tải lại, không để màn hình trắng.
@@ -82,44 +80,40 @@ apps/web/
   src/components/ui/
               BaseComponents.tsx — Button · Card · Input · Textarea · Select · Checkbox · Radio · Switch
   src/components/
-              Hero (bìa "cổng vào" + CTA cuộn tới biểu mẫu) · StarField (nền sao canvas, tự dừng)
-              BirthForm · TuViChartView · PalaceCard (ô cung + bảng chi tiết trượt) · BaziView · CalcTrace
+              BirthForm · TuViChartView (12 ô cung + khung đọc + đại hạn) · BaziView (bốn trụ)
               ReadingPanel (danh mục 12 cung + nội dung một cung, mẫu tab ARIA)
-              WarningList · MethodPage · StarReference
+              CalcTrace · WarningList · MethodPage
               TuViReadingSection · BaziReadingSection · reading-blocks (khối luận giải dùng chung)
-              glossary.tsx (chú thích thuật ngữ + chế độ Dễ hiểu / Sát nguyên văn)
-              ErrorBoundary · Ornaments (ấn triện, la bàn — SVG hình học, không chữ Hán)
+              glossary.tsx (chú thích thuật ngữ + câu hiển thị)
+              ErrorBoundary
   test/       form.test.ts (14 test) · locator.test.ts (4 test) · reading.test.ts (7 test)
   public/     favicon.svg · og.svg · og.png · robots.txt · sitemap.xml
 ```
 
 ### Design system
 
-Nền tảng cho giao diện “Sổ Thiên Văn”, đặt ở `src/design-system` + `src/components/ui`:
+Nền tảng component base vẫn nằm ở `src/design-system` + `src/components/ui`, nhưng giao diện chính
+viết thẳng class nghiệp vụ trong `styles.css`:
 
-- **Một nguồn màu duy nhất**: `styles.css` giữ biến CSS (`--ink`, `--paper`, `--cinnabar`, `--gold`…).
+- **Một nguồn màu duy nhất**: `styles.css` giữ biến CSS (`--bg`, `--surface`, `--ink`, `--line`, `--accent`).
   Chỉ một bảng màu sáng — không có `[data-theme]`, không có bảng tối. `tokens.ts` chỉ *ánh xạ* các biến đó
-  sang JS (cho canvas/SVG) và giữ thang khoảng cách 4px, cỡ chữ, breakpoints 360/480/716/900/1140 —
-  **không khai báo lại mã màu** để tránh lệch giữa CSS và JS.
-- **Không có ThemeProvider**: `main.tsx` render thẳng `App` trong `ErrorBoundary` + `ReadingModeProvider`;
-  không đặt `data-theme`, không lưu lựa chọn nền trong `localStorage`, không theo dõi `prefers-color-scheme`.
-- **Component base** dùng class `ds-*` thuần (không Tailwind): `Button` (6 biến thể × 4 cỡ, có loading),
-  `Card` + header/title/description/footer, `Input`/`Textarea`/`Select` (nhãn, gợi ý, lỗi, icon),
-  `Checkbox`/`Radio`/`Switch`. Mọi id sinh bằng `useId`; lỗi form đi kèm `aria-invalid` +
-  `aria-describedby`; vòng focus dùng `--gold`; mọi chuyển động tắt theo `prefers-reduced-motion`.
-  Bộ này chỉ nạp ở trang xem trước — giao diện chính viết thẳng class nghiệp vụ trong `styles.css`.
-- **Thư viện xem trước**: mở `/design-preview.html` khi chạy `npm run dev` để duyệt mọi biến thể
-  trong chế độ sáng duy nhất. Trang này không nằm trong `dist/web` (Vite chỉ build `index.html`).
+  sang JS và giữ thang khoảng cách, cỡ chữ, breakpoints — **không khai báo lại mã màu**.
+- **Không có ThemeProvider**: `main.tsx` render thẳng `App` trong `ErrorBoundary`; không đặt `data-theme`,
+  không lưu lựa chọn nền, không theo dõi `prefers-color-scheme`.
+- **Thư viện xem trước**: mở `/design-preview.html` khi chạy `npm run dev` để duyệt các biến thể component.
+  Trang này không nằm trong `dist/web` (Vite chỉ build `index.html`).
 
-
-Giao diện theo hướng huyền học Trung Hoa: nền giấy dó, dải mực tàu, son ấn, vàng cổ, ngọc bích.
-Hoạ tiết (ấn triện, la bàn bát quái) vẽ bằng SVG hình học và `aria-hidden` — không dùng chữ Hán
-trang trí; chữ Hán chỉ xuất hiện trong khối “Nguyên văn gốc”. Vẫn **không phụ thuộc font ngoài**:
-chỉ dùng font hệ thống (serif cho tiêu đề, mono cho số và nhãn, CJK stack riêng cho `.cite-zh`).
+Giao diện cố ý tối giản: nền giấy ấm, chữ đậm gần đen, **một** màu nhấn son cho liên kết và dấu chọn,
+đường kẻ 1px thay cho khung/bóng, tiêu đề serif và thân bài sans. Không hoạ tiết trang trí, không chữ Hán
+trên trang chính — chữ Hán chỉ xuất hiện trong khối trích dẫn của trang Nguồn & phương pháp. **Không phụ
+thuộc font ngoài**: chỉ dùng font hệ thống.
 
 ### Giới hạn của bản web
 
-- Chỉ **Tử Vi + Bát Tự**. Phần luận giải đọc tới mức: sao ở cung nào, độ sáng tại cung đó, câu chung của cung, **câu riêng của 14 chính tinh và 11 phụ tinh tại 11 cung** (卷二; Thiên Khôi/Thiên Việt chỉ có ở cung Phu Thê), đại hạn và cung lưu niên — **chưa** có mục theo cung cho 13 phụ tinh còn lại, tổ hợp sao, cách cục, tiểu hạn, vượng suy/dụng thần, hình xung hợp hại.
+- Chỉ **Tử Vi + Bát Tự**. Phần đọc lá số dừng ở mức: **câu của sách cho từng chính tinh tại từng cung**
+  (卷二), cộng đại hạn; nhật chủ và thập thần trên bốn can của Bát Tự; đại vận. Bản gọn **không** hiện sao
+  phụ, độ sáng, tứ hoá, tổ hợp sao, tam hợp — và **chưa** có cách cục, tiểu hạn, lưu niên, vượng suy/dụng
+  thần, hình xung hợp hại.
 - Năm sinh **1900–nay**. Sinh trước Tết 1900 vẫn xem được Bát Tự nhưng không an được Tử Vi (năm âm < 1900).
 - Toạ độ lấy theo **tỉnh lỵ**, sai số ~4 phút mỗi độ kinh tuyến khi dùng giờ mặt trời thật.
 - Không hỗ trợ Việt kiều / nơi sinh ngoài Việt Nam trong bản này.
@@ -334,28 +328,27 @@ Hiện trạng: **34 sao · 4 hoá · 12 cung · 21 bảng độ sáng / 190 ô 
 
 `npm run content:selftest` chạy cùng cổng trên một fixture cố tình sai (quote không tồn tại, ngũ hành không có trong câu trích, id sao lạ) và đòi cổng phải chặn — hiện chặn đúng **16 lỗi** — để chứng minh cổng không phải đồ trang trí.
 
-**`npm run e2e`** (Playwright, Chromium) chạy luồng thật trên trình duyệt: nhập 20/05/1985 11:00 nam → bấm “Lập lá số” → URL chia sẻ mang đủ tham số → tải lại trang vẫn ra lá số → chọn cung Tài Bạch → nhãn “Tại cung Tài Bạch · câu chung cho Tả Phụ, Hữu Bật” → mở `§` đọc câu Hán và nguồn → phím → chuyển cung → tab Bát Tự dựng đúng tứ trụ. Cấu hình ở `playwright.config.ts`, tự dựng dev server. Không nằm trong `npm run check` vì cần tải Chromium; CI chạy ở job `e2e` riêng.
+**`npm run e2e`** (Playwright, Chromium) chạy luồng thật trên trình duyệt: mở trang → chỉ thấy biểu mẫu → nhập 20/05/1985 11:00 nam → bấm “An lá số” → URL chia sẻ mang đủ tham số → tải lại trang vẫn ra lá số → cung Mệnh mở sẵn với câu của sách cho Thái Âm → bấm ô Tài Bạch thì khung đọc đổi theo và ghi “Cung này không có sao chính” → phím ↓ chuyển cung → tab Bát Tự dựng đúng tứ trụ → tab Cách tính mở được `§` → “Đổi ngày sinh” và “Huỷ” → trang Nguồn & phương pháp. Cấu hình ở `playwright.config.ts`, tự dựng dev server. Không nằm trong `npm run check` vì cần tải Chromium; CI chạy ở job `e2e` riêng.
 
-Trang **Tinh diệu** trên web đọc thẳng `content/*.json`, hiển thị bản dịch + mở được nguyên văn kèm nguồn. Đây là định nghĩa **cơ học**; khối luận giải trong tab **Tử Vi / Bát Tự** mới ghép định nghĩa với cung vị, độ sáng, tứ hoá, tam hợp/đối cung và đại hạn.
+Trang **Nguồn & phương pháp** trên web đọc thẳng `content/*.json`, hiển thị bản dịch + mở được nguyên văn kèm nguồn. Đây là định nghĩa **cơ học**; khối luận giải trong tab **Tử Vi / Bát Tự** chỉ ghép câu của sách với cung vị và sao đang đóng — bản gọn không hiện độ sáng, tứ hoá hay tam hợp.
 
 ### Tầng luận giải — cách ghép
 
 `apps/web/src/reading.ts` không viết câu nào. Nó trả về cặp `(claim_vi, quote_id)` lấy từ các tệp trên, kèm dữ liệu engine. Khối hiển thị nằm ở `components/reading-blocks.tsx`, `TuViReadingSection.tsx`, `BaziReadingSection.tsx`:
 
-- **Tử Vi**: mỗi cung → câu “thuận / trắc trở” của cả cung (`palace-rules.json`) + **câu riêng của từng chính tinh tại cung đó** (`star-in-palace.json`) + chính tinh/phụ tinh + độ sáng tại chi đó + tứ hoá + tam hợp (`chi + 4, + 8`) và đối cung (`chi + 6`) + khoảng đại hạn. Sao nào nguồn không chép độ sáng thì hiện “nguồn không chép cung này”, không tự suy ra.
+- **Tử Vi**: mỗi cung → **câu riêng của từng chính tinh tại cung đó** (`star-in-palace.json`). Câu dài được rút theo **tiền tố**: giữ các mệnh đề áp dụng được cho lá số đang xem (đúng sao có mặt, đúng mức sáng, đúng chi, đúng tứ hoá) và dừng ở mệnh đề đầu tiên không áp dụng được, để không mệnh đề nào mất điều kiện đứng trước nó. Không viết lại chữ nào; nếu không còn mệnh đề nào thì dùng câu định nghĩa chung của sao (卷一). Cung không có chính tinh thì ghi rõ, không suy diễn.
 - **Sao tại cung**: `star-in-palace.json` cắt từ **卷二** các mục `二 兄弟` … `十二 父母` — mỗi chính tinh một đoạn, gắn id sao của engine với id cung theo `PALACE_NAMES`. Cung Mệnh không có mục riêng trong 卷二, nên ở đó chỉ hiện câu định nghĩa sao của 卷一 (vốn nói về người có sao ấy tại Mệnh). Năm trường hợp nguồn không chép mục (`Tài Bạch · Thất Sát`, `Tật Ách · Tham Lang/Thiên Lương`, `Điền Trạch · Thất Sát`, `Phúc Đức · Thiên Lương`) được ghi trong `missing` và giao diện nói rõ “sách không chép mục riêng”, không coi là thiếu bản dịch.
-- **Phụ tinh tại cung**: cùng các mục 卷二, sách chép riêng cho **11 phụ tinh** — Văn Xương, Văn Khúc, Tả Phụ, Hữu Bật, Lộc Tồn, Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Thiên Khôi, Thiên Việt (Khôi/Việt chỉ có ở cung Phu Thê). Mục gộp như `文昌文曲`, `羊陀`, `火星铃星`, `天魁天钺` được cắt nguyên đoạn và gắn cùng một `quote_id` cho hai sao; trường hợp sách viết `羊玲`/`羊铃` được giữ nguyên văn nhưng ánh xạ đúng Kình Dương + Linh Tinh. 13 phụ tinh còn lại không có mục theo cung: ghi trong `auxMissing`, giao diện chỉ báo khi sao ấy thật sự đóng tại cung và dùng câu định nghĩa chung của 卷一.
-- **Lưu niên**: chi của năm dương lịch → cung tương ứng; câu luận lưu niên lấy từ `reading-rules.json`.
-- **Đại hạn**: `daHanCycles(chart, gender)` — dương nam/âm nữ đi thuận từ cung Phụ Mẫu, âm nam/dương nữ đi nghịch từ Huynh Đệ; tuổi khởi bằng số ngũ hành cục; mỗi bước 10 năm. Quy tắc và câu đọc mười năm đều có trích.
-- **Bát Tự**: nhật chủ theo can ngày (10 đoạn 三命通會), thập thần xuất hiện ở can trụ và tàng can (淵海子平), đại vận kèm thập thần của can vận.
+- **Phụ tinh tại cung**: cùng các mục 卷二, sách chép riêng cho **11 phụ tinh** — Văn Xương, Văn Khúc, Tả Phụ, Hữu Bật, Lộc Tồn, Kình Dương, Đà La, Hoả Tinh, Linh Tinh, Thiên Khôi, Thiên Việt (Khôi/Việt chỉ có ở cung Phu Thê). Mục gộp như `文昌文曲`, `羊陀`, `火星铃星`, `天魁天钺` được cắt nguyên đoạn và gắn cùng một `quote_id` cho hai sao; trường hợp sách viết `羊玲`/`羊铃` được giữ nguyên văn nhưng ánh xạ đúng Kình Dương + Linh Tinh. 13 phụ tinh còn lại không có mục theo cung: ghi trong `auxMissing`. **Bản gọn hiện tại không hiển thị phụ tinh** — dữ liệu vẫn giữ nguyên trong `content/` để bản đầy đủ dùng lại.
+- **Đại hạn**: `daHanCycles(chart, gender)` — dương nam/âm nữ đi thuận từ cung Phụ Mẫu, âm nam/dương nữ đi nghịch từ Huynh Đệ; tuổi khởi bằng số ngũ hành cục; mỗi bước 10 năm. Bảng trong app chỉ nêu tuổi · cung · sao chính, kèm cung ứng với năm hiện tại.
+- **Bát Tự**: nhật chủ theo can ngày (10 đoạn 三命通會), thập thần **trên bốn can** (淵海子平, thần chỉ nằm trong tàng can không đưa vào mục đọc), đại vận kèm thập thần của can vận.
 
 **Ba lớp chữ cho mỗi câu** (cùng một nguồn, không thêm nhận định):
 
 | Trường | Dùng ở đâu |
 |---|---|
-| `claim_vi` | Bản dịch sát chữ — luôn hiện trong khối “§” và ở chế độ **Sát nguyên văn** |
-| `short_vi` | Một dòng tóm ý — hiện trên thẻ sao/thập thần |
-| `plain_vi` | Lời giảng không thuật ngữ — hiện ở chế độ **Dễ hiểu** (mặc định) |
+| `claim_vi` | Bản dịch sát chữ — hiện trong khối “§” và làm câu hiển thị khi kho chưa có `plain_vi` |
+| `short_vi` | Một dòng tóm ý — dữ liệu, bản gọn không hiện |
+| `plain_vi` | Lời giảng không thuật ngữ — câu hiển thị ưu tiên trên trang đọc |
 
 `content/glossary.json` là phần **biên soạn duy nhất** (không phải trích dẫn): nghĩa ngắn của thuật ngữ, hiện khi rê chuột hoặc bấm vào từ gạch dưới. Cổng nội dung kiểm: mọi `claim_vi`/`short_vi`/`plain_vi` phải đủ dài, `plain_vi` không lẫn chữ Hán, và mỗi thuật ngữ có định nghĩa.
 
@@ -363,7 +356,7 @@ Trang **Tinh diệu** trên web đọc thẳng `content/*.json`, hiển thị b�
 
 Nguyên tắc khi corpus không có câu:
 
-- Phụ tinh chưa có câu định nghĩa **không được bịa** — để trống kèm ghi chú, và nêu đích danh trên trang Tinh diệu.
+- Phụ tinh chưa có câu định nghĩa **không được bịa** — để trống kèm ghi chú.
 - Câu an sao (安星訣) được đánh dấu vai trò `rule` ("Cách an sao") — chỉ định vị trí, không luận tính chất, nên không được tính là định nghĩa đầy đủ.
 - Cung không có câu định nghĩa chung hiển thị `note_vi` nói rõ "corpus luận theo từng sao, chưa có câu chung".
 - Bảng cường nhược mệnh nữ hiển thị **nguyên văn** (dùng 夫君/子息), không tự ánh xạ sang 12 id cung.
@@ -398,11 +391,13 @@ apps/web/
   index.html
   src/        main.tsx · App.tsx · engine.ts · form.ts · format.ts · locator.ts · quotes.tsx · stars.ts · styles.css
   src/components/
-              BirthForm · TuViChartView · BaziView · CalcTrace · WarningList · MethodPage · StarReference · ErrorBoundary
+              BirthForm · TuViChartView · ReadingPanel · TuViReadingSection
+              BaziView · BaziReadingSection · reading-blocks
+              CalcTrace · WarningList · MethodPage · ErrorBoundary
   test/       form.test.ts (14 test) · locator.test.ts (4 test) · reading.test.ts (7 test)
   public/     favicon.svg · og.svg · og.png · robots.txt · sitemap.xml
 .github/workflows/ci.yml
-e2e/          reading.spec.ts (Playwright: nhập → lá số → cung → nguyên văn → URL)
+e2e/          reading.spec.ts (Playwright: biểu mẫu → lá số → cung → Bát Tự → nguồn)
 playwright.config.ts
 docs/         mock giao diện (mock-cach-tinh.html)
 packages/calendar-core/
@@ -451,7 +446,7 @@ Vercel nối với repo GitHub `nothinginluv/tracuuhuyenhoc` (framework Vite, ou
 
 ## Tiếp theo
 
-Đã có: luận theo cung (câu thuận/trắc trở cho 12 chi), tam phương tứ chính, đại hạn, hai hạn chồng nhau, Nam/Bắc Đẩu ứng nửa hạn, cung lưu niên.
+Đã có trong kho: luận theo cung (câu thuận/trắc trở cho 12 chi), tam phương tứ chính, đại hạn, hai hạn chồng nhau, Nam/Bắc Đẩu ứng nửa hạn, cung lưu niên, độ sáng 21 sao. Bản giao diện gọn hiện chỉ hiện phần đã nêu ở mục **Giới hạn của bản web**; phần còn lại vẫn nằm trong `content/` chờ bản đầy đủ.
 
 Còn thiếu — cần cắt thêm câu từ corpus trước khi viết, không đoán:
 
@@ -460,4 +455,4 @@ Còn thiếu — cần cắt thêm câu từ corpus trước khi viết, không 
 3. **Tiểu hạn**: cách an chưa kiểm chứng trong kho đã pin; hiện chỉ có đại hạn và lưu niên.
 4. **Bát Tự**: vượng suy, dụng thần, hình xung hợp hại — kho đã pin chỉ có đoạn lẻ, chưa đủ quy tắc kiểm được nên chưa dựng.
 5. Độ sáng: 17 sao chưa có bảng, vài ô nguồn không chép.
-6. Bundle: đã tách theo route (Tinh diệu, Bát Tự, Phương pháp, Cách tính, khối luận giải); còn tối ưu tiếp — entry 273 kB / 86 kB gzip, toàn bộ JS ~823 kB / ~251 kB gzip.
+6. Bundle: đã tách theo route (Bát Tự, Cách tính, Nguồn & phương pháp, khối đọc lá số); entry hiện ~249 kB / 78 kB gzip, toàn bộ JS ~540 kB / ~170 kB gzip.

@@ -7,18 +7,18 @@ import { PRESET_INFO, QUANG_TRI, type FormValues } from '../form.ts';
 const DISTRICT_NAMES = ['Vĩnh Linh (bắc vĩ tuyến 17)', 'Huyện khác (nam vĩ tuyến 17)'];
 
 /** Chỉ giữ chữ số, cắt đúng độ dài. Cho phép gõ "04" hoặc "4". */
-const digits = (value: string, max: number): string =>
-  value.replace(/\D/g, '').slice(0, max);
+const digits = (value: string, max: number): string => value.replace(/\D/g, '').slice(0, max);
 
 type Props = {
   values: FormValues;
   onChange: (patch: Partial<FormValues>) => void;
   onSubmit: () => void;
+  onCancel?: () => void;
   error: string | null;
   busy?: boolean;
 };
 
-export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
+export function BirthForm({ values, onChange, onSubmit, onCancel, error, busy }: Props) {
   const [advanced, setAdvanced] = useState(false);
   const provinces = useMemo(
     () => [...PROVINCES].sort((a, b) => a.name.localeCompare(b.name, 'vi')),
@@ -34,22 +34,13 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
   };
 
   return (
-    <form className="card form" onSubmit={submit}>
-      <div className="form-head">
-        <div>
-          <p className="eyebrow">Phiếu nhập · 01</p>
-          <h2>Ngày giờ sinh</h2>
-        </div>
-        <p className="form-note">Dương lịch · giờ tại nơi sinh</p>
-        <p className="form-marginal">
-          Múi giờ lịch sử chọn theo tỉnh và năm sinh. Đổi quy ước ở dưới, lá số đổi theo.
-        </p>
-      </div>
+    <form className="form" onSubmit={submit}>
+      <h1 className="form-title">Ngày giờ sinh</h1>
 
       <div className="form-grid">
         <div className="field">
           <span className="field-label" id="birth-date-label">
-            Ngày sinh
+            Ngày sinh (dương lịch)
           </span>
           <div className="split-input" role="group" aria-labelledby="birth-date-label">
             <label className="subfield">
@@ -89,7 +80,6 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
               />
             </label>
           </div>
-          <span className="field-hint">Dương lịch, theo thứ tự ngày / tháng / năm.</span>
         </div>
 
         <div className="field">
@@ -123,7 +113,7 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
               />
             </label>
           </div>
-          <span className="field-hint">Giờ 24h trên đồng hồ nơi sinh (ví dụ 23:30).</span>
+          <span className="field-hint">Giờ trên đồng hồ nơi sinh, 24 giờ.</span>
         </div>
 
         <div className="field">
@@ -133,7 +123,6 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
           <select
             id="birth-province"
             value={values.province}
-            aria-describedby="birth-province-hint"
             onChange={(e) =>
               onChange({
                 province: e.target.value,
@@ -148,9 +137,7 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
               </option>
             ))}
           </select>
-          <span className="field-hint" id="birth-province-hint">
-            63 tỉnh, thành trước sáp nhập 01/07/2025. Dùng cho múi giờ lịch sử và giờ mặt trời thật.
-          </span>
+          <span className="field-hint">Tỉnh, thành trước 01/07/2025 — dùng cho múi giờ lịch sử.</span>
         </div>
 
         <div className="field">
@@ -174,19 +161,17 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
               </button>
             ))}
           </div>
-          <span className="field-hint">Cần cho chiều đại vận Bát Tự.</span>
         </div>
       </div>
 
       {needsDistrict && (
-        <div className="field field-wide district">
+        <div className="field district">
           <label className="field-label" htmlFor="birth-district">
             Huyện nơi sinh (Quảng Trị, 1960–1975)
           </label>
           <select
             id="birth-district"
             value={values.district || DISTRICT_NAMES[1]}
-            aria-describedby="birth-district-hint"
             onChange={(e) => onChange({ district: e.target.value })}
           >
             {DISTRICT_NAMES.map((d) => (
@@ -195,9 +180,8 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
               </option>
             ))}
           </select>
-          <span className="field-hint" id="birth-district-hint">
-            Quảng Trị bị chia đôi ở vĩ tuyến 17 trong giai đoạn này: Vĩnh Linh dùng UTC+7, phần
-            còn lại dùng UTC+8. Chọn sai sẽ lệch 1 giờ và có thể lệch cả canh giờ.
+          <span className="field-hint">
+            Vĩnh Linh dùng UTC+7, phần còn lại dùng UTC+8 trong giai đoạn này.
           </span>
         </div>
       )}
@@ -209,23 +193,29 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
           onClick={() => setAdvanced((v) => !v)}
           aria-expanded={advanced}
         >
-          {advanced ? '− Thu quy ước an sao' : '+ Mở quy ước an sao'}
+          {advanced ? 'Thu gọn quy ước' : 'Tuỳ chỉnh quy ước'}
         </button>
-        <button type="submit" className="btn-primary" disabled={busy}>
-          {busy ? 'Đang an…' : 'An lá số'}
-        </button>
+        <div className="form-actions">
+          {onCancel && (
+            <button type="button" className="link-btn" onClick={onCancel}>
+              Huỷ
+            </button>
+          )}
+          <button type="submit" className="btn-primary" disabled={busy}>
+            {busy ? 'Đang an…' : 'An lá số'}
+          </button>
+        </div>
       </div>
 
       {advanced && (
         <div className="advanced">
-          <div className="field field-wide">
+          <div className="field">
             <label className="field-label" htmlFor="birth-preset">
               Quy ước tính
             </label>
             <select
               id="birth-preset"
               value={values.preset}
-              aria-describedby="birth-preset-hint"
               onChange={(e) => onChange({ preset: e.target.value as PresetName })}
             >
               {(Object.keys(PRESET_INFO) as PresetName[]).map((key) => (
@@ -234,9 +224,7 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
                 </option>
               ))}
             </select>
-            <span className="field-hint" id="birth-preset-hint">
-              {PRESET_INFO[values.preset].detail}
-            </span>
+            <span className="field-hint">{PRESET_INFO[values.preset].detail}</span>
           </div>
 
           <div className="advanced-grid">
@@ -247,13 +235,14 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
               <select
                 id="birth-zi"
                 value={values.ziBoundary}
-                onChange={(e) => onChange({ ziBoundary: e.target.value as FormValues['ziBoundary'] })}
+                onChange={(e) =>
+                  onChange({ ziBoundary: e.target.value as FormValues['ziBoundary'] })
+                }
               >
                 <option value="">Theo quy ước chung</option>
                 <option value="late">Tý muộn — đổi ngày lúc 00:00</option>
                 <option value="early">Tý sớm — đổi ngày lúc 23:00</option>
               </select>
-              <span className="field-hint">Chỉ khác nhau ở khung 23:00–23:59.</span>
             </div>
 
             <div className="field">
@@ -271,7 +260,6 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
                 <option value="current-day">Suy từ can ngày hiện tại</option>
                 <option value="next-day">Suy từ can ngày kế tiếp</option>
               </select>
-              <span className="field-hint">Chỉ có tác dụng khi đang dùng Tý muộn.</span>
             </div>
 
             <div className="field">
@@ -281,15 +269,12 @@ export function BirthForm({ values, onChange, onSubmit, error, busy }: Props) {
               <select
                 id="birth-leap"
                 value={values.leapMonthRule}
-                onChange={(e) =>
-                  onChange({ leapMonthRule: e.target.value as LeapMonthRule })
-                }
+                onChange={(e) => onChange({ leapMonthRule: e.target.value as LeapMonthRule })}
               >
-                <option value="split">Chia đôi: 1–15 tháng nhuận, 16–30 tháng sau</option>
+                <option value="split">Chia đôi tháng nhuận</option>
                 <option value="as-month">Giữ nguyên số tháng</option>
-                <option value="as-next">Dồn cả tháng sang tháng sau</option>
+                <option value="as-next">Dồn sang tháng sau</option>
               </select>
-              <span className="field-hint">Chỉ ảnh hưởng lá số Tử Vi, không ảnh hưởng Bát Tự.</span>
             </div>
           </div>
         </div>
