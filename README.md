@@ -59,9 +59,9 @@ npm run e2e         # E2E Playwright: nhập → lá số → cung → nguyên v
 - **Bát Tự**: bốn trụ (can, chi, thập thần), nhật chủ kèm câu của sách, thập thần **trên bốn can** và bảng đại vận. Tàng can, bảng đếm ngũ hành và ghi chú kỹ thuật nằm trong tab Cách tính.
 - **Trang Nguồn & phương pháp** (chỉ mở từ chân trang): chuỗi tính, bảng preset, quy tắc Tử Vi/Bát Tự, giới hạn, nguồn — và là chỗ duy nhất hiện các khối trích dẫn “§” mở ra nguyên văn chữ Hán. Trang đọc lá số không hiện khối nguồn.
 - **Ngôn ngữ cho người Việt**: câu hiển thị ưu tiên bản giảng không thuật ngữ (`plain_vi`), chỉ khi kho chưa có mới dùng bản dịch sát chữ (`claim_vi`). Chỗ sách im lặng hoặc chưa chép thì ghi rõ, không đoán. Thuật ngữ còn lạ được gạch dưới để xem nghĩa từ `content/glossary.json`.
-- **Giao diện gọn**: **chỉ chế độ sáng** — nền giấy, một màu nhấn son, đường kẻ mảnh, chữ serif cho tiêu đề. Không bóng đổ, không gradient, không hoạ tiết trang trí. Breakpoints 480 / 716 / 900px.
+- **Giao diện giấy mực**: **chỉ chế độ sáng** — nền giấy ngà ấm, mực đậm gần đen, **một** màu son dùng rất tiết chế (dấu chọn, nhãn sao, nút chính), đường kẻ mảnh 1px và khung kép kiểu bản in. Chữ Palatino cho tiêu đề, tên sao và câu luận; nhãn và số liệu dùng sans hệ thống. Breakpoints 480 / 716 / 900px.
 - **Chia sẻ lá số**: sao chép URL (có fallback). Toàn bộ quy ước nằm trong URL nên mở lại đúng lá số.
-- **Responsive**: lá số Tử Vi giữ bề rộng tối thiểu 660px và cuộn ngang trong khung riêng thay vì bóp chữ; dưới 716px danh mục 12 cung chuyển thành dải cuộn ngang.
+- **Responsive**: lá số Tử Vi giữ bề rộng tối thiểu 640px và cuộn ngang trong khung riêng thay vì bóp chữ (có dòng nhắc và mép phải mờ dần); dưới 716px danh mục 12 cung thành lưới 3 cột, dưới 480px bỏ dòng tên sao trong ô chọn cung.
 - **Giảm chuyển động**: tôn trọng `prefers-reduced-motion` (tắt cuộn mượt và vòng xoay tải).
 - **Nhập liệu có test**: `parseForm` tách riêng khỏi component, 14 test cho biên ngày/giờ, năm 1900, tương lai và Quảng Trị.
 - **A11y**: `role="status" aria-live="polite"` thông báo khi lập lá số; focus chuyển tới `#ket-qua` sau khi kết quả vào DOM.
@@ -95,18 +95,20 @@ apps/web/
 Nền tảng component base vẫn nằm ở `src/design-system` + `src/components/ui`, nhưng giao diện chính
 viết thẳng class nghiệp vụ trong `styles.css`:
 
-- **Một nguồn màu duy nhất**: `styles.css` giữ biến CSS (`--bg`, `--surface`, `--ink`, `--line`, `--accent`).
-  Chỉ một bảng màu sáng — không có `[data-theme]`, không có bảng tối. `tokens.ts` chỉ *ánh xạ* các biến đó
-  sang JS và giữ thang khoảng cách, cỡ chữ, breakpoints — **không khai báo lại mã màu**.
+- **Một nguồn màu duy nhất cho giao diện chính**: `styles.css` giữ biến CSS (`--paper`, `--sheet`, `--ink`, `--rule`, `--son`).
+  Chỉ một bảng màu sáng — không có `[data-theme]`, không có bảng tối. `tokens.ts` (thang đo, breakpoints) chỉ phục vụ
+  thư viện xem trước ở `design-preview.html`, không tham gia giao diện chính.
 - **Không có ThemeProvider**: `main.tsx` render thẳng `App` trong `ErrorBoundary`; không đặt `data-theme`,
   không lưu lựa chọn nền, không theo dõi `prefers-color-scheme`.
 - **Thư viện xem trước**: mở `/design-preview.html` khi chạy `npm run dev` để duyệt các biến thể component.
   Trang này không nằm trong `dist/web` (Vite chỉ build `index.html`).
 
-Giao diện cố ý tối giản: nền giấy ấm, chữ đậm gần đen, **một** màu nhấn son cho liên kết và dấu chọn,
-đường kẻ 1px thay cho khung/bóng, tiêu đề serif và thân bài sans. Không hoạ tiết trang trí, không chữ Hán
-trên trang chính — chữ Hán chỉ xuất hiện trong khối trích dẫn của trang Nguồn & phương pháp. **Không phụ
-thuộc font ngoài**: chỉ dùng font hệ thống.
+Giao diện đi theo lối **bản in cổ**: nền giấy ngà, mực đậm gần đen, **một** màu son cho dấu chọn và nhãn,
+đường kẻ 1px và khung kép thay cho bóng đổ; tiêu đề, tên sao và câu luận dùng serif (Palatino), nhãn và số
+liệu dùng sans. Lá số là khung vuông 12 cung, giữa là tấm tên âm lịch / giờ sinh / cục / mệnh chủ. Mục đọc
+12 cung là lưới ô chọn cung rồi một tờ đọc riêng, mỗi câu gắn nhãn son của sao. Không chữ Hán trên trang
+chính — chữ Hán chỉ xuất hiện trong khối trích dẫn của trang Nguồn & phương pháp. **Không phụ thuộc font
+ngoài**: chỉ dùng font hệ thống (Palatino Linotype → Palatino → Cambria → Georgia → Times New Roman).
 
 ### Giới hạn của bản web
 

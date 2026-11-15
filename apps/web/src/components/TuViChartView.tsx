@@ -74,19 +74,21 @@ export function TuViChartView({ chart, gender }: Props) {
               >
                 <span className="cell-head">
                   <span className="cell-name">{p.nameVi}</span>
+                  {(p.isSoul || p.isBody) && (
+                    <span className="cell-tags">
+                      {p.isSoul && <span className="tag">Mệnh</span>}
+                      {p.isBody && <span className="tag">Thân</span>}
+                    </span>
+                  )}
+                </span>
+                <span className={`cell-stars${p.mainStars.length === 0 ? ' is-empty' : ''}`}>
+                  {p.mainStars.map((s) => s.vi).join(' · ') || '—'}
+                </span>
+                <span className="cell-foot">
                   <span className="cell-ganzhi">
                     {p.stemVi} {p.branchVi}
                   </span>
                 </span>
-                <span className="cell-stars">
-                  {p.mainStars.map((s) => s.vi).join(' · ') || '—'}
-                </span>
-                {(p.isSoul || p.isBody) && (
-                  <span className="cell-tags">
-                    {p.isSoul && <span className="tag">Mệnh</span>}
-                    {p.isBody && <span className="tag">Thân</span>}
-                  </span>
-                )}
               </button>
             );
           })}
@@ -119,6 +121,8 @@ export function TuViChartView({ chart, gender }: Props) {
           </div>
         </div>
       </div>
+
+      <p className="chart-hint tiny">Kéo ngang để xem đủ 12 cung.</p>
 
       <TuViReadingSection reading={reading} active={picked} onPick={setPicked} />
     </section>

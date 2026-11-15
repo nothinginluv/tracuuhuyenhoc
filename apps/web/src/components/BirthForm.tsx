@@ -35,6 +35,7 @@ export function BirthForm({ values, onChange, onSubmit, onCancel, error, busy }:
 
   return (
     <form className="form" onSubmit={submit}>
+      <p className="form-kicker">Lập lá số</p>
       <h1 className="form-title">Ngày giờ sinh</h1>
 
       <div className="form-grid">

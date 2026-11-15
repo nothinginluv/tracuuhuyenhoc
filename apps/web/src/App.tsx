@@ -192,7 +192,8 @@ export function App() {
     <div className="app">
       <header className="site-head">
         <button className="brand" onClick={() => setPage('lookup')}>
-          Tra Cứu Huyền Học
+          <span className="brand-name">Tra Cứu Huyền Học</span>
+          <span className="brand-sub">Tử Vi · Bát Tự</span>
         </button>
       </header>
 
@@ -260,6 +261,7 @@ export function App() {
                   role="tab"
                   aria-selected={tab === t.id}
                   aria-controls={`panel-${t.id}`}
+                  aria-label={t.label}
                   onClick={() => setTab(t.id)}
                 >
                   {t.label}

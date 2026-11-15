@@ -24,7 +24,7 @@ export function BaziView({ chart }: { chart: BaziChart }) {
         {chart.stems.map((stem) => {
           const branch = chart.branches.find((b) => b.pillar === stem.pillar)!;
           return (
-            <div className="pillar" key={stem.pillar}>
+            <div className={`pillar${stem.pillar === 'day' ? ' is-day' : ''}`} key={stem.pillar}>
               <p className="pillar-label">{PILLAR_NAMES[stem.pillar].vi}</p>
               <p className="ten-god">
                 {stem.pillar === 'day' ? 'Nhật chủ' : stem.tenGod?.vi ?? '—'}
